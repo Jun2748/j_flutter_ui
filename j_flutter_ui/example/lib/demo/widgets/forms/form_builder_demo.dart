@@ -13,6 +13,31 @@ class FormBuilderDemo extends StatefulWidget {
 class _FormBuilderDemoState extends State<FormBuilderDemo> {
   final GlobalKey<SimpleFormBuilderState> _formKey =
       GlobalKey<SimpleFormBuilderState>();
+  late final SimpleFormController _controller = SimpleFormController(
+    initialValues: <String, dynamic>{
+      'name': 'Jun',
+      'email': 'jun@example.com',
+      'query': 'Flutter UI',
+      'role': 'Engineer',
+      'agreeTerms': true,
+      'workMode': 'Hybrid',
+      'receivePromo': true,
+    },
+  );
+  late Map<String, dynamic> _controllerValues = _controller.values;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_handleControllerChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_handleControllerChanged);
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +48,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         children: <Widget>[
           const SimpleText.body(
             text:
-                'SimpleFormBuilder renders common form controls from a small schema and supports initialValues out of the box.',
+                'SimpleFormBuilder can also sync with SimpleFormController. Use the buttons below to update values externally and watch the form stay in sync.',
           ),
           Gap.h16,
           Wrap(
@@ -33,7 +58,24 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
               SimpleButton.secondary(
                 label: 'Set Name',
                 onPressed: () {
-                  SimpleFormUtil.setValue(_formKey, 'name', 'Jun Lim');
+                  _controller.setValue('name', 'Jun Lim');
+                },
+              ),
+              SimpleButton.secondary(
+                label: 'Patch Email',
+                onPressed: () {
+                  _controller.patchValues(<String, dynamic>{
+                    'email': 'new@example.com',
+                  });
+                },
+              ),
+              SimpleButton.secondary(
+                label: 'Set Values',
+                onPressed: () {
+                  _controller.setValues(<String, dynamic>{
+                    'name': 'Jun Lee',
+                    'email': 'junlee@example.com',
+                  });
                 },
               ),
               SimpleButton.outline(
@@ -47,26 +89,35 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                 },
               ),
               SimpleButton.text(
-                label: 'Reset',
+                label: 'ResetToInitialValue',
                 onPressed: () {
-                  _formKey.currentState?.reset();
+                  _controller.resetToInitialValues();
+                },
+              ),
+              SimpleButton.text(
+                label: 'Reset All',
+                onPressed: () {
+                  _controller.reset();
                 },
               ),
             ],
           ),
           Gap.h16,
           SimpleCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SimpleText.heading(text: 'Controller Values'),
+                Gap.h8,
+                SimpleText.caption(text: _controllerValues.toString()),
+              ],
+            ),
+          ),
+          Gap.h16,
+          SimpleCard(
             child: SimpleFormBuilder(
               key: _formKey,
-              initialValues: <String, dynamic>{
-                'name': 'Jun',
-                'email': 'jun@example.com',
-                'query': 'Flutter UI',
-                'role': 'Engineer',
-                'agreeTerms': true,
-                'workMode': 'Hybrid',
-                'receivePromo': true,
-              },
+              controller: _controller,
               fields: <SimpleFormFieldConfig<dynamic>>[
                 SimpleFormFieldConfig.text(
                   name: 'name',
@@ -139,5 +190,11 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         ],
       ),
     );
+  }
+
+  void _handleControllerChanged() {
+    setState(() {
+      _controllerValues = _controller.values;
+    });
   }
 }

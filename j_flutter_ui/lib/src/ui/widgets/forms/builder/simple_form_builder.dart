@@ -9,6 +9,7 @@ import '../../controls/inputs/simple_radio.dart';
 import '../../controls/inputs/simple_search_field.dart';
 import '../../controls/inputs/simple_switch.dart';
 import '../../controls/inputs/simple_text_field.dart';
+import '../controller/simple_form_controller.dart';
 import '../form_field_wrapper.dart';
 import '../simple_form.dart';
 import 'simple_form_field_config.dart';
@@ -27,6 +28,7 @@ class SimpleFormBuilder extends StatefulWidget {
     this.submitLabel = 'Submit',
     this.clearBackendErrorsOnSubmit = true,
     this.enabled = true,
+    this.controller,
   });
 
   final List<SimpleFormFieldConfig<dynamic>> fields;
@@ -39,6 +41,7 @@ class SimpleFormBuilder extends StatefulWidget {
   final String submitLabel;
   final bool clearBackendErrorsOnSubmit;
   final bool enabled;
+  final SimpleFormController? controller;
 
   @override
   State<SimpleFormBuilder> createState() => SimpleFormBuilderState();
@@ -52,23 +55,32 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
   bool _isSubmitting = false;
+  bool _isSyncingFromController = false;
+  bool _isSyncingToController = false;
 
   bool get isSubmitting => _isSubmitting;
 
   @override
   void initState() {
     super.initState();
+    _attachController(widget.controller);
     _syncFieldState();
   }
 
   @override
   void didUpdateWidget(SimpleFormBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      _detachController(oldWidget.controller);
+      _attachController(widget.controller);
+      _values.clear();
+    }
     _syncFieldState();
   }
 
   @override
   void dispose() {
+    _detachController(widget.controller);
     for (final TextEditingController controller in _controllers.values) {
       controller.dispose();
     }
@@ -200,6 +212,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       }
     });
 
+    _syncControllerFromBuilder();
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
 
@@ -383,6 +396,10 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     if (field.initialValue != null) {
       return field.initialValue;
     }
+    final Map<String, dynamic>? controllerValues = widget.controller?.values;
+    if (controllerValues != null && controllerValues.containsKey(field.name)) {
+      return controllerValues[field.name];
+    }
     if (widget.initialValues != null &&
         widget.initialValues!.containsKey(field.name)) {
       return widget.initialValues![field.name];
@@ -477,6 +494,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       }
     });
 
+    _syncControllerFromBuilder(fieldNames: <String>[field.name]);
     field.onChanged?.call(value);
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
@@ -528,5 +546,81 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       case SimpleFormFieldType.switchField:
         return value != true;
     }
+  }
+
+  void _attachController(SimpleFormController? controller) {
+    controller?.addListener(_handleControllerChanged);
+  }
+
+  void _detachController(SimpleFormController? controller) {
+    controller?.removeListener(_handleControllerChanged);
+  }
+
+  void _handleControllerChanged() {
+    if (_isSyncingToController) {
+      return;
+    }
+
+    final SimpleFormController? controller = widget.controller;
+    if (controller == null) {
+      return;
+    }
+
+    final Map<String, dynamic> controllerValues = controller.values;
+    bool changed = false;
+
+    _isSyncingFromController = true;
+    _applyState(() {
+      for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+        final dynamic controllerValue = controllerValues.containsKey(field.name)
+            ? controllerValues[field.name]
+            : _resolveResetValue(field.type);
+        if (_values[field.name] == controllerValue) {
+          continue;
+        }
+
+        _values[field.name] = controllerValue;
+        _syncControllerValue(field.name, controllerValue);
+        changed = true;
+      }
+    });
+    _isSyncingFromController = false;
+
+    if (changed) {
+      widget.onChanged?.call(Map<String, dynamic>.from(_values));
+    }
+  }
+
+  void _syncControllerFromBuilder({List<String>? fieldNames}) {
+    final SimpleFormController? controller = widget.controller;
+    if (controller == null || _isSyncingFromController) {
+      return;
+    }
+
+    final Map<String, dynamic> controllerValues = controller.values;
+    final Iterable<String> names =
+        fieldNames ??
+        widget.fields.map((SimpleFormFieldConfig<dynamic> field) => field.name);
+    final Map<String, dynamic> nextValues = <String, dynamic>{};
+
+    for (final String name in names) {
+      if (!_values.containsKey(name)) {
+        continue;
+      }
+
+      final bool hasControllerValue = controllerValues.containsKey(name);
+      final dynamic currentValue = _values[name];
+      if (!hasControllerValue || controllerValues[name] != currentValue) {
+        nextValues[name] = currentValue;
+      }
+    }
+
+    if (nextValues.isEmpty) {
+      return;
+    }
+
+    _isSyncingToController = true;
+    controller.patchValues(nextValues);
+    _isSyncingToController = false;
   }
 }
