@@ -26,6 +26,14 @@ class SimpleFormUtil {
     return formKey.currentState?.getValues() ?? <String, dynamic>{};
   }
 
+  static bool validate(GlobalKey<SimpleFormBuilderState> formKey) {
+    return formKey.currentState?.validate() ?? false;
+  }
+
+  static bool isValid(GlobalKey<SimpleFormBuilderState> formKey) {
+    return formKey.currentState?.isValid() ?? false;
+  }
+
   static void setError(
     GlobalKey<SimpleFormBuilderState> formKey,
     String fieldName,
@@ -63,6 +71,21 @@ class SimpleFormUtil {
 
   static void clearErrors(GlobalKey<SimpleFormBuilderState> formKey) {
     formKey.currentState?.clearFieldErrors();
+  }
+
+  static Future<void> submit(GlobalKey<SimpleFormBuilderState> formKey) async {
+    await formKey.currentState?.submit();
+  }
+
+  static void setSubmitting(
+    GlobalKey<SimpleFormBuilderState> formKey,
+    bool value,
+  ) {
+    formKey.currentState?.setSubmitting(value);
+  }
+
+  static bool isSubmitting(GlobalKey<SimpleFormBuilderState> formKey) {
+    return formKey.currentState?.isSubmitting ?? false;
   }
 
   static void reset(GlobalKey<SimpleFormBuilderState> formKey) {

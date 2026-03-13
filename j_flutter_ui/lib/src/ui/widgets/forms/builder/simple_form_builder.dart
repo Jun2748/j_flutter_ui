@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../controls/buttons/simple_button.dart';
@@ -23,27 +25,35 @@ class SimpleFormBuilder extends StatefulWidget {
     this.fieldSpacing = 16,
     this.showSubmitButton = false,
     this.submitLabel = 'Submit',
+    this.clearBackendErrorsOnSubmit = true,
+    this.enabled = true,
   });
 
   final List<SimpleFormFieldConfig<dynamic>> fields;
   final Map<String, dynamic>? initialValues;
   final ValueChanged<Map<String, dynamic>>? onChanged;
-  final ValueChanged<Map<String, dynamic>>? onSubmit;
+  final FutureOr<void> Function(Map<String, dynamic> values)? onSubmit;
   final EdgeInsets? padding;
   final double fieldSpacing;
   final bool showSubmitButton;
   final String submitLabel;
+  final bool clearBackendErrorsOnSubmit;
+  final bool enabled;
 
   @override
   State<SimpleFormBuilder> createState() => SimpleFormBuilderState();
 }
 
 class SimpleFormBuilderState extends State<SimpleFormBuilder> {
+  final GlobalKey<FormState> _internalFormKey = GlobalKey<FormState>();
   final Map<String, dynamic> _values = <String, dynamic>{};
   final Map<String, String?> _errors = <String, String?>{};
   final Map<String, String?> _fieldErrors = <String, String?>{};
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
+  bool _isSubmitting = false;
+
+  bool get isSubmitting => _isSubmitting;
 
   @override
   void initState() {
@@ -83,12 +93,14 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
         SimpleButton.primary(
           label: widget.submitLabel,
           width: double.infinity,
-          onPressed: _handleSubmit,
+          loading: _isSubmitting,
+          onPressed: _isFormEnabled && !_isSubmitting ? submit : null,
         ),
       );
     }
 
     return SimpleForm(
+      formKey: _internalFormKey,
       padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,6 +127,16 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
 
   Map<String, dynamic> getValues() {
     return Map<String, dynamic>.from(_values);
+  }
+
+  bool validate() {
+    final bool formValid = _internalFormKey.currentState?.validate() ?? false;
+    final bool fieldsValid = _validateFields();
+    return formValid && fieldsValid;
+  }
+
+  bool isValid() {
+    return validate();
   }
 
   Map<String, String?> getFieldErrors() {
@@ -158,6 +180,15 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     });
   }
 
+  void setSubmitting(bool value) {
+    if (_isSubmitting == value) {
+      return;
+    }
+    _applyState(() {
+      _isSubmitting = value;
+    });
+  }
+
   void reset() {
     _applyState(() {
       _errors.clear();
@@ -172,9 +203,36 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
 
+  Future<void> submit() async {
+    if (_isSubmitting) {
+      return;
+    }
+
+    final bool valid = validate();
+    if (!valid) {
+      return;
+    }
+
+    if (widget.onSubmit == null) {
+      return;
+    }
+
+    if (widget.clearBackendErrorsOnSubmit) {
+      clearFieldErrors();
+    }
+
+    setSubmitting(true);
+    try {
+      await widget.onSubmit?.call(Map<String, dynamic>.from(_values));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   Widget _buildField(SimpleFormFieldConfig<dynamic> field) {
     final dynamic value = _values[field.name];
     final String? errorText = _fieldErrors[field.name] ?? _errors[field.name];
+    final bool effectiveEnabled = _isFieldEnabled(field);
 
     switch (field.type) {
       case SimpleFormFieldType.text:
@@ -188,7 +246,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
             errorText: errorText,
             keyboardType: field.keyboardType,
             obscureText: field.obscureText,
-            enabled: field.enabled,
+            enabled: effectiveEnabled,
             onChanged: (String text) => _updateValue(field, text),
           ),
         );
@@ -201,7 +259,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
           child: SimpleSearchField(
             controller: _controllers[field.name],
             hintText: field.hintText ?? 'Search',
-            enabled: field.enabled,
+            enabled: effectiveEnabled,
             onChanged: (String text) => _updateValue(field, text),
           ),
         );
@@ -218,7 +276,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
             items: field.items,
             hintText: field.hintText,
             errorText: errorText,
-            enabled: field.enabled,
+            enabled: effectiveEnabled,
             onChanged: (dynamic selected) => _updateValue(field, selected),
           ),
         );
@@ -230,7 +288,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
           child: SimpleCheckbox(
             value: value as bool?,
             label: field.label,
-            enabled: field.enabled,
+            enabled: effectiveEnabled,
             onChanged: (bool? checked) => _updateValue(field, checked ?? false),
           ),
         );
@@ -251,7 +309,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
                   child: SimpleRadio<dynamic>(
                     value: field.options![index],
                     groupValue: value,
-                    onChanged: field.enabled
+                    onChanged: effectiveEnabled
                         ? (dynamic selected) => _updateValue(field, selected)
                         : null,
                     label: _resolveOptionLabel(field, field.options![index]),
@@ -268,7 +326,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
           child: SimpleSwitch(
             value: value as bool?,
             label: field.label,
-            onChanged: field.enabled
+            onChanged: effectiveEnabled
                 ? (bool selected) => _updateValue(field, selected)
                 : null,
           ),
@@ -361,6 +419,12 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
         type == SimpleFormFieldType.search;
   }
 
+  bool get _isFormEnabled => widget.enabled;
+
+  bool _isFieldEnabled(SimpleFormFieldConfig<dynamic> field) {
+    return _isFormEnabled && !_isSubmitting && field.enabled;
+  }
+
   SimpleFormFieldConfig<dynamic>? _findField(String name) {
     for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
       if (field.name == name) {
@@ -417,6 +481,27 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
 
+  bool _validateFields() {
+    bool hasError = false;
+    final Map<String, String?> nextErrors = <String, String?>{};
+
+    for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+      final String? error = _validateField(field, _values[field.name]);
+      nextErrors[field.name] = error;
+      if (error != null && error.isNotEmpty) {
+        hasError = true;
+      }
+    }
+
+    _applyState(() {
+      _errors
+        ..clear()
+        ..addAll(nextErrors);
+    });
+
+    return !hasError;
+  }
+
   void _applyState(VoidCallback updates) {
     if (!mounted) {
       return;
@@ -442,29 +527,6 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       case SimpleFormFieldType.checkbox:
       case SimpleFormFieldType.switchField:
         return value != true;
-    }
-  }
-
-  void _handleSubmit() {
-    final Map<String, String?> nextErrors = <String, String?>{};
-    bool hasError = false;
-
-    for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
-      final String? error = _validateField(field, _values[field.name]);
-      nextErrors[field.name] = error;
-      if (error != null && error.isNotEmpty) {
-        hasError = true;
-      }
-    }
-
-    setState(() {
-      _errors
-        ..clear()
-        ..addAll(nextErrors);
-    });
-
-    if (!hasError) {
-      widget.onSubmit?.call(Map<String, dynamic>.from(_values));
     }
   }
 }
