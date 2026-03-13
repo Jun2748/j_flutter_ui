@@ -41,6 +41,7 @@ class SimpleFormBuilder extends StatefulWidget {
 class SimpleFormBuilderState extends State<SimpleFormBuilder> {
   final Map<String, dynamic> _values = <String, dynamic>{};
   final Map<String, String?> _errors = <String, String?>{};
+  final Map<String, String?> _fieldErrors = <String, String?>{};
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
 
@@ -100,33 +101,69 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     return _values[name];
   }
 
+  String? getFieldError(String name) {
+    return _fieldErrors[name];
+  }
+
   void setFieldValue(String name, dynamic value) {
     final SimpleFormFieldConfig<dynamic>? field = _findField(name);
     if (field == null) {
       return;
     }
-
-    setState(() {
-      _values[name] = value;
-      _syncControllerValue(name, value);
-      if (_errors[name] != null) {
-        _errors[name] = _validateField(field, value);
-      }
-    });
-
-    field.onChanged?.call(value);
-    widget.onChanged?.call(Map<String, dynamic>.from(_values));
+    _applyFieldValue(field, value);
   }
 
   Map<String, dynamic> getValues() {
     return Map<String, dynamic>.from(_values);
   }
 
+  Map<String, String?> getFieldErrors() {
+    return Map<String, String?>.from(_fieldErrors);
+  }
+
+  void setFieldError(String name, String? error) {
+    if (_findField(name) == null) {
+      return;
+    }
+
+    _applyState(() {
+      if (error == null || error.trim().isEmpty) {
+        _fieldErrors.remove(name);
+      } else {
+        _fieldErrors[name] = error;
+      }
+    });
+  }
+
+  void setFieldErrors(Map<String, String> errors) {
+    _applyState(() {
+      for (final MapEntry<String, String> entry in errors.entries) {
+        if (_findField(entry.key) == null) {
+          continue;
+        }
+        _fieldErrors[entry.key] = entry.value;
+      }
+    });
+  }
+
+  void clearFieldError(String name) {
+    _applyState(() {
+      _fieldErrors.remove(name);
+    });
+  }
+
+  void clearFieldErrors() {
+    _applyState(() {
+      _fieldErrors.clear();
+    });
+  }
+
   void reset() {
-    setState(() {
+    _applyState(() {
       _errors.clear();
+      _fieldErrors.clear();
       for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
-        final dynamic resetValue = _resolveInitialValue(field);
+        final dynamic resetValue = _resolveResetValue(field.type);
         _values[field.name] = resetValue;
         _syncControllerValue(field.name, resetValue);
       }
@@ -137,18 +174,18 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
 
   Widget _buildField(SimpleFormFieldConfig<dynamic> field) {
     final dynamic value = _values[field.name];
-    final String? errorText = _errors[field.name];
+    final String? errorText = _fieldErrors[field.name] ?? _errors[field.name];
 
     switch (field.type) {
       case SimpleFormFieldType.text:
         return FormFieldWrapper(
           label: field.label,
-          helperText: field.helperText,
-          errorText: errorText,
+          helperText: errorText == null ? field.helperText : null,
           required: field.required,
           child: SimpleTextField(
             controller: _controllers[field.name],
             hintText: field.hintText,
+            errorText: errorText,
             keyboardType: field.keyboardType,
             obscureText: field.obscureText,
             enabled: field.enabled,
@@ -171,8 +208,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       case SimpleFormFieldType.dropdown:
         return FormFieldWrapper(
           label: field.label,
-          helperText: field.helperText,
-          errorText: errorText,
+          helperText: errorText == null ? field.helperText : null,
           required: field.required,
           child: SimpleDropdown<dynamic>(
             key: ValueKey<String>(
@@ -181,6 +217,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
             value: value,
             items: field.items,
             hintText: field.hintText,
+            errorText: errorText,
             enabled: field.enabled,
             onChanged: (dynamic selected) => _updateValue(field, selected),
           ),
@@ -256,6 +293,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       if (!nextFieldNames.contains(key)) {
         _values.remove(key);
         _errors.remove(key);
+        _fieldErrors.remove(key);
       }
     }
 
@@ -292,6 +330,20 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       return widget.initialValues![field.name];
     }
     switch (field.type) {
+      case SimpleFormFieldType.text:
+      case SimpleFormFieldType.search:
+        return '';
+      case SimpleFormFieldType.checkbox:
+      case SimpleFormFieldType.switchField:
+        return false;
+      case SimpleFormFieldType.dropdown:
+      case SimpleFormFieldType.radio:
+        return null;
+    }
+  }
+
+  dynamic _resolveResetValue(SimpleFormFieldType type) {
+    switch (type) {
       case SimpleFormFieldType.text:
       case SimpleFormFieldType.search:
         return '';
@@ -348,8 +400,13 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
   }
 
   void _updateValue(SimpleFormFieldConfig<dynamic> field, dynamic value) {
-    setState(() {
+    _applyFieldValue(field, value);
+  }
+
+  void _applyFieldValue(SimpleFormFieldConfig<dynamic> field, dynamic value) {
+    _applyState(() {
       _values[field.name] = value;
+      _fieldErrors.remove(field.name);
       _syncControllerValue(field.name, value);
       if (_errors[field.name] != null) {
         _errors[field.name] = _validateField(field, value);
@@ -358,6 +415,13 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
 
     field.onChanged?.call(value);
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
+  }
+
+  void _applyState(VoidCallback updates) {
+    if (!mounted) {
+      return;
+    }
+    setState(updates);
   }
 
   String? _validateField(SimpleFormFieldConfig<dynamic> field, dynamic value) {

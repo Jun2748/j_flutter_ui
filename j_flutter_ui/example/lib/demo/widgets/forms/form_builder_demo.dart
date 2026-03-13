@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:j_flutter_ui/j_flutter_ui.dart';
 
-class FormBuilderDemo extends StatelessWidget {
+class FormBuilderDemo extends StatefulWidget {
   const FormBuilderDemo({super.key});
 
   String get title => 'Form Builder';
 
   @override
+  State<FormBuilderDemo> createState() => _FormBuilderDemoState();
+}
+
+class _FormBuilderDemoState extends State<FormBuilderDemo> {
+  final GlobalKey<SimpleFormBuilderState> _formKey =
+      GlobalKey<SimpleFormBuilderState>();
+
+  @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBar: AppBarEx(title: title),
+      appBar: AppBarEx(title: widget.title),
       body: ListView(
         padding: JInsets.screenPadding,
         children: <Widget>[
@@ -18,10 +26,41 @@ class FormBuilderDemo extends StatelessWidget {
                 'SimpleFormBuilder renders common form controls from a small schema and supports initialValues out of the box.',
           ),
           Gap.h16,
+          Wrap(
+            spacing: JDimens.dp8,
+            runSpacing: JDimens.dp8,
+            children: <Widget>[
+              SimpleButton.secondary(
+                label: 'Set Name',
+                onPressed: () {
+                  SimpleFormUtil.setValue(_formKey, 'name', 'Jun Lim');
+                },
+              ),
+              SimpleButton.outline(
+                label: 'Set Email Error',
+                onPressed: () {
+                  SimpleFormUtil.setError(
+                    _formKey,
+                    'email',
+                    'Email already exists',
+                  );
+                },
+              ),
+              SimpleButton.text(
+                label: 'Reset',
+                onPressed: () {
+                  _formKey.currentState?.reset();
+                },
+              ),
+            ],
+          ),
+          Gap.h16,
           SimpleCard(
             child: SimpleFormBuilder(
+              key: _formKey,
               initialValues: <String, dynamic>{
                 'name': 'Jun',
+                'email': 'jun@example.com',
                 'query': 'Flutter UI',
                 'role': 'Engineer',
                 'agreeTerms': true,
@@ -35,6 +74,14 @@ class FormBuilderDemo extends StatelessWidget {
                   hintText: 'Enter your full name',
                   helperText: 'This uses SimpleTextField internally.',
                   required: true,
+                ),
+                SimpleFormFieldConfig.text(
+                  name: 'email',
+                  label: 'Email',
+                  hintText: 'Enter your email',
+                  helperText:
+                      'Use "Set Email Error" to simulate a backend error. Editing this field will clear that error automatically.',
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 SimpleFormFieldConfig.search(
                   name: 'query',

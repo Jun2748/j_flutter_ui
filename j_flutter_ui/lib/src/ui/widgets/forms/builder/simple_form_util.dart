@@ -26,6 +26,45 @@ class SimpleFormUtil {
     return formKey.currentState?.getValues() ?? <String, dynamic>{};
   }
 
+  static void setError(
+    GlobalKey<SimpleFormBuilderState> formKey,
+    String fieldName,
+    String error,
+  ) {
+    formKey.currentState?.setFieldError(fieldName, error);
+  }
+
+  static void setErrors(
+    GlobalKey<SimpleFormBuilderState> formKey,
+    Map<String, String> errors,
+  ) {
+    formKey.currentState?.setFieldErrors(errors);
+  }
+
+  static String? getError(
+    GlobalKey<SimpleFormBuilderState> formKey,
+    String fieldName,
+  ) {
+    return formKey.currentState?.getFieldError(fieldName);
+  }
+
+  static Map<String, String?> getErrors(
+    GlobalKey<SimpleFormBuilderState> formKey,
+  ) {
+    return formKey.currentState?.getFieldErrors() ?? <String, String?>{};
+  }
+
+  static void clearError(
+    GlobalKey<SimpleFormBuilderState> formKey,
+    String fieldName,
+  ) {
+    formKey.currentState?.clearFieldError(fieldName);
+  }
+
+  static void clearErrors(GlobalKey<SimpleFormBuilderState> formKey) {
+    formKey.currentState?.clearFieldErrors();
+  }
+
   static void reset(GlobalKey<SimpleFormBuilderState> formKey) {
     formKey.currentState?.reset();
   }

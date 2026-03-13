@@ -13,6 +13,8 @@ class SimpleDropdown<T> extends StatelessWidget {
     this.onChanged,
     this.hintText,
     this.labelText,
+    this.helperText,
+    this.errorText,
     this.enabled = true,
   });
 
@@ -21,6 +23,8 @@ class SimpleDropdown<T> extends StatelessWidget {
   final ValueChanged<T?>? onChanged;
   final String? hintText;
   final String? labelText;
+  final String? helperText;
+  final String? errorText;
   final bool enabled;
 
   @override
@@ -54,6 +58,8 @@ class SimpleDropdown<T> extends StatelessWidget {
           : SimpleText.caption(text: hintText!, color: textSecondary),
       decoration: InputDecoration(
         labelText: labelText,
+        helperText: helperText,
+        errorText: errorText,
         enabled: enabled,
         border: inputBorder,
         enabledBorder: inputBorder,
