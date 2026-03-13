@@ -12,12 +12,12 @@ class SimpleText extends StatelessWidget {
     this.color,
     this.align,
     this.weight,
-    this.maxLines,
+    this.maxLines = 10,
   }) : _variant = variant;
 
   const SimpleText.title({
     Key? key,
-    required String text,
+    required String? text,
     Color? color,
     TextAlign? align,
     FontWeight? weight,
@@ -34,7 +34,7 @@ class SimpleText extends StatelessWidget {
 
   const SimpleText.heading({
     Key? key,
-    required String text,
+    required String? text,
     Color? color,
     TextAlign? align,
     FontWeight? weight,
@@ -51,7 +51,7 @@ class SimpleText extends StatelessWidget {
 
   const SimpleText.body({
     Key? key,
-    required String text,
+    required String? text,
     Color? color,
     TextAlign? align,
     FontWeight? weight,
@@ -68,7 +68,7 @@ class SimpleText extends StatelessWidget {
 
   const SimpleText.caption({
     Key? key,
-    required String text,
+    required String? text,
     Color? color,
     TextAlign? align,
     FontWeight? weight,
@@ -85,7 +85,7 @@ class SimpleText extends StatelessWidget {
 
   const SimpleText.label({
     Key? key,
-    required String text,
+    required String? text,
     Color? color,
     TextAlign? align,
     FontWeight? weight,
@@ -100,7 +100,7 @@ class SimpleText extends StatelessWidget {
          maxLines: maxLines,
        );
 
-  final String text;
+  final String? text;
   final Color? color;
   final TextAlign? align;
   final FontWeight? weight;
@@ -110,7 +110,7 @@ class SimpleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? '',
       textAlign: align,
       maxLines: maxLines,
       overflow: maxLines == null ? null : TextOverflow.ellipsis,

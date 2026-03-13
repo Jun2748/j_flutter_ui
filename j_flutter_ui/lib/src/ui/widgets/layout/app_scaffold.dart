@@ -12,7 +12,7 @@ class AppScaffold extends StatelessWidget {
   });
 
   final PreferredSizeWidget? appBar;
-  final Widget body;
+  final Widget? body;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final EdgeInsets? bodyPadding;
@@ -20,7 +20,7 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget resolvedBody = body;
+    Widget resolvedBody = body ?? const SizedBox.shrink();
 
     if (bodyPadding != null) {
       resolvedBody = Padding(padding: bodyPadding!, child: resolvedBody);

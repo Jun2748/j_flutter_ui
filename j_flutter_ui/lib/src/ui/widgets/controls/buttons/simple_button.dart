@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
-import '../../resources/dimens.dart';
-import '../../resources/styles.dart';
-import '../layout/gap.dart';
+import '../../../resources/colors.dart';
+import '../../../resources/dimens.dart';
+import '../../../resources/styles.dart';
+import '../../layout/gap.dart';
 
 enum _SimpleButtonVariant { primary, secondary, outline, text }
 
@@ -21,7 +21,7 @@ class SimpleButton extends StatelessWidget {
 
   const SimpleButton.primary({
     Key? key,
-    required String label,
+    required String? label,
     required VoidCallback? onPressed,
     bool loading = false,
     IconData? icon,
@@ -40,7 +40,7 @@ class SimpleButton extends StatelessWidget {
 
   const SimpleButton.secondary({
     Key? key,
-    required String label,
+    required String? label,
     required VoidCallback? onPressed,
     bool loading = false,
     IconData? icon,
@@ -59,7 +59,7 @@ class SimpleButton extends StatelessWidget {
 
   const SimpleButton.outline({
     Key? key,
-    required String label,
+    required String? label,
     required VoidCallback? onPressed,
     bool loading = false,
     IconData? icon,
@@ -78,7 +78,7 @@ class SimpleButton extends StatelessWidget {
 
   const SimpleButton.text({
     Key? key,
-    required String label,
+    required String? label,
     required VoidCallback? onPressed,
     bool loading = false,
     IconData? icon,
@@ -95,7 +95,7 @@ class SimpleButton extends StatelessWidget {
          padding: padding,
        );
 
-  final String label;
+  final String? label;
   final VoidCallback? onPressed;
   final bool loading;
   final IconData? icon;
@@ -202,7 +202,7 @@ class SimpleButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         if (icon != null) ...<Widget>[Icon(icon, size: JIconSizes.md), Gap.w8],
-        Text(label),
+        Text(label ?? ''),
       ],
     );
   }

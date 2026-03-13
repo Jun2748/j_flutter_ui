@@ -1,7 +1,14 @@
 import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
+import '../widgets/feedback/chip_demo.dart';
+import '../widgets/feedback/divider_demo.dart';
+import '../widgets/forms/dropdown_demo.dart';
+import '../widgets/forms/search_field_demo.dart';
+import '../widgets/forms/selection_controls_demo.dart';
+import '../widgets/forms/text_field_demo.dart';
 import '../widgets/layout/gap_demo.dart';
 import '../widgets/layout/section_demo.dart';
+import '../widgets/navigation/navigation_demo.dart';
 import '../widgets/text/text_demo.dart';
 import 'demo_category.dart';
 import 'demo_item.dart';
@@ -24,7 +31,7 @@ class DemoRegistry {
     ),
     DemoItem(
       title: const TextDemo().title,
-      category: DemoCategory.foundations,
+      category: DemoCategory.text,
       description: 'Typography scale powered by SimpleText.',
       builder: (_) => const TextDemo(),
     ),
@@ -39,6 +46,48 @@ class DemoRegistry {
       category: DemoCategory.layout,
       description: 'Section header and content composition.',
       builder: (_) => const SectionDemo(),
+    ),
+    DemoItem(
+      title: const TextFieldDemo().title,
+      category: DemoCategory.forms,
+      description: 'Text input states built with SimpleTextField.',
+      builder: (_) => const TextFieldDemo(),
+    ),
+    DemoItem(
+      title: const SearchFieldDemo().title,
+      category: DemoCategory.forms,
+      description: 'Search input with prefix icon and clear action.',
+      builder: (_) => const SearchFieldDemo(),
+    ),
+    DemoItem(
+      title: const DropdownDemo().title,
+      category: DemoCategory.forms,
+      description: 'Dropdown selection with SimpleDropdown.',
+      builder: (_) => const DropdownDemo(),
+    ),
+    DemoItem(
+      title: const SelectionControlsDemo().title,
+      category: DemoCategory.forms,
+      description: 'Checkbox, radio, and switch controls.',
+      builder: (_) => const SelectionControlsDemo(),
+    ),
+    DemoItem(
+      title: const ChipDemo().title,
+      category: DemoCategory.feedback,
+      description: 'Status and category chips.',
+      builder: (_) => const ChipDemo(),
+    ),
+    DemoItem(
+      title: const DividerDemo().title,
+      category: DemoCategory.feedback,
+      description: 'Default and custom divider styles.',
+      builder: (_) => const DividerDemo(),
+    ),
+    DemoItem(
+      title: const NavigationDemo().title,
+      category: DemoCategory.navigation,
+      description: 'AppBarEx and BottomNavBarEx working together.',
+      builder: (_) => const NavigationDemo(),
     ),
   ];
 }

@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+
+import '../../../resources/colors.dart';
+import '../../../resources/dimens.dart';
+import '../../typography/simple_text.dart';
+
+class SimpleCheckbox extends StatelessWidget {
+  const SimpleCheckbox({
+    super.key,
+    required this.value,
+    this.onChanged,
+    this.label,
+    this.enabled = true,
+  });
+
+  final bool? value;
+  final ValueChanged<bool?>? onChanged;
+  final String? label;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool resolvedValue = value ?? false;
+    final bool interactive = enabled && onChanged != null;
+
+    final Widget checkbox = Checkbox(
+      value: resolvedValue,
+      onChanged: interactive ? onChanged : null,
+    );
+
+    if (label == null || label!.trim().isEmpty) {
+      return checkbox;
+    }
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(JDimens.dp8),
+      onTap: interactive ? () => onChanged?.call(!resolvedValue) : null,
+      child: Padding(
+        padding: JInsets.vertical4,
+        child: Row(
+          children: <Widget>[
+            checkbox,
+            Expanded(
+              child: SimpleText.body(
+                text: label!,
+                color: enabled
+                    ? null
+                    : JColors.getColor(context, lightKey: 'textDisabled'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../resources/dimens.dart';
-import '../text/simple_text.dart';
+import '../typography/simple_text.dart';
 import 'gap.dart';
 
 class Section extends StatelessWidget {
@@ -15,7 +15,7 @@ class Section extends StatelessWidget {
 
   final String? title;
   final Widget? action;
-  final Widget child;
+  final Widget? child;
   final EdgeInsets padding;
 
   @override
@@ -36,7 +36,7 @@ class Section extends StatelessWidget {
             ),
             Gap.h16,
           ],
-          child,
+          child ?? const SizedBox.shrink(),
         ],
       ),
     );

@@ -8,12 +8,12 @@ class SimpleCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = JInsets.all16,
-    this.margin = EdgeInsets.zero,
+    this.margin = JInsets.all16,
     this.radius,
     this.onTap,
   });
 
-  final Widget child;
+  final Widget? child;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final double? radius;
@@ -22,7 +22,10 @@ class SimpleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double resolvedRadius = radius ?? JDimens.dp16;
-    final Widget content = Padding(padding: padding, child: child);
+    final Widget content = Padding(
+      padding: padding,
+      child: child ?? const SizedBox.shrink(),
+    );
 
     return Card(
       margin: margin,

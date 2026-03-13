@@ -1,7 +1,7 @@
 class DemoCategory {
   const DemoCategory._();
 
-  static const String foundations = 'Foundations';
+  static const String text = 'Text';
   static const String widgets = 'Widgets';
   static const String layout = 'Layout';
   static const String navigation = 'Navigation';
@@ -10,7 +10,7 @@ class DemoCategory {
   static const String animations = 'Animations';
 
   static const List<String> ordered = <String>[
-    foundations,
+    text,
     widgets,
     layout,
     navigation,

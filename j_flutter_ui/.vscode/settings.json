@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.log": "plaintext"
+  },
+  "editor.formatOnSave": true,
+} 

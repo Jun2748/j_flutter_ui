@@ -18,6 +18,13 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
 
   String _searchQuery = '';
   String _selectedCategory = _allCategory;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +50,8 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Search demos',
-                    prefixIcon: Icon(Icons.search),
-                  ),
+                SimpleSearchField(
+                  controller: _searchController,
                   onChanged: (String value) {
                     setState(() {
                       _searchQuery = value.trim();

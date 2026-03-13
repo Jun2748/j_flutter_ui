@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../text/simple_text.dart';
+import '../typography/simple_text.dart';
 
 enum _SimpleChipVariant { neutral, primary, success, warning, error }
 
@@ -13,22 +13,22 @@ class SimpleChip extends StatelessWidget {
     required _SimpleChipVariant variant,
   }) : _variant = variant;
 
-  const SimpleChip.neutral({Key? key, required String label})
+  const SimpleChip.neutral({Key? key, required String? label})
     : this._(key: key, label: label, variant: _SimpleChipVariant.neutral);
 
-  const SimpleChip.primary({Key? key, required String label})
+  const SimpleChip.primary({Key? key, required String? label})
     : this._(key: key, label: label, variant: _SimpleChipVariant.primary);
 
-  const SimpleChip.success({Key? key, required String label})
+  const SimpleChip.success({Key? key, required String? label})
     : this._(key: key, label: label, variant: _SimpleChipVariant.success);
 
-  const SimpleChip.warning({Key? key, required String label})
+  const SimpleChip.warning({Key? key, required String? label})
     : this._(key: key, label: label, variant: _SimpleChipVariant.warning);
 
-  const SimpleChip.error({Key? key, required String label})
+  const SimpleChip.error({Key? key, required String? label})
     : this._(key: key, label: label, variant: _SimpleChipVariant.error);
 
-  final String label;
+  final String? label;
   final _SimpleChipVariant _variant;
 
   @override
@@ -44,7 +44,7 @@ class SimpleChip extends StatelessWidget {
         color: colors.background,
         borderRadius: BorderRadius.circular(JDimens.dp24),
       ),
-      child: SimpleText.label(text: label, color: colors.foreground),
+      child: SimpleText.label(text: label ?? '', color: colors.foreground),
     );
   }
 
