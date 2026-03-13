@@ -8,24 +8,22 @@ class TextDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBarEx(title: title),
-      body: Padding(
-        padding: JInsets.screenPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const <Widget>[
-            SimpleText.title(text: 'SimpleText.title'),
-            Gap.h16,
-            SimpleText.heading(text: 'SimpleText.heading'),
-            Gap.h16,
-            SimpleText.body(text: 'SimpleText.body'),
-            Gap.h16,
-            SimpleText.caption(text: 'SimpleText.caption'),
-            Gap.h16,
-            SimpleText.label(text: 'SimpleText.label'),
-          ],
-        ),
+      bodyPadding: JInsets.screenPadding,
+      body: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SimpleText.title(text: 'SimpleText.title'),
+          Gap.h16,
+          SimpleText.heading(text: 'SimpleText.heading'),
+          Gap.h16,
+          SimpleText.body(text: 'SimpleText.body'),
+          Gap.h16,
+          SimpleText.caption(text: 'SimpleText.caption'),
+          Gap.h16,
+          SimpleText.label(text: 'SimpleText.label'),
+        ],
       ),
     );
   }

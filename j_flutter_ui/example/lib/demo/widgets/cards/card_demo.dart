@@ -8,25 +8,23 @@ class CardDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBarEx(title: title),
-      body: Padding(
-        padding: JInsets.screenPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const SimpleCard(child: SimpleText.body(text: 'Example card')),
-            Gap.h16,
-            SimpleCard(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Clickable card tapped')),
-                );
-              },
-              child: const SimpleText.body(text: 'Tap this card'),
-            ),
-          ],
-        ),
+      bodyPadding: JInsets.screenPadding,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          const SimpleCard(child: SimpleText.body(text: 'Example card')),
+          Gap.h16,
+          SimpleCard(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Clickable card tapped')),
+              );
+            },
+            child: const SimpleText.body(text: 'Tap this card'),
+          ),
+        ],
       ),
     );
   }

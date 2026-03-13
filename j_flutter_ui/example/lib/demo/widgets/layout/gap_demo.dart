@@ -8,26 +8,24 @@ class GapDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBarEx(title: title),
-      body: Padding(
-        padding: JInsets.screenPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const <Widget>[
-            SimpleText.body(text: 'Above Gap.h8'),
-            Gap.h8,
-            SimpleText.caption(text: 'After Gap.h8'),
-            Gap.h16,
-            SimpleText.body(text: 'Above Gap.h16'),
-            Gap.h16,
-            SimpleText.caption(text: 'After Gap.h16'),
-            Gap.h24,
-            SimpleText.body(text: 'Above Gap.h24'),
-            Gap.h24,
-            SimpleText.caption(text: 'After Gap.h24'),
-          ],
-        ),
+      bodyPadding: JInsets.screenPadding,
+      body: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SimpleText.body(text: 'Above Gap.h8'),
+          Gap.h8,
+          SimpleText.caption(text: 'After Gap.h8'),
+          Gap.h16,
+          SimpleText.body(text: 'Above Gap.h16'),
+          Gap.h16,
+          SimpleText.caption(text: 'After Gap.h16'),
+          Gap.h24,
+          SimpleText.body(text: 'Above Gap.h24'),
+          Gap.h24,
+          SimpleText.caption(text: 'After Gap.h24'),
+        ],
       ),
     );
   }

@@ -8,7 +8,7 @@ class SectionDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBarEx(title: title),
       body: const Section(
         title: 'Profile',
