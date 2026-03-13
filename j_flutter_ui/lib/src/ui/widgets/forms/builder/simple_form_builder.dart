@@ -35,10 +35,10 @@ class SimpleFormBuilder extends StatefulWidget {
   final String submitLabel;
 
   @override
-  State<SimpleFormBuilder> createState() => _SimpleFormBuilderState();
+  State<SimpleFormBuilder> createState() => SimpleFormBuilderState();
 }
 
-class _SimpleFormBuilderState extends State<SimpleFormBuilder> {
+class SimpleFormBuilderState extends State<SimpleFormBuilder> {
   final Map<String, dynamic> _values = <String, dynamic>{};
   final Map<String, String?> _errors = <String, String?>{};
   final Map<String, TextEditingController> _controllers =
@@ -94,6 +94,45 @@ class _SimpleFormBuilderState extends State<SimpleFormBuilder> {
         children: children,
       ),
     );
+  }
+
+  dynamic getFieldValue(String name) {
+    return _values[name];
+  }
+
+  void setFieldValue(String name, dynamic value) {
+    final SimpleFormFieldConfig<dynamic>? field = _findField(name);
+    if (field == null) {
+      return;
+    }
+
+    setState(() {
+      _values[name] = value;
+      _syncControllerValue(name, value);
+      if (_errors[name] != null) {
+        _errors[name] = _validateField(field, value);
+      }
+    });
+
+    field.onChanged?.call(value);
+    widget.onChanged?.call(Map<String, dynamic>.from(_values));
+  }
+
+  Map<String, dynamic> getValues() {
+    return Map<String, dynamic>.from(_values);
+  }
+
+  void reset() {
+    setState(() {
+      _errors.clear();
+      for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+        final dynamic resetValue = _resolveInitialValue(field);
+        _values[field.name] = resetValue;
+        _syncControllerValue(field.name, resetValue);
+      }
+    });
+
+    widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
 
   Widget _buildField(SimpleFormFieldConfig<dynamic> field) {
@@ -270,6 +309,33 @@ class _SimpleFormBuilderState extends State<SimpleFormBuilder> {
         type == SimpleFormFieldType.search;
   }
 
+  SimpleFormFieldConfig<dynamic>? _findField(String name) {
+    for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+      if (field.name == name) {
+        return field;
+      }
+    }
+    return null;
+  }
+
+  void _syncControllerValue(String name, dynamic value) {
+    final TextEditingController? controller = _controllers[name];
+    if (controller == null) {
+      return;
+    }
+
+    final String textValue = (value ?? '').toString();
+    if (controller.text == textValue) {
+      return;
+    }
+
+    controller.value = controller.value.copyWith(
+      text: textValue,
+      selection: TextSelection.collapsed(offset: textValue.length),
+      composing: TextRange.empty,
+    );
+  }
+
   String _resolveOptionLabel(
     SimpleFormFieldConfig<dynamic> field,
     dynamic option,
@@ -284,6 +350,7 @@ class _SimpleFormBuilderState extends State<SimpleFormBuilder> {
   void _updateValue(SimpleFormFieldConfig<dynamic> field, dynamic value) {
     setState(() {
       _values[field.name] = value;
+      _syncControllerValue(field.name, value);
       if (_errors[field.name] != null) {
         _errors[field.name] = _validateField(field, value);
       }

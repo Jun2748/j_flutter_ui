@@ -21,12 +21,12 @@ class FormBuilderDemo extends StatelessWidget {
           SimpleCard(
             child: SimpleFormBuilder(
               initialValues: <String, dynamic>{
-                // 'name': 'Jun',
-                // 'query': 'Flutter UI',
-                // 'role': 'Engineer',
-                // 'agreeTerms': true,
-                // 'workMode': 'Hybrid',
-                // 'receivePromo': true,
+                'name': 'Jun',
+                'query': 'Flutter UI',
+                'role': 'Engineer',
+                'agreeTerms': true,
+                'workMode': 'Hybrid',
+                'receivePromo': true,
               },
               fields: <SimpleFormFieldConfig<dynamic>>[
                 SimpleFormFieldConfig.text(

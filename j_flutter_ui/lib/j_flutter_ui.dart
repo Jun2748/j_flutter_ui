@@ -12,6 +12,7 @@ export 'src/ui/widgets/display/simple_divider.dart';
 export 'src/ui/widgets/forms/builder/simple_form_builder.dart';
 export 'src/ui/widgets/forms/builder/simple_form_field_config.dart';
 export 'src/ui/widgets/forms/builder/simple_form_field_type.dart';
+export 'src/ui/widgets/forms/builder/simple_form_util.dart';
 export 'src/ui/widgets/forms/form_field_wrapper.dart';
 export 'src/ui/widgets/forms/form_section.dart';
 export 'src/ui/widgets/forms/simple_form.dart';
