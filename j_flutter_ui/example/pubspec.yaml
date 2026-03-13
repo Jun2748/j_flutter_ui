@@ -1,0 +1,15 @@
+name: j_flutter_ui_example
+description: Example app for the j_flutter_ui package.
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  j_flutter_ui:
+    path: ../
+
+flutter:
+  uses-material-design: true

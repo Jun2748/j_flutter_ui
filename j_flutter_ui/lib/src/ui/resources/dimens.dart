@@ -124,6 +124,7 @@ abstract final class JInsets {
     vertical: JDimens.dp12,
   );
   static const EdgeInsets screen = EdgeInsets.all(JDimens.dp16);
+  static const EdgeInsets screenPadding = screen;
   static const EdgeInsets card = EdgeInsets.all(JDimens.dp16);
 }
 
