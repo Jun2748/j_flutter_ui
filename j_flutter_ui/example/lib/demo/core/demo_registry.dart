@@ -3,6 +3,8 @@ import '../widgets/cards/card_demo.dart';
 import '../widgets/feedback/chip_demo.dart';
 import '../widgets/feedback/divider_demo.dart';
 import '../widgets/forms/dropdown_demo.dart';
+import '../widgets/forms/form_builder_demo.dart';
+import '../widgets/forms/form_composition_demo.dart';
 import '../widgets/forms/search_field_demo.dart';
 import '../widgets/forms/selection_controls_demo.dart';
 import '../widgets/forms/text_field_demo.dart';
@@ -70,6 +72,19 @@ class DemoRegistry {
       category: DemoCategory.forms,
       description: 'Checkbox, radio, and switch controls.',
       builder: (_) => const SelectionControlsDemo(),
+    ),
+    DemoItem(
+      title: const FormCompositionDemo().title,
+      category: DemoCategory.forms,
+      description: 'SimpleForm, FormSection, and FormFieldWrapper in one flow.',
+      builder: (_) => const FormCompositionDemo(),
+    ),
+    DemoItem(
+      title: const FormBuilderDemo().title,
+      category: DemoCategory.forms,
+      description:
+          'Schema-driven forms with initialValues and submit handling.',
+      builder: (_) => const FormBuilderDemo(),
     ),
     DemoItem(
       title: const ChipDemo().title,

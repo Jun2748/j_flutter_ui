@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../resources/colors.dart';
 import '../../../resources/dimens.dart';
-import '../../typography/simple_text.dart';
+import '../../../resources/styles.dart';
 
 class SimpleCheckbox extends StatelessWidget {
   const SimpleCheckbox({
@@ -10,12 +10,14 @@ class SimpleCheckbox extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.label,
+    this.textStyle,
     this.enabled = true,
   });
 
   final bool? value;
   final ValueChanged<bool?>? onChanged;
   final String? label;
+  final TextStyle? textStyle;
   final bool enabled;
 
   @override
@@ -41,11 +43,15 @@ class SimpleCheckbox extends StatelessWidget {
           children: <Widget>[
             checkbox,
             Expanded(
-              child: SimpleText.body(
-                text: label!,
-                color: enabled
-                    ? null
-                    : JColors.getColor(context, lightKey: 'textDisabled'),
+              child: Text(
+                label!,
+                style: JTextStyles.body2
+                    .merge(textStyle)
+                    .copyWith(
+                      color: enabled
+                          ? textStyle?.color
+                          : JColors.getColor(context, lightKey: 'textDisabled'),
+                    ),
               ),
             ),
           ],
