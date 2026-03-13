@@ -11,8 +11,6 @@ class FormBuilderDemo extends StatefulWidget {
 }
 
 class _FormBuilderDemoState extends State<FormBuilderDemo> {
-  final GlobalKey<SimpleFormBuilderState> _formKey =
-      GlobalKey<SimpleFormBuilderState>();
   late final SimpleFormController _controller = SimpleFormController(
     initialValues: <String, dynamic>{
       'name': 'Jun',
@@ -24,17 +22,9 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
       'receivePromo': true,
     },
   );
-  late Map<String, dynamic> _controllerValues = _controller.values;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_handleControllerChanged);
-  }
 
   @override
   void dispose() {
-    _controller.removeListener(_handleControllerChanged);
     _controller.dispose();
     super.dispose();
   }
@@ -48,7 +38,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         children: <Widget>[
           const SimpleText.body(
             text:
-                'SimpleFormBuilder can also sync with SimpleFormController. Use the buttons below to update values externally and watch the form stay in sync.',
+                'SimpleFormBuilder syncs with SimpleFormController for values, errors, validation, and submit flow. Editing a field automatically clears its backend error.',
           ),
           Gap.h16,
           Wrap(
@@ -81,11 +71,18 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
               SimpleButton.outline(
                 label: 'Set Email Error',
                 onPressed: () {
-                  SimpleFormUtil.setError(
-                    _formKey,
-                    'email',
-                    'Email already exists',
-                  );
+                  _controller.setError('email', 'Email already exists');
+                },
+              ),
+              SimpleButton.outline(
+                label: 'Set Multi Errors',
+                onPressed: () {
+                  _controller.setErrors(<String, String>{
+                    'email': 'Email already exists',
+                    'query': 'Search term is too broad',
+                    'role': 'choose a new role',
+                    'agreeTerms': 'accept the terms',
+                  });
                 },
               ),
               SimpleButton.text(
@@ -100,23 +97,42 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   _controller.reset();
                 },
               ),
+              SimpleButton.text(
+                label: 'Validate',
+                onPressed: () {
+                  final bool isValid = _controller.validate();
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Valid: $isValid')));
+                },
+              ),
             ],
           ),
           Gap.h16,
-          SimpleCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SimpleText.heading(text: 'Controller Values'),
-                Gap.h8,
-                SimpleText.caption(text: _controllerValues.toString()),
-              ],
-            ),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (BuildContext context, _) {
+              return SimpleCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SimpleText.heading(text: 'Controller State'),
+                    Gap.h8,
+                    SimpleText.caption(
+                      text: 'Values: ${_controller.values.toString()}',
+                    ),
+                    Gap.h8,
+                    SimpleText.caption(
+                      text: 'Errors: ${_controller.errors.toString()}',
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           Gap.h16,
           SimpleCard(
             child: SimpleFormBuilder(
-              key: _formKey,
               controller: _controller,
               fields: <SimpleFormFieldConfig<dynamic>>[
                 SimpleFormFieldConfig.text(
@@ -179,8 +195,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                 ),
               ],
               showSubmitButton: true,
-              onChanged: (_) {},
-              onSubmit: (Map<String, dynamic> values) {
+              onSubmit: (Map<String, dynamic> values) async {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Submitted: ${values.toString()}')),
                 );
@@ -190,11 +205,5 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         ],
       ),
     );
-  }
-
-  void _handleControllerChanged() {
-    setState(() {
-      _controllerValues = _controller.values;
-    });
   }
 }

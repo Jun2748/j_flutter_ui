@@ -47,7 +47,8 @@ class SimpleFormBuilder extends StatefulWidget {
   State<SimpleFormBuilder> createState() => SimpleFormBuilderState();
 }
 
-class SimpleFormBuilderState extends State<SimpleFormBuilder> {
+class SimpleFormBuilderState extends State<SimpleFormBuilder>
+    implements SimpleFormControllerHost {
   final GlobalKey<FormState> _internalFormKey = GlobalKey<FormState>();
   final Map<String, dynamic> _values = <String, dynamic>{};
   final Map<String, String?> _errors = <String, String?>{};
@@ -63,24 +64,27 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
   @override
   void initState() {
     super.initState();
-    _attachController(widget.controller);
+    _bindController(widget.controller);
     _syncFieldState();
+    _syncErrorStateFromController();
   }
 
   @override
   void didUpdateWidget(SimpleFormBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      _detachController(oldWidget.controller);
-      _attachController(widget.controller);
+      _unbindController(oldWidget.controller);
+      _bindController(widget.controller);
       _values.clear();
+      _fieldErrors.clear();
     }
     _syncFieldState();
+    _syncErrorStateFromController();
   }
 
   @override
   void dispose() {
-    _detachController(widget.controller);
+    _unbindController(widget.controller);
     for (final TextEditingController controller in _controllers.values) {
       controller.dispose();
     }
@@ -141,6 +145,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     return Map<String, dynamic>.from(_values);
   }
 
+  @override
   bool validate() {
     final bool formValid = _internalFormKey.currentState?.validate() ?? false;
     final bool fieldsValid = _validateFields();
@@ -160,36 +165,64 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
       return;
     }
 
-    _applyState(() {
-      if (error == null || error.trim().isEmpty) {
-        _fieldErrors.remove(name);
-      } else {
-        _fieldErrors[name] = error;
-      }
-    });
+    final bool changed = _setBackendErrorLocally(name, error);
+    if (!changed) {
+      return;
+    }
+
+    _syncControllerErrorsFromBuilder(fieldNames: <String>[name]);
   }
 
   void setFieldErrors(Map<String, String> errors) {
+    bool changed = false;
+
     _applyState(() {
       for (final MapEntry<String, String> entry in errors.entries) {
         if (_findField(entry.key) == null) {
           continue;
         }
-        _fieldErrors[entry.key] = entry.value;
+
+        final String? normalizedError = _normalizeError(entry.value);
+        if (normalizedError == null) {
+          if (_fieldErrors.remove(entry.key) != null) {
+            changed = true;
+          }
+          continue;
+        }
+
+        if (_fieldErrors[entry.key] != normalizedError) {
+          _fieldErrors[entry.key] = normalizedError;
+          changed = true;
+        }
       }
     });
+
+    if (changed) {
+      _syncControllerErrorsFromBuilder(fieldNames: errors.keys.toList());
+    }
   }
 
   void clearFieldError(String name) {
+    bool changed = false;
+
     _applyState(() {
-      _fieldErrors.remove(name);
+      changed = _fieldErrors.remove(name) != null;
     });
+
+    if (changed) {
+      _syncControllerErrorsFromBuilder(fieldNames: <String>[name]);
+    }
   }
 
   void clearFieldErrors() {
+    if (_fieldErrors.isEmpty) {
+      return;
+    }
+
     _applyState(() {
       _fieldErrors.clear();
     });
+    _syncControllerErrorsFromBuilder(clearAll: true);
   }
 
   void setSubmitting(bool value) {
@@ -213,9 +246,11 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     });
 
     _syncControllerFromBuilder();
+    _syncControllerErrorsFromBuilder(clearAll: true);
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
 
+  @override
   Future<void> submit() async {
     if (_isSubmitting) {
       return;
@@ -485,9 +520,11 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
   }
 
   void _applyFieldValue(SimpleFormFieldConfig<dynamic> field, dynamic value) {
+    bool backendErrorCleared = false;
+
     _applyState(() {
       _values[field.name] = value;
-      _fieldErrors.remove(field.name);
+      backendErrorCleared = _fieldErrors.remove(field.name) != null;
       _syncControllerValue(field.name, value);
       if (_errors[field.name] != null) {
         _errors[field.name] = _validateField(field, value);
@@ -495,6 +532,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     });
 
     _syncControllerFromBuilder(fieldNames: <String>[field.name]);
+    if (backendErrorCleared) {
+      _syncControllerErrorsFromBuilder(fieldNames: <String>[field.name]);
+    }
     field.onChanged?.call(value);
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
@@ -548,12 +588,37 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     }
   }
 
-  void _attachController(SimpleFormController? controller) {
+  String? _normalizeError(String? error) {
+    if (error == null || error.trim().isEmpty) {
+      return null;
+    }
+    return error;
+  }
+
+  bool _setBackendErrorLocally(String name, String? error) {
+    final String? normalizedError = _normalizeError(error);
+    bool changed = false;
+
+    _applyState(() {
+      if (normalizedError == null) {
+        changed = _fieldErrors.remove(name) != null;
+      } else if (_fieldErrors[name] != normalizedError) {
+        _fieldErrors[name] = normalizedError;
+        changed = true;
+      }
+    });
+
+    return changed;
+  }
+
+  void _bindController(SimpleFormController? controller) {
+    controller?.attachHost(this);
     controller?.addListener(_handleControllerChanged);
   }
 
-  void _detachController(SimpleFormController? controller) {
+  void _unbindController(SimpleFormController? controller) {
     controller?.removeListener(_handleControllerChanged);
+    controller?.detachHost(this);
   }
 
   void _handleControllerChanged() {
@@ -567,7 +632,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
     }
 
     final Map<String, dynamic> controllerValues = controller.values;
-    bool changed = false;
+    bool valuesChanged = false;
 
     _isSyncingFromController = true;
     _applyState(() {
@@ -581,12 +646,14 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
 
         _values[field.name] = controllerValue;
         _syncControllerValue(field.name, controllerValue);
-        changed = true;
+        valuesChanged = true;
       }
+
+      _syncErrorStateFromControllerInsideSetState(controller);
     });
     _isSyncingFromController = false;
 
-    if (changed) {
+    if (valuesChanged) {
       widget.onChanged?.call(Map<String, dynamic>.from(_values));
     }
   }
@@ -621,6 +688,65 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder> {
 
     _isSyncingToController = true;
     controller.patchValues(nextValues);
+    _isSyncingToController = false;
+  }
+
+  void _syncErrorStateFromController() {
+    final SimpleFormController? controller = widget.controller;
+    if (controller == null) {
+      return;
+    }
+
+    _applyState(() {
+      _syncErrorStateFromControllerInsideSetState(controller);
+    });
+  }
+
+  void _syncErrorStateFromControllerInsideSetState(
+    SimpleFormController controller,
+  ) {
+    final Map<String, String?> controllerErrors = controller.errors;
+
+    final List<String> errorKeys = _fieldErrors.keys.toList();
+    for (final String key in errorKeys) {
+      if (!controllerErrors.containsKey(key)) {
+        _fieldErrors.remove(key);
+      }
+    }
+
+    for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+      final String fieldName = field.name;
+      final String? controllerError = controllerErrors[fieldName];
+      if (controllerError == null) {
+        _fieldErrors.remove(fieldName);
+        continue;
+      }
+      _fieldErrors[fieldName] = controllerError;
+    }
+  }
+
+  void _syncControllerErrorsFromBuilder({
+    List<String>? fieldNames,
+    bool clearAll = false,
+  }) {
+    final SimpleFormController? controller = widget.controller;
+    if (controller == null || _isSyncingFromController) {
+      return;
+    }
+
+    _isSyncingToController = true;
+    if (clearAll) {
+      controller.clearErrors();
+    } else if (fieldNames != null) {
+      for (final String name in fieldNames) {
+        final String? error = _fieldErrors[name];
+        if (error == null) {
+          controller.clearError(name);
+        } else {
+          controller.setError(name, error);
+        }
+      }
+    }
     _isSyncingToController = false;
   }
 }
