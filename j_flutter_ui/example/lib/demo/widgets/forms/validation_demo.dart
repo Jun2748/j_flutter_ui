@@ -16,12 +16,18 @@ class ValidationDemo extends StatelessWidget {
           const SimpleBanner.info(
             title: 'Validation demo',
             message:
-                'This form shows required, email, and cross-field password validation.',
+                'This form focuses on reusable required and email validation with inline error rendering.',
           ),
           Gap.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               fields: <SimpleFormFieldConfig<dynamic>>[
+                SimpleFormFieldConfig.text(
+                  name: 'name',
+                  label: 'Name',
+                  hintText: 'Enter your name',
+                  validator: SimpleFormValidator.required(),
+                ),
                 SimpleFormFieldConfig.text(
                   name: 'email',
                   label: 'Email',
@@ -31,35 +37,13 @@ class ValidationDemo extends StatelessWidget {
                     SimpleFormValidator.email(),
                   ]),
                 ),
-                SimpleFormFieldConfig.text(
-                  name: 'password',
-                  label: 'Password',
-                  hintText: 'Enter password',
-                  obscureText: true,
-                  validator: SimpleFormValidator.combine(<SimpleValidator>[
-                    SimpleFormValidator.required(),
-                    SimpleFormValidator.minLength(8),
-                  ]),
-                ),
-                SimpleFormFieldConfig.text(
-                  name: 'confirmPassword',
-                  label: 'Confirm Password',
-                  hintText: 'Re-enter password',
-                  obscureText: true,
-                  validator: SimpleFormValidator.required(),
-                  crossValidators: <SimpleCrossFieldValidator>[
-                    SimpleCrossFieldValidators.matchField(
-                      'password',
-                      message: 'Passwords do not match',
-                    ),
-                  ],
-                ),
               ],
               showSubmitButton: true,
               submitLabel: 'Validate Form',
               onSubmit: (Map<String, dynamic> values) async {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Validation passed')),
+                SimpleSnackbar.showSuccess(
+                  context,
+                  message: 'Validation passed',
                 );
               },
             ),

@@ -1,25 +1,21 @@
 class DemoCategory {
   const DemoCategory._();
 
-  static const String text = 'Text';
-  static const String widgets = 'Widgets';
+  static const String foundations = 'Foundations';
+  static const String controls = 'Controls';
+  static const String display = 'Display';
   static const String layout = 'Layout';
   static const String navigation = 'Navigation';
   static const String overlays = 'Overlays';
-  static const String feedback = 'Feedback';
-  static const String states = 'States';
   static const String forms = 'Forms';
-  static const String animations = 'Animations';
 
   static const List<String> ordered = <String>[
-    text,
-    widgets,
+    foundations,
+    controls,
+    display,
     layout,
     navigation,
     overlays,
-    feedback,
-    states,
     forms,
-    animations,
   ];
 }

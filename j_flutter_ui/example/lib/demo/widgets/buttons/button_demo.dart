@@ -10,17 +10,54 @@ class ButtonDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppBarEx(title: title),
-      bodyPadding: JInsets.screenPadding,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: ListView(
+        padding: JInsets.screenPadding,
         children: <Widget>[
-          SimpleButton.primary(label: 'Primary Button', onPressed: () {}),
+          Section(
+            title: 'Variants',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SimpleButton.primary(
+                  label: 'Primary Button',
+                  icon: Icons.check_circle_outline,
+                  onPressed: () {},
+                ),
+                Gap.h16,
+                SimpleButton.secondary(
+                  label: 'Secondary Button',
+                  onPressed: () {},
+                ),
+                Gap.h16,
+                SimpleButton.outline(label: 'Outline Button', onPressed: () {}),
+                Gap.h16,
+                SimpleButton.text(label: 'Text Button', onPressed: () {}),
+              ],
+            ),
+          ),
           Gap.h16,
-          SimpleButton.secondary(label: 'Secondary Button', onPressed: () {}),
-          Gap.h16,
-          SimpleButton.outline(label: 'Outline Button', onPressed: () {}),
-          Gap.h16,
-          SimpleButton.text(label: 'Text Button', onPressed: () {}),
+          Section(
+            title: 'Loading state',
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: SimpleButton.primary(
+                    label: 'Saving',
+                    loading: true,
+                    onPressed: () {},
+                  ),
+                ),
+                const Gap.w(JDimens.dp12),
+                Expanded(
+                  child: SimpleButton.outline(
+                    label: 'Syncing',
+                    loading: true,
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
