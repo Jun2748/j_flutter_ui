@@ -31,7 +31,27 @@ class SimpleFormValidator {
   static SimpleValidator phone({
     String message = SimpleValidationMessages.invalidPhone,
   }) {
-    return pattern(SimpleRegexPatterns.phone, message: message);
+    return (dynamic value) {
+      final String? normalizedValue = _normalizeValue(value);
+      if (normalizedValue == null || normalizedValue.isEmpty) {
+        return null;
+      }
+
+      if (!SimpleRegexPatterns.phone.hasMatch(normalizedValue)) {
+        return message;
+      }
+
+      final String digitsOnly = normalizedValue.replaceAll(
+        RegExp(r'[^0-9]'),
+        '',
+      );
+
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+        return message;
+      }
+
+      return null;
+    };
   }
 
   static SimpleValidator pattern(

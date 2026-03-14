@@ -133,6 +133,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   }
 
   dynamic getFieldValue(String name) {
+    _syncCurrentTextValuesFromControllers(fieldNames: <String>[name]);
     return _values[name];
   }
 
@@ -149,14 +150,17 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   }
 
   Map<String, dynamic> getValues() {
+    _syncCurrentTextValuesFromControllers();
     return Map<String, dynamic>.from(_values);
   }
 
   @override
   bool validate() {
-    final bool formValid = _internalFormKey.currentState?.validate() ?? false;
-    final bool fieldsValid = _validateFields();
-    return formValid && fieldsValid;
+    _syncCurrentTextValuesFromControllers(syncController: true);
+    final bool formValid = _internalFormKey.currentState?.validate() ?? true;
+    final Map<String, String?> validationErrors = _collectValidationErrors();
+    _applyValidationErrors(validationErrors);
+    return formValid && !_hasValidationErrors(validationErrors);
   }
 
   @override
@@ -217,12 +221,18 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
 
   @override
   Future<bool> validateAndScrollToFirstError() async {
-    final bool valid = validate();
+    _syncCurrentTextValuesFromControllers(syncController: true);
+    final bool formValid = _internalFormKey.currentState?.validate() ?? true;
+    final Map<String, String?> validationErrors = _collectValidationErrors();
+    _applyValidationErrors(validationErrors);
+    final bool valid = formValid && !_hasValidationErrors(validationErrors);
     if (valid) {
       return true;
     }
 
-    final String? firstInvalidFieldName = _findFirstInvalidFieldName();
+    final String? firstInvalidFieldName = _findFirstInvalidFieldName(
+      validationErrors,
+    );
     if (firstInvalidFieldName == null) {
       return false;
     }
@@ -349,9 +359,12 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       clearFieldErrors();
     }
 
+    _syncCurrentTextValuesFromControllers(syncController: true);
+    final Map<String, dynamic> submitValues = getValues();
+
     setSubmitting(true);
     try {
-      await widget.onSubmit?.call(Map<String, dynamic>.from(_values));
+      await widget.onSubmit?.call(submitValues);
     } finally {
       setSubmitting(false);
     }
@@ -641,6 +654,44 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     _applyFieldValue(field, value);
   }
 
+  void _syncCurrentTextValuesFromControllers({
+    List<String>? fieldNames,
+    bool syncController = false,
+  }) {
+    final Iterable<SimpleFormFieldConfig<dynamic>> fieldsToSync =
+        fieldNames == null
+        ? widget.fields
+        : widget.fields.where(
+            (SimpleFormFieldConfig<dynamic> field) =>
+                fieldNames.contains(field.name),
+          );
+
+    final List<String> changedFieldNames = <String>[];
+
+    for (final SimpleFormFieldConfig<dynamic> field in fieldsToSync) {
+      if (!_usesTextController(field.type)) {
+        continue;
+      }
+
+      final TextEditingController? controller = _controllers[field.name];
+      if (controller == null) {
+        continue;
+      }
+
+      final String currentTextValue = controller.text;
+      if (_values[field.name] == currentTextValue) {
+        continue;
+      }
+
+      _values[field.name] = currentTextValue;
+      changedFieldNames.add(field.name);
+    }
+
+    if (syncController && changedFieldNames.isNotEmpty) {
+      _syncControllerFromBuilder(fieldNames: changedFieldNames);
+    }
+  }
+
   void _applyFieldValue(SimpleFormFieldConfig<dynamic> field, dynamic value) {
     bool backendErrorCleared = false;
 
@@ -661,30 +712,32 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
 
-  bool _validateFields() {
-    bool hasError = false;
+  Map<String, String?> _collectValidationErrors() {
     final Map<String, String?> nextErrors = <String, String?>{};
-
     for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
-      final String? error = _validateField(field, _values[field.name]);
-      nextErrors[field.name] = error;
-      if (error != null && error.isNotEmpty) {
-        hasError = true;
-      }
+      nextErrors[field.name] = _validateField(field, _values[field.name]);
     }
 
+    return nextErrors;
+  }
+
+  void _applyValidationErrors(Map<String, String?> validationErrors) {
     _applyState(() {
       _errors
         ..clear()
-        ..addAll(nextErrors);
+        ..addAll(validationErrors);
     });
-
-    return !hasError;
   }
 
-  String? _findFirstInvalidFieldName() {
+  bool _hasValidationErrors(Map<String, String?> validationErrors) {
+    return validationErrors.values.any(
+      (String? error) => error != null && error.isNotEmpty,
+    );
+  }
+
+  String? _findFirstInvalidFieldName(Map<String, String?> validationErrors) {
     for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
-      final String? error = _validateField(field, _values[field.name]);
+      final String? error = validationErrors[field.name];
       if (error != null && error.isNotEmpty) {
         return field.name;
       }

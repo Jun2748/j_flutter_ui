@@ -9,5 +9,5 @@ class SimpleRegexPatterns {
 
   static final RegExp alphanumeric = RegExp(r'^[A-Za-z0-9]+$');
 
-  static final RegExp phone = RegExp(r'^\+?[0-9\s().-]{7,20}$');
+  static final RegExp phone = RegExp(r'^\+?[0-9\s().-]+$');
 }
