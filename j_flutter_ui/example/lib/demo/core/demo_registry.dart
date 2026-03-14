@@ -6,6 +6,7 @@ import '../widgets/feedback/banner_demo.dart';
 import '../widgets/feedback/chip_demo.dart';
 import '../widgets/feedback/dialog_demo.dart';
 import '../widgets/feedback/divider_demo.dart';
+import '../widgets/feedback/snackbar_demo.dart';
 import '../widgets/forms/dropdown_demo.dart';
 import '../widgets/forms/backend_error_demo.dart';
 import '../widgets/forms/form_builder_demo.dart';
@@ -20,6 +21,10 @@ import '../widgets/layout/gap_demo.dart';
 import '../widgets/layout/section_demo.dart';
 import '../widgets/navigation/navigation_demo.dart';
 import '../widgets/navigation/tabs_demo.dart';
+import '../widgets/overlays/bottom_sheet_demo.dart';
+import '../widgets/states/empty_state_demo.dart';
+import '../widgets/states/error_view_demo.dart';
+import '../widgets/states/loading_view_demo.dart';
 import '../widgets/text/text_demo.dart';
 import 'demo_category.dart';
 import 'demo_item.dart';
@@ -152,6 +157,12 @@ class DemoRegistry {
       builder: (_) => const DialogDemo(),
     ),
     DemoItem(
+      title: const SnackbarDemo().title,
+      category: DemoCategory.feedback,
+      description: 'ScaffoldMessenger-based snackbars with semantic variants.',
+      builder: (_) => const SnackbarDemo(),
+    ),
+    DemoItem(
       title: const DividerDemo().title,
       category: DemoCategory.feedback,
       description: 'Default and custom divider styles.',
@@ -168,6 +179,30 @@ class DemoRegistry {
       category: DemoCategory.navigation,
       description: 'DefaultTabController wrapper with styled tabs.',
       builder: (_) => const TabsDemo(),
+    ),
+    DemoItem(
+      title: const BottomSheetDemo().title,
+      category: DemoCategory.overlays,
+      description: 'Reusable modal bottom sheets with title and content.',
+      builder: (_) => const BottomSheetDemo(),
+    ),
+    DemoItem(
+      title: const EmptyStateDemo().title,
+      category: DemoCategory.states,
+      description: 'Centered empty-state layouts with optional actions.',
+      builder: (_) => const EmptyStateDemo(),
+    ),
+    DemoItem(
+      title: const LoadingViewDemo().title,
+      category: DemoCategory.states,
+      description: 'Centered loading indicators for page or section states.',
+      builder: (_) => const LoadingViewDemo(),
+    ),
+    DemoItem(
+      title: const ErrorViewDemo().title,
+      category: DemoCategory.states,
+      description: 'Centered error states with optional retry actions.',
+      builder: (_) => const ErrorViewDemo(),
     ),
   ];
 }

@@ -5,7 +5,9 @@ class DemoCategory {
   static const String widgets = 'Widgets';
   static const String layout = 'Layout';
   static const String navigation = 'Navigation';
+  static const String overlays = 'Overlays';
   static const String feedback = 'Feedback';
+  static const String states = 'States';
   static const String forms = 'Forms';
   static const String animations = 'Animations';
 
@@ -14,7 +16,9 @@ class DemoCategory {
     widgets,
     layout,
     navigation,
+    overlays,
     feedback,
+    states,
     forms,
     animations,
   ];
