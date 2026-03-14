@@ -7,11 +7,15 @@ import '../widgets/feedback/chip_demo.dart';
 import '../widgets/feedback/dialog_demo.dart';
 import '../widgets/feedback/divider_demo.dart';
 import '../widgets/forms/dropdown_demo.dart';
+import '../widgets/forms/backend_error_demo.dart';
 import '../widgets/forms/form_builder_demo.dart';
+import '../widgets/forms/form_controller_demo.dart';
 import '../widgets/forms/form_composition_demo.dart';
+import '../widgets/forms/invalid_scroll_demo.dart';
 import '../widgets/forms/search_field_demo.dart';
 import '../widgets/forms/selection_controls_demo.dart';
 import '../widgets/forms/text_field_demo.dart';
+import '../widgets/forms/validation_demo.dart';
 import '../widgets/layout/gap_demo.dart';
 import '../widgets/layout/section_demo.dart';
 import '../widgets/navigation/navigation_demo.dart';
@@ -96,6 +100,32 @@ class DemoRegistry {
       description:
           'Schema-driven forms with initialValues and submit handling.',
       builder: (_) => const FormBuilderDemo(),
+    ),
+    DemoItem(
+      title: const FormControllerDemo().title,
+      category: DemoCategory.forms,
+      description:
+          'External controller actions updating a builder-backed form.',
+      builder: (_) => const FormControllerDemo(),
+    ),
+    DemoItem(
+      title: const ValidationDemo().title,
+      category: DemoCategory.forms,
+      description: 'Required, email, and confirm-password validation states.',
+      builder: (_) => const ValidationDemo(),
+    ),
+    DemoItem(
+      title: const BackendErrorDemo().title,
+      category: DemoCategory.forms,
+      description: 'Backend field errors through SimpleFormController.',
+      builder: (_) => const BackendErrorDemo(),
+    ),
+    DemoItem(
+      title: const InvalidScrollDemo().title,
+      category: DemoCategory.forms,
+      description:
+          'Long forms auto-scroll to the first invalid field on submit.',
+      builder: (_) => const InvalidScrollDemo(),
     ),
     DemoItem(
       title: const BadgeDemo().title,
