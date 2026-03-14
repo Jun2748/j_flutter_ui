@@ -17,6 +17,10 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
       'email': 'jun@example.com',
       'phone': '+60123456789',
       'query': 'FlutterUI',
+      'password': 'secret123',
+      'confirmPassword': 'secret1234',
+      'minPrice': '100',
+      'maxPrice': '250',
       'role': 'Engineer',
       'agreeTerms': true,
       'workMode': 'Hybrid',
@@ -39,7 +43,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         children: <Widget>[
           const SimpleText.body(
             text:
-                'SimpleFormBuilder syncs with SimpleFormController for values, errors, validation, and submit flow. This demo also shows reusable validators for required, email, phone, and format checks.',
+                'SimpleFormBuilder syncs with SimpleFormController for values, errors, validation, and submit flow. This demo also shows reusable validators for required, email, phone, format checks, and cross-field validation.',
           ),
           Gap.h16,
           Wrap(
@@ -169,6 +173,63 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   helperText: 'Optional field using reusable phone validation.',
                   keyboardType: TextInputType.phone,
                   validator: SimpleFormValidator.phone(),
+                ),
+                SimpleFormFieldConfig.text(
+                  name: 'password',
+                  label: 'Password',
+                  hintText: 'Enter your password',
+                  helperText:
+                      'Required password field with reusable min length validation.',
+                  required: true,
+                  obscureText: true,
+                  validator: SimpleFormValidator.minLength(8),
+                ),
+                SimpleFormFieldConfig.text(
+                  name: 'confirmPassword',
+                  label: 'Confirm Password',
+                  hintText: 'Re-enter your password',
+                  helperText:
+                      'Cross-field validation checks that this matches the password field.',
+                  required: true,
+                  obscureText: true,
+                  crossValidators: <SimpleCrossFieldValidator>[
+                    SimpleCrossFieldValidators.matchField(
+                      'password',
+                      message: 'Passwords do not match',
+                    ),
+                  ],
+                ),
+                SimpleFormFieldConfig.text(
+                  name: 'minPrice',
+                  label: 'Min Price',
+                  hintText: 'Enter minimum price',
+                  helperText:
+                      'Required numeric field used by max price cross-field validation.',
+                  required: true,
+                  keyboardType: TextInputType.number,
+                  validator: SimpleFormValidator.pattern(
+                    SimpleRegexPatterns.numbersOnly,
+                    message: 'Only numbers are allowed',
+                  ),
+                ),
+                SimpleFormFieldConfig.text(
+                  name: 'maxPrice',
+                  label: 'Max Price',
+                  hintText: 'Enter maximum price',
+                  helperText:
+                      'Must be numeric and greater than the minimum price.',
+                  required: true,
+                  keyboardType: TextInputType.number,
+                  validator: SimpleFormValidator.pattern(
+                    SimpleRegexPatterns.numbersOnly,
+                    message: 'Only numbers are allowed',
+                  ),
+                  crossValidators: <SimpleCrossFieldValidator>[
+                    SimpleCrossFieldValidators.greaterThanField(
+                      'minPrice',
+                      message: 'Max price must be greater than min price',
+                    ),
+                  ],
                 ),
                 SimpleFormFieldConfig.search(
                   name: 'query',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../validation/simple_cross_field_validator.dart';
 import 'simple_form_field_type.dart';
 
 class SimpleFormFieldConfig<T> {
@@ -17,6 +18,7 @@ class SimpleFormFieldConfig<T> {
     this.options,
     this.initialValue,
     this.validator,
+    this.crossValidators = const <SimpleCrossFieldValidator>[],
     this.onChanged,
     this.optionLabelBuilder,
   });
@@ -32,6 +34,8 @@ class SimpleFormFieldConfig<T> {
     TextInputType? keyboardType,
     String? initialValue,
     String? Function(dynamic value)? validator,
+    List<SimpleCrossFieldValidator> crossValidators =
+        const <SimpleCrossFieldValidator>[],
     ValueChanged<String?>? onChanged,
   }) {
     return SimpleFormFieldConfig<String>(
@@ -46,6 +50,7 @@ class SimpleFormFieldConfig<T> {
           keyboardType: keyboardType,
           initialValue: initialValue,
           validator: validator,
+          crossValidators: crossValidators,
           onChanged: onChanged,
         )
         as SimpleFormFieldConfig<T>;
@@ -60,6 +65,8 @@ class SimpleFormFieldConfig<T> {
     bool enabled = true,
     String? initialValue,
     String? Function(dynamic value)? validator,
+    List<SimpleCrossFieldValidator> crossValidators =
+        const <SimpleCrossFieldValidator>[],
     ValueChanged<String?>? onChanged,
   }) {
     return SimpleFormFieldConfig<String>(
@@ -72,6 +79,7 @@ class SimpleFormFieldConfig<T> {
           enabled: enabled,
           initialValue: initialValue,
           validator: validator,
+          crossValidators: crossValidators,
           onChanged: onChanged,
         )
         as SimpleFormFieldConfig<T>;
@@ -87,6 +95,8 @@ class SimpleFormFieldConfig<T> {
     List<DropdownMenuItem<T>>? items,
     T? initialValue,
     String? Function(dynamic value)? validator,
+    List<SimpleCrossFieldValidator> crossValidators =
+        const <SimpleCrossFieldValidator>[],
     ValueChanged<T?>? onChanged,
   }) {
     return SimpleFormFieldConfig<T>(
@@ -100,6 +110,7 @@ class SimpleFormFieldConfig<T> {
       items: items,
       initialValue: initialValue,
       validator: validator,
+      crossValidators: crossValidators,
       onChanged: onChanged,
     );
   }
@@ -113,6 +124,8 @@ class SimpleFormFieldConfig<T> {
     bool enabled = true,
     bool? initialValue,
     String? Function(dynamic value)? validator,
+    List<SimpleCrossFieldValidator> crossValidators =
+        const <SimpleCrossFieldValidator>[],
     ValueChanged<bool?>? onChanged,
   }) {
     return SimpleFormFieldConfig<bool>(
@@ -125,6 +138,7 @@ class SimpleFormFieldConfig<T> {
           enabled: enabled,
           initialValue: initialValue,
           validator: validator,
+          crossValidators: crossValidators,
           onChanged: onChanged,
         )
         as SimpleFormFieldConfig<T>;
@@ -140,6 +154,8 @@ class SimpleFormFieldConfig<T> {
     required List<T> options,
     T? initialValue,
     String? Function(dynamic value)? validator,
+    List<SimpleCrossFieldValidator> crossValidators =
+        const <SimpleCrossFieldValidator>[],
     ValueChanged<T?>? onChanged,
     String Function(T value)? optionLabelBuilder,
   }) {
@@ -154,6 +170,7 @@ class SimpleFormFieldConfig<T> {
       options: options,
       initialValue: initialValue,
       validator: validator,
+      crossValidators: crossValidators,
       onChanged: onChanged,
       optionLabelBuilder: optionLabelBuilder,
     );
@@ -168,6 +185,8 @@ class SimpleFormFieldConfig<T> {
     bool enabled = true,
     bool? initialValue,
     String? Function(dynamic value)? validator,
+    List<SimpleCrossFieldValidator> crossValidators =
+        const <SimpleCrossFieldValidator>[],
     ValueChanged<bool?>? onChanged,
   }) {
     return SimpleFormFieldConfig<bool>(
@@ -180,6 +199,7 @@ class SimpleFormFieldConfig<T> {
           enabled: enabled,
           initialValue: initialValue,
           validator: validator,
+          crossValidators: crossValidators,
           onChanged: onChanged,
         )
         as SimpleFormFieldConfig<T>;
@@ -198,6 +218,7 @@ class SimpleFormFieldConfig<T> {
   final List<T>? options;
   final T? initialValue;
   final String? Function(dynamic value)? validator;
+  final List<SimpleCrossFieldValidator> crossValidators;
   final ValueChanged<T?>? onChanged;
   final String Function(T value)? optionLabelBuilder;
 }

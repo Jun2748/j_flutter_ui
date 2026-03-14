@@ -12,6 +12,7 @@ import '../../controls/inputs/simple_text_field.dart';
 import '../controller/simple_form_controller.dart';
 import '../form_field_wrapper.dart';
 import '../simple_form.dart';
+import '../validation/simple_cross_field_validator.dart';
 import '../validation/simple_form_validator.dart';
 import '../validation/simple_validation_messages.dart';
 import 'simple_form_field_config.dart';
@@ -702,6 +703,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       if (_errors[field.name] != null) {
         _errors[field.name] = _validateField(field, value);
       }
+      _revalidateCrossValidatorFields();
     });
 
     _syncControllerFromBuilder(fieldNames: <String>[field.name]);
@@ -759,11 +761,31 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
         (dynamic nextValue) => field.validator?.call(nextValue),
     ];
 
-    if (validators.isEmpty) {
+    final String? singleFieldError = validators.isEmpty
+        ? null
+        : SimpleFormValidator.combine(validators)(value);
+    if (singleFieldError != null && singleFieldError.isNotEmpty) {
+      return singleFieldError;
+    }
+
+    if (field.crossValidators.isEmpty) {
       return null;
     }
 
-    return SimpleFormValidator.combine(validators)(value);
+    return SimpleCrossFieldValidators.combine(field.crossValidators)(
+      value,
+      Map<String, dynamic>.from(_values),
+    );
+  }
+
+  void _revalidateCrossValidatorFields() {
+    for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+      if (field.crossValidators.isEmpty) {
+        continue;
+      }
+
+      _errors[field.name] = _validateField(field, _values[field.name]);
+    }
   }
 
   SimpleValidator _requiredValidator(SimpleFormFieldConfig<dynamic> field) {
@@ -851,6 +873,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
         valuesChanged = true;
       }
 
+      _revalidateCrossValidatorFields();
       _syncErrorStateFromControllerInsideSetState(controller);
     });
     _isSyncingFromController = false;
