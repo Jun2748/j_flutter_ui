@@ -1,0 +1,125 @@
+import 'package:flutter/material.dart';
+
+import '../../../resources/colors.dart';
+import '../../../resources/dimens.dart';
+import '../../layout/gap.dart';
+import '../../typography/simple_text.dart';
+
+class SimpleSegmentedItem<T> {
+  const SimpleSegmentedItem({
+    required this.value,
+    required this.label,
+    this.icon,
+  });
+
+  final T value;
+  final String label;
+  final IconData? icon;
+}
+
+class SimpleSegmentedControl<T> extends StatelessWidget {
+  const SimpleSegmentedControl({
+    super.key,
+    required this.items,
+    required this.value,
+    required this.onChanged,
+    this.padding,
+    this.expanded = true,
+  });
+
+  final List<SimpleSegmentedItem<T>> items;
+  final T value;
+  final ValueChanged<T> onChanged;
+  final EdgeInsets? padding;
+  final bool expanded;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color surface = JColors.getColor(context, lightKey: 'surface');
+    final Color border = JColors.getColor(context, lightKey: 'border');
+
+    return Container(
+      padding: padding ?? JInsets.all4,
+      decoration: BoxDecoration(
+        color: surface,
+        borderRadius: BorderRadius.circular(JDimens.dp16),
+        border: Border.all(color: border),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          for (int index = 0; index < items.length; index++)
+            _buildSegment(context, items[index], index),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegment(
+    BuildContext context,
+    SimpleSegmentedItem<T> item,
+    int index,
+  ) {
+    final bool isSelected = item.value == value;
+    final Color primary = JColors.getColor(context, lightKey: 'primary');
+    final Color textPrimary = JColors.getColor(
+      context,
+      lightKey: 'textPrimary',
+    );
+    final Color textSecondary = JColors.getColor(
+      context,
+      lightKey: 'textSecondary',
+    );
+
+    Widget child = InkWell(
+      borderRadius: BorderRadius.circular(JDimens.dp12),
+      onTap: () => onChanged(item.value),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(
+          horizontal: JDimens.dp12,
+          vertical: JDimens.dp8,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected ? primary : const Color(0x00000000),
+          borderRadius: BorderRadius.circular(JDimens.dp12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: expanded ? MainAxisSize.max : MainAxisSize.min,
+          children: <Widget>[
+            if (item.icon != null) ...<Widget>[
+              Icon(
+                item.icon,
+                size: JIconSizes.sm,
+                color: isSelected ? JColors.white : textSecondary,
+              ),
+              Gap.w8,
+            ],
+            Flexible(
+              child: SimpleText.label(
+                text: item.label,
+                color: isSelected ? JColors.white : textPrimary,
+                weight: FontWeight.w600,
+                align: TextAlign.center,
+                maxLines: 1,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (expanded) {
+      child = Expanded(child: child);
+    } else if (index > 0) {
+      child = Padding(
+        padding: const EdgeInsets.only(left: JDimens.dp4),
+        child: child,
+      );
+    }
+
+    return child;
+  }
+}

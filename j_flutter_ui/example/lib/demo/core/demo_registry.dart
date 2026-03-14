@@ -1,6 +1,10 @@
 import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
+import '../widgets/controls/segmented_control_demo.dart';
+import '../widgets/feedback/badge_demo.dart';
+import '../widgets/feedback/banner_demo.dart';
 import '../widgets/feedback/chip_demo.dart';
+import '../widgets/feedback/dialog_demo.dart';
 import '../widgets/feedback/divider_demo.dart';
 import '../widgets/forms/dropdown_demo.dart';
 import '../widgets/forms/form_builder_demo.dart';
@@ -11,6 +15,7 @@ import '../widgets/forms/text_field_demo.dart';
 import '../widgets/layout/gap_demo.dart';
 import '../widgets/layout/section_demo.dart';
 import '../widgets/navigation/navigation_demo.dart';
+import '../widgets/navigation/tabs_demo.dart';
 import '../widgets/text/text_demo.dart';
 import 'demo_category.dart';
 import 'demo_item.dart';
@@ -30,6 +35,12 @@ class DemoRegistry {
       category: DemoCategory.widgets,
       description: 'Basic and tappable card examples.',
       builder: (_) => const CardDemo(),
+    ),
+    DemoItem(
+      title: const SegmentedControlDemo().title,
+      category: DemoCategory.widgets,
+      description: 'Segmented selection with equal-width and compact layouts.',
+      builder: (_) => const SegmentedControlDemo(),
     ),
     DemoItem(
       title: const TextDemo().title,
@@ -87,10 +98,28 @@ class DemoRegistry {
       builder: (_) => const FormBuilderDemo(),
     ),
     DemoItem(
+      title: const BadgeDemo().title,
+      category: DemoCategory.feedback,
+      description: 'Compact inline badges with semantic variants.',
+      builder: (_) => const BadgeDemo(),
+    ),
+    DemoItem(
+      title: const BannerDemo().title,
+      category: DemoCategory.feedback,
+      description: 'Inline status banners with action and dismiss options.',
+      builder: (_) => const BannerDemo(),
+    ),
+    DemoItem(
       title: const ChipDemo().title,
       category: DemoCategory.feedback,
       description: 'Status and category chips.',
       builder: (_) => const ChipDemo(),
+    ),
+    DemoItem(
+      title: const DialogDemo().title,
+      category: DemoCategory.feedback,
+      description: 'Reusable confirm and custom-content dialogs.',
+      builder: (_) => const DialogDemo(),
     ),
     DemoItem(
       title: const DividerDemo().title,
@@ -103,6 +132,12 @@ class DemoRegistry {
       category: DemoCategory.navigation,
       description: 'AppBarEx and BottomNavBarEx working together.',
       builder: (_) => const NavigationDemo(),
+    ),
+    DemoItem(
+      title: const TabsDemo().title,
+      category: DemoCategory.navigation,
+      description: 'DefaultTabController wrapper with styled tabs.',
+      builder: (_) => const TabsDemo(),
     ),
   ];
 }

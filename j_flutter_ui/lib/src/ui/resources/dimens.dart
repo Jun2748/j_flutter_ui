@@ -76,7 +76,7 @@ abstract final class JIconSizes {
 
 abstract final class JInsets {
   const JInsets._();
-
+  static const EdgeInsets zero = EdgeInsets.only();
   static const EdgeInsets all4 = EdgeInsets.all(JDimens.dp4);
   static const EdgeInsets all8 = EdgeInsets.all(JDimens.dp8);
   static const EdgeInsets all12 = EdgeInsets.all(JDimens.dp12);
