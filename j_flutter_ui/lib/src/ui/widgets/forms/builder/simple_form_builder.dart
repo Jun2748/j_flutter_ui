@@ -53,8 +53,10 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   final Map<String, dynamic> _values = <String, dynamic>{};
   final Map<String, String?> _errors = <String, String?>{};
   final Map<String, String?> _fieldErrors = <String, String?>{};
+  final Map<String, GlobalKey> _fieldKeys = <String, GlobalKey>{};
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
+  final Map<String, FocusNode> _focusNodes = <String, FocusNode>{};
   bool _isSubmitting = false;
   bool _isSyncingFromController = false;
   bool _isSyncingToController = false;
@@ -88,12 +90,24 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     for (final TextEditingController controller in _controllers.values) {
       controller.dispose();
     }
+    for (final FocusNode focusNode in _focusNodes.values) {
+      focusNode.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> children = <Widget>[
+      if (widget.showSubmitButton && widget.onSubmit != null) ...[
+        SimpleButton.primary(
+          label: 'Empty Validation Redirection Test',
+          width: double.infinity,
+          loading: _isSubmitting,
+          onPressed: _isFormEnabled && !_isSubmitting ? submit : null,
+        ),
+        SizedBox(height: widget.fieldSpacing),
+      ],
       for (int index = 0; index < widget.fields.length; index++) ...<Widget>[
         _buildField(widget.fields[index]),
         if (index < widget.fields.length - 1)
@@ -150,6 +164,79 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     final bool formValid = _internalFormKey.currentState?.validate() ?? false;
     final bool fieldsValid = _validateFields();
     return formValid && fieldsValid;
+  }
+
+  @override
+  Future<void> scrollToField(String fieldName) {
+    final Completer<void> completer = Completer<void>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) {
+        completer.complete();
+        return;
+      }
+
+      final BuildContext? fieldContext = _fieldKeys[fieldName]?.currentContext;
+      if (fieldContext == null) {
+        completer.complete();
+        return;
+      }
+
+      try {
+        await Scrollable.ensureVisible(
+          fieldContext,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          alignment: 0.1,
+        );
+      } finally {
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
+      }
+    });
+
+    return completer.future;
+  }
+
+  @override
+  Future<void> focusField(String fieldName) {
+    final Completer<void> completer = Completer<void>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        completer.complete();
+        return;
+      }
+
+      final FocusNode? focusNode = _focusNodes[fieldName];
+      if (focusNode == null || !focusNode.canRequestFocus) {
+        completer.complete();
+        return;
+      }
+
+      focusNode.requestFocus();
+      completer.complete();
+    });
+
+    return completer.future;
+  }
+
+  @override
+  Future<bool> validateAndScrollToFirstError() async {
+    final bool valid = validate();
+    if (valid) {
+      return true;
+    }
+
+    final String? firstInvalidFieldName = _findFirstInvalidFieldName();
+    if (firstInvalidFieldName == null) {
+      return false;
+    }
+
+    await scrollToField(firstInvalidFieldName);
+    await focusField(firstInvalidFieldName);
+    return false;
   }
 
   bool isValid() {
@@ -256,7 +343,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       return;
     }
 
-    final bool valid = validate();
+    final bool valid = await validateAndScrollToFirstError();
     if (!valid) {
       return;
     }
@@ -281,15 +368,19 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     final dynamic value = _values[field.name];
     final String? errorText = _fieldErrors[field.name] ?? _errors[field.name];
     final bool effectiveEnabled = _isFieldEnabled(field);
+    final FocusNode? focusNode = _focusNodes[field.name];
+
+    Widget child;
 
     switch (field.type) {
       case SimpleFormFieldType.text:
-        return FormFieldWrapper(
+        child = FormFieldWrapper(
           label: field.label,
           helperText: errorText == null ? field.helperText : null,
           required: field.required,
           child: SimpleTextField(
             controller: _controllers[field.name],
+            focusNode: focusNode,
             hintText: field.hintText,
             errorText: errorText,
             keyboardType: field.keyboardType,
@@ -298,21 +389,24 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             onChanged: (String text) => _updateValue(field, text),
           ),
         );
+        break;
       case SimpleFormFieldType.search:
-        return FormFieldWrapper(
+        child = FormFieldWrapper(
           label: field.label,
           helperText: field.helperText,
           errorText: errorText,
           required: field.required,
           child: SimpleSearchField(
             controller: _controllers[field.name],
+            focusNode: focusNode,
             hintText: field.hintText ?? 'Search',
             enabled: effectiveEnabled,
             onChanged: (String text) => _updateValue(field, text),
           ),
         );
+        break;
       case SimpleFormFieldType.dropdown:
-        return FormFieldWrapper(
+        child = FormFieldWrapper(
           label: field.label,
           helperText: errorText == null ? field.helperText : null,
           required: field.required,
@@ -328,8 +422,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             onChanged: (dynamic selected) => _updateValue(field, selected),
           ),
         );
+        break;
       case SimpleFormFieldType.checkbox:
-        return FormFieldWrapper(
+        child = FormFieldWrapper(
           helperText: field.helperText,
           errorText: errorText,
           required: field.required,
@@ -340,8 +435,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             onChanged: (bool? checked) => _updateValue(field, checked ?? false),
           ),
         );
+        break;
       case SimpleFormFieldType.radio:
-        return FormFieldWrapper(
+        child = FormFieldWrapper(
           label: field.label,
           helperText: field.helperText,
           errorText: errorText,
@@ -366,8 +462,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             ],
           ),
         );
+        break;
       case SimpleFormFieldType.switchField:
-        return FormFieldWrapper(
+        child = FormFieldWrapper(
           helperText: field.helperText,
           errorText: errorText,
           required: field.required,
@@ -379,7 +476,10 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
                 : null,
           ),
         );
+        break;
     }
+
+    return Container(key: _fieldKeys[field.name], child: child);
   }
 
   void _syncFieldState() {
@@ -387,10 +487,25 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
         .map((SimpleFormFieldConfig<dynamic> field) => field.name)
         .toSet();
 
+    final List<String> fieldKeyNames = _fieldKeys.keys.toList();
+    for (final String key in fieldKeyNames) {
+      if (!nextFieldNames.contains(key)) {
+        _fieldKeys.remove(key);
+      }
+    }
+
     final List<String> controllerKeys = _controllers.keys.toList();
     for (final String key in controllerKeys) {
       if (!nextFieldNames.contains(key)) {
         _controllers.remove(key)?.dispose();
+      }
+    }
+
+    final List<String> focusNodeKeys = _focusNodes.keys.toList();
+    for (final String key in focusNodeKeys) {
+      if (!nextFieldNames.contains(key) ||
+          !_supportsFocus(_findFieldType(key))) {
+        _focusNodes.remove(key)?.dispose();
       }
     }
 
@@ -404,6 +519,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     }
 
     for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+      _fieldKeys.putIfAbsent(field.name, GlobalKey.new);
       final dynamic resolvedValue = _values.containsKey(field.name)
           ? _values[field.name]
           : _resolveInitialValue(field);
@@ -423,6 +539,10 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             composing: TextRange.empty,
           );
         }
+      }
+
+      if (_supportsFocus(field.type)) {
+        _focusNodes.putIfAbsent(field.name, FocusNode.new);
       }
     }
   }
@@ -469,6 +589,15 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   bool _usesTextController(SimpleFormFieldType type) {
     return type == SimpleFormFieldType.text ||
         type == SimpleFormFieldType.search;
+  }
+
+  bool _supportsFocus(SimpleFormFieldType? type) {
+    return type == SimpleFormFieldType.text ||
+        type == SimpleFormFieldType.search;
+  }
+
+  SimpleFormFieldType? _findFieldType(String name) {
+    return _findField(name)?.type;
   }
 
   bool get _isFormEnabled => widget.enabled;
@@ -558,6 +687,16 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     });
 
     return !hasError;
+  }
+
+  String? _findFirstInvalidFieldName() {
+    for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
+      final String? error = _validateField(field, _values[field.name]);
+      if (error != null && error.isNotEmpty) {
+        return field.name;
+      }
+    }
+    return null;
   }
 
   void _applyState(VoidCallback updates) {

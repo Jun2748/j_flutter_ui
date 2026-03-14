@@ -149,18 +149,21 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   helperText:
                       'Use "Set Email Error" to simulate a backend error. Editing this field will clear that error automatically.',
                   keyboardType: TextInputType.emailAddress,
+                  required: true,
                 ),
                 SimpleFormFieldConfig.search(
                   name: 'query',
                   label: 'Search',
                   hintText: 'Search skills or interests',
                   helperText: 'This uses SimpleSearchField internally.',
+                  required: true,
                 ),
                 SimpleFormFieldConfig<String>.dropdown(
                   name: 'role',
                   label: 'Role',
                   hintText: 'Choose a role',
                   helperText: 'This uses SimpleDropdown internally.',
+                  required: true,
                   items: <DropdownMenuItem<String>>[
                     DropdownMenuItem<String>(
                       value: 'Designer',
@@ -187,11 +190,13 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   label: 'Preferred Work Mode',
                   helperText: 'This uses SimpleRadio internally.',
                   options: <String>['Remote', 'Hybrid', 'On-site'],
+                  required: true,
                 ),
                 SimpleFormFieldConfig.switchField(
                   name: 'receivePromo',
                   label: 'Receive Promotions',
                   helperText: 'This uses SimpleSwitch internally.',
+                  required: true,
                 ),
               ],
               showSubmitButton: true,

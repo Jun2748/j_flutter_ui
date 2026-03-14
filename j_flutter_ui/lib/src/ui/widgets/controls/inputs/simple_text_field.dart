@@ -7,6 +7,7 @@ class SimpleTextField extends StatelessWidget {
   const SimpleTextField({
     super.key,
     this.controller,
+    this.focusNode,
     this.labelText,
     this.hintText,
     this.helperText,
@@ -24,6 +25,7 @@ class SimpleTextField extends StatelessWidget {
   });
 
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final String? labelText;
   final String? hintText;
   final String? helperText;
@@ -54,6 +56,7 @@ class SimpleTextField extends StatelessWidget {
 
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       obscureText: obscureText,

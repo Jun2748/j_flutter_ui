@@ -200,9 +200,18 @@ class SimpleButton extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         if (icon != null) ...<Widget>[Icon(icon, size: JIconSizes.md), Gap.w8],
-        Text(label ?? ''),
+        Flexible(
+          child: Text(
+            label ?? '',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            textAlign: TextAlign.center,
+          ),
+        ),
       ],
     );
   }

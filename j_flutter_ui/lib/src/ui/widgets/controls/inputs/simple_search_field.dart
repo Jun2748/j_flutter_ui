@@ -4,12 +4,14 @@ class SimpleSearchField extends StatefulWidget {
   const SimpleSearchField({
     super.key,
     this.controller,
+    this.focusNode,
     this.hintText = 'Search',
     this.onChanged,
     this.enabled = true,
   });
 
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final String hintText;
   final ValueChanged<String>? onChanged;
   final bool enabled;
@@ -43,6 +45,7 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
+      focusNode: widget.focusNode,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
       decoration: InputDecoration(

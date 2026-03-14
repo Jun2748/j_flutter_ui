@@ -4,6 +4,9 @@ import 'simple_form_state_snapshot.dart';
 
 abstract class SimpleFormControllerHost {
   bool validate();
+  Future<void> scrollToField(String fieldName);
+  Future<void> focusField(String fieldName);
+  Future<bool> validateAndScrollToFirstError();
   Future<void> submit();
 }
 
@@ -177,6 +180,19 @@ class SimpleFormController extends ChangeNotifier {
 
   bool validate() {
     return _attachedHost?.validate() ?? false;
+  }
+
+  Future<void> scrollToField(String fieldName) async {
+    await _attachedHost?.scrollToField(fieldName);
+  }
+
+  Future<void> focusField(String fieldName) async {
+    await _attachedHost?.focusField(fieldName);
+  }
+
+  Future<bool> validateAndScrollToFirstError() {
+    return _attachedHost?.validateAndScrollToFirstError() ??
+        Future<bool>.value(false);
   }
 
   Future<void> submit() async {
