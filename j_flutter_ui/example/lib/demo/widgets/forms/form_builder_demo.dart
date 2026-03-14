@@ -15,7 +15,8 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
     initialValues: <String, dynamic>{
       'name': 'Jun',
       'email': 'jun@example.com',
-      'query': 'Flutter UI',
+      'phone': '+60123456789',
+      'query': 'FlutterUI',
       'role': 'Engineer',
       'agreeTerms': true,
       'workMode': 'Hybrid',
@@ -38,7 +39,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         children: <Widget>[
           const SimpleText.body(
             text:
-                'SimpleFormBuilder syncs with SimpleFormController for values, errors, validation, and submit flow. Editing a field automatically clears its backend error.',
+                'SimpleFormBuilder syncs with SimpleFormController for values, errors, validation, and submit flow. This demo also shows reusable validators for required, email, phone, and format checks.',
           ),
           Gap.h16,
           Wrap(
@@ -98,9 +99,13 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                 },
               ),
               SimpleButton.text(
-                label: 'Validate',
-                onPressed: () {
-                  final bool isValid = _controller.validate();
+                label: 'Validate & Scroll',
+                onPressed: () async {
+                  final bool isValid = await _controller
+                      .validateAndScrollToFirstError();
+                  if (!context.mounted) {
+                    return;
+                  }
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text('Valid: $isValid')));
@@ -139,24 +144,43 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   name: 'name',
                   label: 'Full Name',
                   hintText: 'Enter your full name',
-                  helperText: 'This uses SimpleTextField internally.',
+                  helperText:
+                      'This uses SimpleTextField internally with combined min/max length validation.',
                   required: true,
+                  validator: SimpleFormValidator.combine(<SimpleValidator>[
+                    SimpleFormValidator.minLength(3),
+                    SimpleFormValidator.maxLength(40),
+                  ]),
                 ),
                 SimpleFormFieldConfig.text(
                   name: 'email',
                   label: 'Email',
                   hintText: 'Enter your email',
                   helperText:
-                      'Use "Set Email Error" to simulate a backend error. Editing this field will clear that error automatically.',
+                      'Required plus reusable email format validation. Use "Set Email Error" to simulate a backend error.',
                   keyboardType: TextInputType.emailAddress,
                   required: true,
+                  validator: SimpleFormValidator.email(),
+                ),
+                SimpleFormFieldConfig.text(
+                  name: 'phone',
+                  label: 'Phone',
+                  hintText: 'Enter your phone number',
+                  helperText: 'Optional field using reusable phone validation.',
+                  keyboardType: TextInputType.phone,
+                  validator: SimpleFormValidator.phone(),
                 ),
                 SimpleFormFieldConfig.search(
                   name: 'query',
                   label: 'Search',
                   hintText: 'Search skills or interests',
-                  helperText: 'This uses SimpleSearchField internally.',
+                  helperText:
+                      'Required plus alphanumeric pattern validation using reusable regex patterns.',
                   required: true,
+                  validator: SimpleFormValidator.pattern(
+                    SimpleRegexPatterns.alphanumeric,
+                    message: 'Only letters and numbers are allowed',
+                  ),
                 ),
                 SimpleFormFieldConfig<String>.dropdown(
                   name: 'role',

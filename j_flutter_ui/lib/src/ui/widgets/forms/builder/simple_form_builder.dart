@@ -12,6 +12,8 @@ import '../../controls/inputs/simple_text_field.dart';
 import '../controller/simple_form_controller.dart';
 import '../form_field_wrapper.dart';
 import '../simple_form.dart';
+import '../validation/simple_form_validator.dart';
+import '../validation/simple_validation_messages.dart';
 import 'simple_form_field_config.dart';
 import 'simple_form_field_type.dart';
 
@@ -99,15 +101,6 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   @override
   Widget build(BuildContext context) {
     final List<Widget> children = <Widget>[
-      if (widget.showSubmitButton && widget.onSubmit != null) ...[
-        SimpleButton.primary(
-          label: 'Empty Validation Redirection Test',
-          width: double.infinity,
-          loading: _isSubmitting,
-          onPressed: _isFormEnabled && !_isSubmitting ? submit : null,
-        ),
-        SizedBox(height: widget.fieldSpacing),
-      ],
       for (int index = 0; index < widget.fields.length; index++) ...<Widget>[
         _buildField(widget.fields[index]),
         if (index < widget.fields.length - 1)
@@ -707,24 +700,41 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   }
 
   String? _validateField(SimpleFormFieldConfig<dynamic> field, dynamic value) {
-    if (field.required && _isEmptyValue(field.type, value)) {
-      return '${field.label ?? field.name} is required';
+    final List<SimpleValidator> validators = <SimpleValidator>[
+      if (field.required) _requiredValidator(field),
+      if (field.validator != null)
+        (dynamic nextValue) => field.validator?.call(nextValue),
+    ];
+
+    if (validators.isEmpty) {
+      return null;
     }
-    return field.validator?.call(value);
+
+    return SimpleFormValidator.combine(validators)(value);
   }
 
-  bool _isEmptyValue(SimpleFormFieldType type, dynamic value) {
-    switch (type) {
+  SimpleValidator _requiredValidator(SimpleFormFieldConfig<dynamic> field) {
+    final String message = _requiredMessage(field);
+
+    switch (field.type) {
       case SimpleFormFieldType.text:
       case SimpleFormFieldType.search:
-        return value == null || value.toString().trim().isEmpty;
+        return SimpleFormValidator.required(message: message);
       case SimpleFormFieldType.dropdown:
       case SimpleFormFieldType.radio:
-        return value == null;
+        return (dynamic value) => value == null ? message : null;
       case SimpleFormFieldType.checkbox:
       case SimpleFormFieldType.switchField:
-        return value != true;
+        return (dynamic value) => value == true ? null : message;
     }
+  }
+
+  String _requiredMessage(SimpleFormFieldConfig<dynamic> field) {
+    final String label = (field.label ?? field.name).trim();
+    if (label.isEmpty) {
+      return SimpleValidationMessages.required;
+    }
+    return '$label is required';
   }
 
   String? _normalizeError(String? error) {
