@@ -43,101 +43,21 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
         children: <Widget>[
           const SimpleText.body(
             text:
-                'SimpleFormBuilder syncs with SimpleFormController for values, errors, validation, and submit flow. This demo also shows reusable validators for required, email, phone, format checks, and cross-field validation.',
+                'This page focuses on SimpleFormBuilder as a schema-driven form and shows the recommended controller initialization pattern. Dedicated demos cover controller actions, backend errors, validation states, and invalid-scroll behavior in more detail.',
           ),
           Gap.h16,
-          Wrap(
-            spacing: JDimens.dp8,
-            runSpacing: JDimens.dp8,
-            children: <Widget>[
-              SimpleButton.secondary(
-                label: 'Set Name',
-                onPressed: () {
-                  _controller.setValue('name', 'Jun Lim');
-                },
-              ),
-              SimpleButton.secondary(
-                label: 'Patch Email',
-                onPressed: () {
-                  _controller.patchValues(<String, dynamic>{
-                    'email': 'new@example.com',
-                  });
-                },
-              ),
-              SimpleButton.secondary(
-                label: 'Set Values',
-                onPressed: () {
-                  _controller.setValues(<String, dynamic>{
-                    'name': 'Jun Lee',
-                    'email': 'junlee@example.com',
-                  });
-                },
-              ),
-              SimpleButton.outline(
-                label: 'Set Email Error',
-                onPressed: () {
-                  _controller.setError('email', 'Email already exists');
-                },
-              ),
-              SimpleButton.outline(
-                label: 'Set Multi Errors',
-                onPressed: () {
-                  _controller.setErrors(<String, String>{
-                    'email': 'Email already exists',
-                    'query': 'Search term is too broad',
-                    'role': 'choose a new role',
-                    'agreeTerms': 'accept the terms',
-                  });
-                },
-              ),
-              SimpleButton.text(
-                label: 'ResetToInitialValue',
-                onPressed: () {
-                  _controller.resetToInitialValues();
-                },
-              ),
-              SimpleButton.text(
-                label: 'Reset All',
-                onPressed: () {
-                  _controller.reset();
-                },
-              ),
-              SimpleButton.text(
-                label: 'Validate & Scroll',
-                onPressed: () async {
-                  final bool isValid = await _controller
-                      .validateAndScrollToFirstError();
-                  if (!context.mounted) {
-                    return;
-                  }
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text('Valid: $isValid')));
-                },
-              ),
-            ],
-          ),
-          Gap.h16,
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (BuildContext context, _) {
-              return SimpleCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SimpleText.heading(text: 'Controller State'),
-                    Gap.h8,
-                    SimpleText.caption(
-                      text: 'Values: ${_controller.values.toString()}',
-                    ),
-                    Gap.h8,
-                    SimpleText.caption(
-                      text: 'Errors: ${_controller.errors.toString()}',
-                    ),
-                  ],
+          SimpleCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SimpleText.heading(text: 'Controller initialization'),
+                Gap.h8,
+                const SimpleText.caption(
+                  text:
+                      'This form is connected to a SimpleFormController with initialValues so the builder starts with prefilled data.',
                 ),
-              );
-            },
+              ],
+            ),
           ),
           Gap.h16,
           SimpleCard(
@@ -160,8 +80,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   name: 'email',
                   label: 'Email',
                   hintText: 'Enter your email',
-                  helperText:
-                      'Required plus reusable email format validation. Use "Set Email Error" to simulate a backend error.',
+                  helperText: 'Required plus reusable email format validation.',
                   keyboardType: TextInputType.emailAddress,
                   required: true,
                   validator: SimpleFormValidator.email(),
@@ -249,7 +168,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   hintText: 'Choose a role',
                   helperText: 'This uses SimpleDropdown internally.',
                   required: true,
-                  items: <DropdownMenuItem<String>>[
+                  items: const <DropdownMenuItem<String>>[
                     DropdownMenuItem<String>(
                       value: 'Designer',
                       child: Text('Designer'),
