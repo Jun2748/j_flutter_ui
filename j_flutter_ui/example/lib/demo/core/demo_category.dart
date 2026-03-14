@@ -4,6 +4,7 @@ class DemoCategory {
   static const String foundations = 'Foundations';
   static const String controls = 'Controls';
   static const String display = 'Display';
+  static const String screens = 'Screens';
   static const String layout = 'Layout';
   static const String navigation = 'Navigation';
   static const String overlays = 'Overlays';
@@ -13,6 +14,7 @@ class DemoCategory {
     foundations,
     controls,
     display,
+    screens,
     layout,
     navigation,
     overlays,

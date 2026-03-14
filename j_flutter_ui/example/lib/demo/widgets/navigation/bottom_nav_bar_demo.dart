@@ -19,17 +19,17 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppBarEx(title: widget.title),
-      bottomNavigationBar: BottomNavBarEx(
+      bottomNavigationBar: SimpleBottomNavBar(
         currentIndex: _currentIndex,
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        items: const <BottomNavItem>[
-          BottomNavItem(icon: Icons.home_outlined, label: 'Home'),
-          BottomNavItem(icon: Icons.explore_outlined, label: 'Explore'),
-          BottomNavItem(icon: Icons.person_outline, label: 'Profile'),
+        items: const <SimpleBottomNavItem>[
+          SimpleBottomNavItem(icon: Icons.home_outlined, label: 'Home'),
+          SimpleBottomNavItem(icon: Icons.explore_outlined, label: 'Explore'),
+          SimpleBottomNavItem(icon: Icons.person_outline, label: 'Profile'),
         ],
       ),
       body: Center(

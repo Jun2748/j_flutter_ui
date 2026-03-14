@@ -27,6 +27,7 @@ import '../widgets/navigation/app_bar_demo.dart';
 import '../widgets/navigation/bottom_nav_bar_demo.dart';
 import '../widgets/navigation/tabs_demo.dart';
 import '../widgets/overlays/bottom_sheet_demo.dart';
+import '../widgets/screens/account_menu_demo.dart';
 import '../widgets/states/empty_state_demo.dart';
 import '../widgets/states/error_view_demo.dart';
 import '../widgets/states/loading_view_demo.dart';
@@ -141,6 +142,13 @@ class DemoRegistry {
       category: DemoCategory.display,
       description: 'Error states with retry actions and inline usage.',
       builder: (_) => const ErrorViewDemo(),
+    ),
+    DemoItem(
+      title: const AccountMenuDemo().title,
+      category: DemoCategory.screens,
+      description:
+          'A realistic account/settings screen composition using menu sections, tiles, and bottom navigation.',
+      builder: (_) => const AccountMenuDemo(),
     ),
     DemoItem(
       title: const GapDemo().title,
