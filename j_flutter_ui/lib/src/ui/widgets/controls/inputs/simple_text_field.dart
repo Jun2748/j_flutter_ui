@@ -54,7 +54,7 @@ class SimpleTextField extends StatelessWidget {
       lightKey: 'border',
     );
 
-    return TextFormField(
+    final Widget textField = TextFormField(
       controller: controller,
       focusNode: focusNode,
       keyboardType: keyboardType,
@@ -62,6 +62,8 @@ class SimpleTextField extends StatelessWidget {
       obscureText: obscureText,
       enabled: enabled,
       readOnly: readOnly,
+      showCursor: !readOnly,
+      enableInteractiveSelection: !readOnly,
       maxLines: obscureText ? 1 : maxLines,
       onChanged: onChanged,
       validator: validator,
@@ -89,6 +91,16 @@ class SimpleTextField extends StatelessWidget {
         hintStyle: TextStyle(color: readOnly ? textDisabled : null),
       ),
       style: TextStyle(color: readOnly ? textDisabled : null),
+    );
+
+    if (!readOnly) {
+      return textField;
+    }
+
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      child: IgnorePointer(ignoring: true, child: textField),
     );
   }
 
