@@ -9,25 +9,135 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
     this.titleWidget,
     this.actions,
     this.leading,
+    this.trailing,
     this.centerTitle = false,
+    this.backgroundColor,
+    this.elevation = 0,
+    this.height = JHeights.appBar,
+    this.padding,
+    this.bottomBorder,
+    this.primary = true,
+    this.automaticallyImplyLeading = true,
   });
 
   final String? title;
   final Widget? titleWidget;
   final List<Widget>? actions;
   final Widget? leading;
+  final Widget? trailing;
   final bool centerTitle;
+  final Color? backgroundColor;
+  final double elevation;
+  final double height;
+  final EdgeInsetsGeometry? padding;
+  final BorderSide? bottomBorder;
+  final bool primary;
+  final bool automaticallyImplyLeading;
 
   @override
-  Size get preferredSize => const Size.fromHeight(JHeights.appBar);
+  Size get preferredSize => Size.fromHeight(height);
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: titleWidget ?? (title != null ? Text(title!) : null),
-      actions: actions,
-      leading: leading,
-      centerTitle: centerTitle,
+    final ThemeData theme = Theme.of(context);
+    final Widget? resolvedLeading = _buildLeading(context);
+    final Widget? resolvedTrailing = _buildTrailing();
+    final EdgeInsetsGeometry resolvedPadding =
+        padding ??
+        (resolvedLeading == null && resolvedTrailing == null
+            ? JInsets.horizontal16
+            : const EdgeInsets.symmetric(horizontal: JDimens.dp4));
+    final Widget? resolvedTitle =
+        titleWidget ??
+        (title != null
+            ? Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis)
+            : null);
+    final TextStyle resolvedTitleStyle =
+        theme.appBarTheme.titleTextStyle ??
+        theme.textTheme.titleLarge ??
+        const TextStyle();
+    final IconThemeData resolvedIconTheme =
+        theme.appBarTheme.iconTheme ?? theme.iconTheme;
+    final Widget toolbar = SizedBox(
+      height: height,
+      child: Padding(
+        padding: resolvedPadding,
+        child: NavigationToolbar(
+          leading: resolvedLeading,
+          middle: resolvedTitle,
+          trailing: resolvedTrailing,
+          centerMiddle: centerTitle,
+          middleSpacing: JDimens.dp12,
+        ),
+      ),
+    );
+
+    return Material(
+      color:
+          backgroundColor ??
+          theme.appBarTheme.backgroundColor ??
+          theme.colorScheme.surface,
+      elevation: elevation,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: elevation == 0 ? Colors.transparent : null,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: bottomBorder != null ? Border(bottom: bottomBorder!) : null,
+        ),
+        child: SafeArea(
+          top: primary,
+          bottom: false,
+          child: IconTheme(
+            data: resolvedIconTheme,
+            child: DefaultTextStyle(
+              style: resolvedTitleStyle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              child: toolbar,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget? _buildLeading(BuildContext context) {
+    if (leading != null) {
+      return leading;
+    }
+
+    if (!automaticallyImplyLeading) {
+      return null;
+    }
+
+    final ModalRoute<dynamic>? route = ModalRoute.of(context);
+    final bool canPop =
+        Navigator.canPop(context) || (route?.impliesAppBarDismissal ?? false);
+
+    if (!canPop) {
+      return null;
+    }
+
+    return const BackButton();
+  }
+
+  Widget? _buildTrailing() {
+    final bool hasActions = actions != null && actions!.isNotEmpty;
+
+    if (trailing == null && !hasActions) {
+      return null;
+    }
+
+    if (!hasActions) {
+      return trailing;
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (trailing case final Widget trailingWidget) trailingWidget,
+        ...actions!,
+      ],
     );
   }
 }

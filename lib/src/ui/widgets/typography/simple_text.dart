@@ -11,6 +11,7 @@ class SimpleText extends StatelessWidget {
     required _SimpleTextVariant variant,
     this.color,
     this.align,
+    this.style,
     this.weight,
     this.maxLines = 10,
   }) : _variant = variant;
@@ -20,6 +21,7 @@ class SimpleText extends StatelessWidget {
     required String? text,
     Color? color,
     TextAlign? align,
+    TextStyle? style,
     FontWeight? weight,
     int? maxLines,
   }) : this._(
@@ -28,6 +30,7 @@ class SimpleText extends StatelessWidget {
          variant: _SimpleTextVariant.title,
          color: color,
          align: align,
+         style: style,
          weight: weight,
          maxLines: maxLines,
        );
@@ -37,6 +40,7 @@ class SimpleText extends StatelessWidget {
     required String? text,
     Color? color,
     TextAlign? align,
+    TextStyle? style,
     FontWeight? weight,
     int? maxLines,
   }) : this._(
@@ -45,6 +49,7 @@ class SimpleText extends StatelessWidget {
          variant: _SimpleTextVariant.heading,
          color: color,
          align: align,
+         style: style,
          weight: weight,
          maxLines: maxLines,
        );
@@ -54,6 +59,7 @@ class SimpleText extends StatelessWidget {
     required String? text,
     Color? color,
     TextAlign? align,
+    TextStyle? style,
     FontWeight? weight,
     int? maxLines,
   }) : this._(
@@ -62,6 +68,7 @@ class SimpleText extends StatelessWidget {
          variant: _SimpleTextVariant.body,
          color: color,
          align: align,
+         style: style,
          weight: weight,
          maxLines: maxLines,
        );
@@ -71,6 +78,7 @@ class SimpleText extends StatelessWidget {
     required String? text,
     Color? color,
     TextAlign? align,
+    TextStyle? style,
     FontWeight? weight,
     int? maxLines,
   }) : this._(
@@ -79,6 +87,7 @@ class SimpleText extends StatelessWidget {
          variant: _SimpleTextVariant.caption,
          color: color,
          align: align,
+         style: style,
          weight: weight,
          maxLines: maxLines,
        );
@@ -88,6 +97,7 @@ class SimpleText extends StatelessWidget {
     required String? text,
     Color? color,
     TextAlign? align,
+    TextStyle? style,
     FontWeight? weight,
     int? maxLines,
   }) : this._(
@@ -96,6 +106,7 @@ class SimpleText extends StatelessWidget {
          variant: _SimpleTextVariant.label,
          color: color,
          align: align,
+         style: style,
          weight: weight,
          maxLines: maxLines,
        );
@@ -103,6 +114,7 @@ class SimpleText extends StatelessWidget {
   final String? text;
   final Color? color;
   final TextAlign? align;
+  final TextStyle? style;
   final FontWeight? weight;
   final int? maxLines;
   final _SimpleTextVariant _variant;
@@ -114,7 +126,9 @@ class SimpleText extends StatelessWidget {
       textAlign: align,
       maxLines: maxLines,
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
-      style: _resolveStyle().copyWith(color: color, fontWeight: weight),
+      style: _resolveStyle()
+          .merge(style)
+          .copyWith(color: color, fontWeight: weight),
     );
   }
 

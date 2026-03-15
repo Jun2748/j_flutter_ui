@@ -34,6 +34,33 @@ class AppBarDemo extends StatelessWidget {
               ],
             ),
           ),
+          Gap.h16,
+          _AppBarPreviewCard(
+            title: 'Lightweight auth header',
+            child: AppBarEx(
+              title: 'Login or Sign Up',
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              padding: JInsets.horizontal16,
+              trailing: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: JColors.getColor(context, lightKey: 'card'),
+                  borderRadius: BorderRadius.circular(JDimens.dp12),
+                  border: Border.all(
+                    color: JColors.getColor(context, lightKey: 'border'),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: JDimens.dp12,
+                    vertical: JDimens.dp8,
+                  ),
+                  child: SimpleText.label(text: 'EN', weight: FontWeight.w700),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
