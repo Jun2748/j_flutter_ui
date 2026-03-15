@@ -1,0 +1,6 @@
+# Flutter and Dart tool output
+.dart_tool/
+build/
+
+# Local machine files
+.DS_Store
