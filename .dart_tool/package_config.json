@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "args",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/args-2.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "async",
       "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/async-2.13.0",
       "packageUri": "lib/",
@@ -50,10 +56,28 @@
       "languageVersion": "3.8"
     },
     {
+      "name": "flutter_svg",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/flutter_svg-2.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/jun/Development/Flutter/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.9"
+    },
+    {
+      "name": "http",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/http-1.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/http_parser-4.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "leak_tracker",
@@ -104,6 +128,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "path_parsing",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/path_parsing-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/petitparser-7.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/jun/Development/Flutter/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -146,6 +182,30 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "typed_data",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/typed_data-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "vector_graphics",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/vector_graphics-1.1.20",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/vector_math-2.2.0",
       "packageUri": "lib/",
@@ -156,6 +216,18 @@
       "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/vm_service-15.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.5"
+    },
+    {
+      "name": "web",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/web-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "xml",
+      "rootUri": "file:///Users/jun/.pub-cache/hosted/pub.dev/xml-6.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
     },
     {
       "name": "j_flutter_ui",

@@ -1,6 +1,8 @@
 import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
 import '../widgets/controls/segmented_control_demo.dart';
+import '../widgets/images_display/flag_demo.dart';
+import '../widgets/images_display/image_help_demo.dart';
 import '../widgets/feedback/badge_demo.dart';
 import '../widgets/feedback/banner_demo.dart';
 import '../widgets/feedback/chip_demo.dart';
@@ -45,6 +47,21 @@ class DemoRegistry {
       description: 'Typography scale and color usage powered by SimpleText.',
       builder: (_) => const TextDemo(),
     ),
+    DemoItem(
+      title: const FlagDemo().title,
+      category: DemoCategory.foundations,
+      description:
+          'Flag rendering by country code, asset, and currency mapping.',
+      builder: (_) => const FlagDemo(),
+    ),
+    DemoItem(
+      title: const ImageHelpDemo().title,
+      category: DemoCategory.foundations,
+      description:
+          'Examples of loading icon, flag, and illustration SVG assets with Images.svg.',
+      builder: (_) => const ImageHelpDemo(),
+    ),
+
     DemoItem(
       title: const ButtonDemo().title,
       category: DemoCategory.controls,
