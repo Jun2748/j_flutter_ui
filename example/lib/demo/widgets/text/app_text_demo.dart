@@ -12,21 +12,21 @@ class AppTextDemo extends StatelessWidget {
       appBar: AppBarEx(title: title),
       bodyPadding: JInsets.screenPadding,
       body: ListView(
-        children: const <Widget>[
-          _DemoCard(
+        children: <Widget>[
+          const _DemoCard(
             title: 'Raw AppText',
             child: AppText(text: 'This is raw AppText content.'),
           ),
           JGaps.h16,
-          _DemoCard(
+          const _DemoCard(
             title: 'Localized AppText',
             child: AppText(
-              localeKey: 'common.welcome',
+              localeKey: L.commonWelcome,
               args: <String, String>{'name': 'Developer'},
             ),
           ),
           JGaps.h16,
-          _DemoCard(
+          const _DemoCard(
             title: 'AppText with HTML',
             child: AppText(
               text: 'This is <strong>bold</strong> and <em>italic</em> HTML.',
@@ -34,11 +34,27 @@ class AppTextDemo extends StatelessWidget {
             ),
           ),
           JGaps.h16,
-          _DemoCard(
+          const _DemoCard(
             title: 'Localized AppText with HTML',
-            child: AppText(
-              localeKey: 'demo.html.localized',
-              useHtml: true,
+            child: AppText(localeKey: L.demoHtmlLocalized, useHtml: true),
+          ),
+          JGaps.h16,
+          _DemoCard(
+            title: 'Intl.text helper',
+            child: VStack(
+              gap: JDimens.dp16,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                AppText(text: Intl.text(L.commonConfirm)),
+                SimpleButton.text(
+                  label: Intl.text(L.commonCancel),
+                  onPressed: () {},
+                ),
+                SimpleTextField(
+                  labelText: Intl.text(L.loginPhone),
+                  hintText: Intl.text(L.commonOkay),
+                ),
+              ],
             ),
           ),
         ],

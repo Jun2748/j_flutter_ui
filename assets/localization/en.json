@@ -1,5 +1,7 @@
 {
+  "common.okay": "Okay",
   "login.title": "Welcome back",
+  "login.phone": "Phone number",
   "login.subtitle": "Sign in to continue to your account",
   "common.cancel": "Cancel",
   "common.confirm": "Confirm",

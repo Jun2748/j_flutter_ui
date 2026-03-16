@@ -3,6 +3,8 @@ export 'src/ui/constants/currency_codes.dart';
 export 'src/ui/localization/app_localization_bridge.dart';
 export 'src/ui/localization/app_localizations.dart';
 export 'src/ui/localization/app_localizations_delegate.dart';
+export 'src/ui/localization/intl.dart';
+export 'src/ui/localization/l.dart';
 export 'src/ui/resources/index.dart';
 export 'src/ui/widgets/controls/buttons/simple_button.dart';
 export 'src/ui/widgets/controls/dropdown/simple_dropdown.dart';
