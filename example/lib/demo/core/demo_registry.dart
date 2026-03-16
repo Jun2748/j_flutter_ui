@@ -36,6 +36,7 @@ import '../widgets/states/error_view_demo.dart';
 import '../widgets/states/loading_view_demo.dart';
 import '../widgets/text/app_text_demo.dart';
 import '../widgets/text/text_demo.dart';
+import '../stack_demo.dart';
 import 'demo_category.dart';
 import 'demo_item.dart';
 
@@ -194,6 +195,13 @@ class DemoRegistry {
       category: DemoCategory.layout,
       description: 'Titled sections wrapping related content.',
       builder: (_) => const SectionDemo(),
+    ),
+    DemoItem(
+      title: const StackDemo().title,
+      category: DemoCategory.layout,
+      description:
+          'Vertical and horizontal stack primitives that add spacing between children.',
+      builder: (_) => const StackDemo(),
     ),
     DemoItem(
       title: const ScaffoldDemo().title,
