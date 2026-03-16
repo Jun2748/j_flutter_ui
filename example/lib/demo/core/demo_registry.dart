@@ -2,7 +2,7 @@ import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
 import '../widgets/controls/segmented_control_demo.dart';
 import '../widgets/images_display/flag_demo.dart';
-import '../widgets/images_display/image_help_demo.dart';
+import '../widgets/images_display/image_helper_demo.dart';
 import '../widgets/feedback/badge_demo.dart';
 import '../widgets/feedback/banner_demo.dart';
 import '../widgets/feedback/chip_demo.dart';
@@ -55,11 +55,11 @@ class DemoRegistry {
       builder: (_) => const FlagDemo(),
     ),
     DemoItem(
-      title: const ImageHelpDemo().title,
+      title: const ImageHelperDemo().title,
       category: DemoCategory.foundations,
       description:
           'Examples of loading icon, flag, and illustration SVG assets with Images.svg.',
-      builder: (_) => const ImageHelpDemo(),
+      builder: (_) => const ImageHelperDemo(),
     ),
 
     DemoItem(

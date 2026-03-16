@@ -1,9 +1,6 @@
 export 'src/ui/constants/country_codes.dart';
 export 'src/ui/constants/currency_codes.dart';
 export 'src/ui/resources/index.dart';
-export 'src/ui/resources/flags.dart';
-export 'src/ui/resources/images.dart';
-export 'src/ui/resources/illustrations.dart';
 export 'src/ui/widgets/controls/buttons/simple_button.dart';
 export 'src/ui/widgets/controls/dropdown/simple_dropdown.dart';
 export 'src/ui/widgets/controls/inputs/simple_checkbox.dart';

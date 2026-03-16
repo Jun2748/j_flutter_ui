@@ -9,23 +9,7 @@ import '../resources/images.dart';
 abstract final class FlagUtils {
   const FlagUtils._();
 
-  static const Map<String, String> _currencyToCountryCode = <String, String>{
-    CurrencyCodes.sgd: CountryCodes.sg,
-    CurrencyCodes.usd: CountryCodes.us,
-    CurrencyCodes.cny: CountryCodes.cn,
-    CurrencyCodes.cnh: CountryCodes.cn,
-    CurrencyCodes.hkd: CountryCodes.hk,
-    CurrencyCodes.aud: CountryCodes.au,
-    CurrencyCodes.eur: CountryCodes.eu,
-    CurrencyCodes.chf: CountryCodes.ch,
-    CurrencyCodes.gbp: CountryCodes.gb,
-    CurrencyCodes.nzd: CountryCodes.nz,
-    CurrencyCodes.jpy: CountryCodes.jp,
-    CurrencyCodes.cad: CountryCodes.ca,
-    CurrencyCodes.myr: CountryCodes.my,
-  };
-
-  static const Map<String, String> _countryToFlagAsset = <String, String>{
+  static const Map<String, String> _countryFlagMap = <String, String>{
     CountryCodes.sg: Flags.singapore,
     CountryCodes.us: Flags.usa,
     CountryCodes.cn: Flags.china,
@@ -46,26 +30,57 @@ abstract final class FlagUtils {
     CountryCodes.ru: Flags.russia,
   };
 
-  static String? countryCodeFromCurrency(String? currency) {
-    final String? normalizedCurrency = _normalizeCurrencyCode(currency);
-    if (normalizedCurrency == null) {
-      return null;
-    }
+  static const Map<String, String> _currencyCountryMap = <String, String>{
+    CurrencyCodes.sgd: CountryCodes.sg,
+    CurrencyCodes.usd: CountryCodes.us,
+    CurrencyCodes.cny: CountryCodes.cn,
+    CurrencyCodes.cnh: CountryCodes.cn,
+    CurrencyCodes.hkd: CountryCodes.hk,
+    CurrencyCodes.aud: CountryCodes.au,
+    CurrencyCodes.eur: CountryCodes.eu,
+    CurrencyCodes.chf: CountryCodes.ch,
+    CurrencyCodes.gbp: CountryCodes.gb,
+    CurrencyCodes.nzd: CountryCodes.nz,
+    CurrencyCodes.jpy: CountryCodes.jp,
+    CurrencyCodes.cad: CountryCodes.ca,
+    CurrencyCodes.myr: CountryCodes.my,
+  };
 
-    return _currencyToCountryCode[normalizedCurrency];
-  }
-
-  static String? flagAssetFromCountry(String? country) {
-    final String? normalizedCountry = _normalizeCountryCode(country);
+  static String? flagAssetFromCountry(String? countryCode) {
+    final String? normalizedCountry = _normalizeCountryCode(countryCode);
     if (normalizedCountry == null) {
       return null;
     }
 
-    return _countryToFlagAsset[normalizedCountry];
+    return _countryFlagMap[normalizedCountry];
   }
 
-  static String? flagAssetFromCurrency(String? currency) {
-    final String? countryCode = countryCodeFromCurrency(currency);
+  static Widget flagByCountry(String? countryCode, {double? size}) {
+    final String? asset = flagAssetFromCountry(countryCode);
+    final double resolvedSize = size ?? JIconSizes.md;
+
+    if (asset == null || asset.isEmpty) {
+      return SizedBox(width: resolvedSize, height: resolvedSize);
+    }
+
+    return SizedBox(
+      width: resolvedSize,
+      height: resolvedSize,
+      child: Images.svg(asset, width: resolvedSize, height: resolvedSize),
+    );
+  }
+
+  static String? countryCodeFromCurrency(String? currencyCode) {
+    final String? normalizedCurrency = _normalizeCurrencyCode(currencyCode);
+    if (normalizedCurrency == null) {
+      return null;
+    }
+
+    return _currencyCountryMap[normalizedCurrency];
+  }
+
+  static String? flagAssetFromCurrency(String? currencyCode) {
+    final String? countryCode = countryCodeFromCurrency(currencyCode);
     if (countryCode == null) {
       return null;
     }
@@ -73,29 +88,9 @@ abstract final class FlagUtils {
     return flagAssetFromCountry(countryCode);
   }
 
-  static Widget flagByCurrency(
-    String? currency, {
-    double? size,
-  }) {
-    final String? asset = flagAssetFromCurrency(currency);
-    final double resolvedSize = size ?? JIconSizes.md;
-
-    if (asset == null || asset.isEmpty) {
-      return SizedBox(
-        width: resolvedSize,
-        height: resolvedSize,
-      );
-    }
-
-    return SizedBox(
-      width: resolvedSize,
-      height: resolvedSize,
-      child: Images.svg(
-        asset,
-        width: size,
-        height: size,
-      ),
-    );
+  static Widget flagByCurrency(String? currencyCode, {double? size}) {
+    final String? countryCode = countryCodeFromCurrency(currencyCode);
+    return flagByCountry(countryCode, size: size);
   }
 
   static String? _normalizeCountryCode(String? value) {
