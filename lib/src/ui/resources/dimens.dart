@@ -25,21 +25,21 @@ abstract final class JDimens {
 abstract final class JGaps {
   const JGaps._();
 
-  static const SizedBox h4 = SizedBox(width: JDimens.dp4);
-  static const SizedBox h8 = SizedBox(width: JDimens.dp8);
-  static const SizedBox h12 = SizedBox(width: JDimens.dp12);
-  static const SizedBox h16 = SizedBox(width: JDimens.dp16);
-  static const SizedBox h20 = SizedBox(width: JDimens.dp20);
-  static const SizedBox h24 = SizedBox(width: JDimens.dp24);
-  static const SizedBox h32 = SizedBox(width: JDimens.dp32);
+  static const SizedBox h4 = SizedBox(height: JDimens.dp4);
+  static const SizedBox h8 = SizedBox(height: JDimens.dp8);
+  static const SizedBox h12 = SizedBox(height: JDimens.dp12);
+  static const SizedBox h16 = SizedBox(height: JDimens.dp16);
+  static const SizedBox h20 = SizedBox(height: JDimens.dp20);
+  static const SizedBox h24 = SizedBox(height: JDimens.dp24);
+  static const SizedBox h32 = SizedBox(height: JDimens.dp32);
 
-  static const SizedBox v4 = SizedBox(height: JDimens.dp4);
-  static const SizedBox v8 = SizedBox(height: JDimens.dp8);
-  static const SizedBox v12 = SizedBox(height: JDimens.dp12);
-  static const SizedBox v16 = SizedBox(height: JDimens.dp16);
-  static const SizedBox v20 = SizedBox(height: JDimens.dp20);
-  static const SizedBox v24 = SizedBox(height: JDimens.dp24);
-  static const SizedBox v32 = SizedBox(height: JDimens.dp32);
+  static const SizedBox w4 = SizedBox(width: JDimens.dp4);
+  static const SizedBox w8 = SizedBox(width: JDimens.dp8);
+  static const SizedBox w12 = SizedBox(width: JDimens.dp12);
+  static const SizedBox w16 = SizedBox(width: JDimens.dp16);
+  static const SizedBox w20 = SizedBox(width: JDimens.dp20);
+  static const SizedBox w24 = SizedBox(width: JDimens.dp24);
+  static const SizedBox w32 = SizedBox(width: JDimens.dp32);
 }
 
 abstract final class JFontSizes {
