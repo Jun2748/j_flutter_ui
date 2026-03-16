@@ -1,5 +1,8 @@
 export 'src/ui/constants/country_codes.dart';
 export 'src/ui/constants/currency_codes.dart';
+export 'src/ui/localization/app_localization_bridge.dart';
+export 'src/ui/localization/app_localizations.dart';
+export 'src/ui/localization/app_localizations_delegate.dart';
 export 'src/ui/resources/index.dart';
 export 'src/ui/widgets/controls/buttons/simple_button.dart';
 export 'src/ui/widgets/controls/dropdown/simple_dropdown.dart';
@@ -44,5 +47,7 @@ export 'src/ui/widgets/overlays/simple_bottom_sheet.dart';
 export 'src/ui/widgets/states/simple_empty_state.dart';
 export 'src/ui/widgets/states/simple_error_view.dart';
 export 'src/ui/widgets/states/simple_loading_view.dart';
+export 'src/ui/widgets/typography/app_text.dart';
 export 'src/ui/widgets/typography/simple_text.dart';
 export 'src/ui/utils/flag_utils.dart';
+export 'src/ui/utils/text_scale_utils.dart';

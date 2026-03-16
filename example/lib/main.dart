@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:j_flutter_ui/j_flutter_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,13 @@ class ExampleApp extends StatelessWidget {
             theme: JAppTheme.lightTheme,
             darkTheme: JAppTheme.darkTheme,
             themeMode: controller.themeMode,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+              AppLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             home: const WidgetCatalog(),
           );
         },

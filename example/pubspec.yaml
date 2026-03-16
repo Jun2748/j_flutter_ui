@@ -8,6 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   j_flutter_ui:
     path: ../
   provider: ^6.1.5

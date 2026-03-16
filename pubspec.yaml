@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  auto_size_text: ^3.0.0
+  flutter_html: ^3.0.0
   flutter_svg: ^2.2.0
 
 dev_dependencies:
@@ -24,3 +26,4 @@ flutter:
     - assets/images/png/
     - assets/images/jpg/
     - assets/images/svg/
+    - assets/localization/

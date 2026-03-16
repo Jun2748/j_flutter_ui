@@ -1,0 +1,8 @@
+{
+  "login.title": "Welcome back",
+  "login.subtitle": "Sign in to continue to your account",
+  "common.cancel": "Cancel",
+  "common.confirm": "Confirm",
+  "common.welcome": "Welcome, {name}",
+  "demo.html.localized": "Localized <strong>HTML</strong> from <em>library JSON</em>."
+}

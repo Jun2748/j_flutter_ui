@@ -34,6 +34,7 @@ import '../widgets/screens/account_menu_demo.dart';
 import '../widgets/states/empty_state_demo.dart';
 import '../widgets/states/error_view_demo.dart';
 import '../widgets/states/loading_view_demo.dart';
+import '../widgets/text/app_text_demo.dart';
 import '../widgets/text/text_demo.dart';
 import 'demo_category.dart';
 import 'demo_item.dart';
@@ -47,6 +48,13 @@ class DemoRegistry {
       category: DemoCategory.foundations,
       description: 'Typography scale and color usage powered by SimpleText.',
       builder: (_) => const TextDemo(),
+    ),
+    DemoItem(
+      title: const AppTextDemo().title,
+      category: DemoCategory.foundations,
+      description:
+          'Higher-level text widget with localization and optional auto-fit support.',
+      builder: (_) => const AppTextDemo(),
     ),
     DemoItem(
       title: const FlagDemo().title,
