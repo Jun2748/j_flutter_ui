@@ -4,7 +4,7 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 class ImageHelperDemo extends StatelessWidget {
   const ImageHelperDemo({super.key});
 
-  String get title => 'Images Helper Demo';
+  String get title => 'Images Helper';
 
   @override
   Widget build(BuildContext context) {

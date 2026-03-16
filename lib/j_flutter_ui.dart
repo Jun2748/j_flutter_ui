@@ -12,6 +12,7 @@ export 'src/ui/widgets/controls/segmented/simple_segmented_control.dart';
 export 'src/ui/widgets/display/simple_card.dart';
 export 'src/ui/widgets/display/simple_chip.dart';
 export 'src/ui/widgets/display/simple_divider.dart';
+export 'src/ui/widgets/display/simple_list_item.dart';
 export 'src/ui/widgets/display/simple_menu_page.dart';
 export 'src/ui/widgets/display/simple_menu_section.dart';
 export 'src/ui/widgets/display/simple_menu_tile.dart';

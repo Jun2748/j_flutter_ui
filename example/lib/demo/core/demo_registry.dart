@@ -9,6 +9,7 @@ import '../widgets/feedback/chip_demo.dart';
 import '../widgets/feedback/dialog_demo.dart';
 import '../widgets/feedback/divider_demo.dart';
 import '../widgets/feedback/snackbar_demo.dart';
+import '../list_item_demo.dart';
 import '../widgets/forms/backend_error_demo.dart';
 import '../widgets/forms/checkbox_demo.dart';
 import '../widgets/forms/cross_validation_demo.dart';
@@ -116,6 +117,13 @@ class DemoRegistry {
       category: DemoCategory.display,
       description: 'Basic and tappable card examples.',
       builder: (_) => const CardDemo(),
+    ),
+    DemoItem(
+      title: const ListItemDemo().title,
+      category: DemoCategory.display,
+      description:
+          'Low-level list row primitive for navigation, settings, and info layouts.',
+      builder: (_) => const ListItemDemo(),
     ),
     DemoItem(
       title: const BadgeDemo().title,

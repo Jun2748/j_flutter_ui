@@ -4,7 +4,7 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 class FlagDemo extends StatelessWidget {
   const FlagDemo({super.key});
 
-  String get title => 'Flag Demo';
+  String get title => 'Flag';
 
   @override
   Widget build(BuildContext context) {
