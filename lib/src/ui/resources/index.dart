@@ -5,5 +5,5 @@ export 'images.dart';
 export 'illustrations.dart';
 export 'styles.dart';
 export 'theme.dart';
+export 'ui_icons.dart';
 export 'videos.dart';
-export 'svgs.dart';

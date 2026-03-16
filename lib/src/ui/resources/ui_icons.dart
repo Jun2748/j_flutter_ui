@@ -1,5 +1,5 @@
-abstract final class Svgs {
-  const Svgs._();
+abstract final class UiIcons {
+  const UiIcons._();
 
   static const String _basePath = 'assets/images/svg';
 

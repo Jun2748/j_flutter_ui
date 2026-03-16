@@ -14,9 +14,9 @@ class ImageHelperDemo extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Images.svg(Svgs.search, width: 28, height: 28),
+            Images.svg(UiIcons.search, width: 28, height: 28),
             const SizedBox(height: 8),
-            const Text('Icon SVG using Images.svg(Svgs.search)'),
+            const Text('Icon SVG using Images.svg(UiIcons.search)'),
             const SizedBox(height: 32),
             Images.svg(Flags.malaysia, width: 28, height: 28),
             const SizedBox(height: 8),
