@@ -4,7 +4,7 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 class AccountMenuDemo extends StatefulWidget {
   const AccountMenuDemo({super.key});
 
-  String get title => 'Account Menu';
+  String get title => 'Menu Patterns';
 
   @override
   State<AccountMenuDemo> createState() => _AccountMenuDemoState();
@@ -75,7 +75,7 @@ class _AccountMenuDemoState extends State<AccountMenuDemo> {
                       Gap.h8,
                       SimpleText.caption(
                         text:
-                            'A realistic composition example using the refactored menu page, menu section, and menu tile APIs.',
+                            'A realistic composition example using SimpleMenuPage, SimpleMenuSection, and SimpleMenuTile together.',
                         maxLines: 3,
                       ),
                     ],

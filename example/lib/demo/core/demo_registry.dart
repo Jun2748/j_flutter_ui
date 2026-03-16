@@ -181,7 +181,7 @@ class DemoRegistry {
       title: const AccountMenuDemo().title,
       category: DemoCategory.screens,
       description:
-          'A realistic account/settings screen composition using menu sections, tiles, and bottom navigation.',
+          'End-to-end menu patterns using SimpleMenuPage, SimpleMenuSection, and SimpleMenuTile in a realistic account screen.',
       builder: (_) => const AccountMenuDemo(),
     ),
     DemoItem(
