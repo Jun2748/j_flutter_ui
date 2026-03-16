@@ -383,13 +383,17 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       case SimpleFormFieldType.text:
         child = FormFieldWrapper(
           label: field.label,
+          labelWidget: field.labelWidget,
           helperText: errorText == null ? field.helperText : null,
+          helper: errorText == null ? field.helper : null,
           required: field.required,
           child: SimpleTextField(
             controller: _controllers[field.name],
             focusNode: focusNode,
             hintText: field.hintText,
             errorText: errorText,
+            prefix: field.prefix,
+            suffix: field.suffix,
             keyboardType: field.keyboardType,
             obscureText: field.obscureText,
             enabled: effectiveEnabled,
@@ -400,7 +404,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       case SimpleFormFieldType.search:
         child = FormFieldWrapper(
           label: field.label,
+          labelWidget: field.labelWidget,
           helperText: field.helperText,
+          helper: field.helper,
           errorText: errorText,
           required: field.required,
           child: SimpleSearchField(
@@ -415,7 +421,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       case SimpleFormFieldType.dropdown:
         child = FormFieldWrapper(
           label: field.label,
+          labelWidget: field.labelWidget,
           helperText: errorText == null ? field.helperText : null,
+          helper: errorText == null ? field.helper : null,
           required: field.required,
           child: SimpleDropdown<dynamic>(
             key: ValueKey<String>(
@@ -433,11 +441,13 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       case SimpleFormFieldType.checkbox:
         child = FormFieldWrapper(
           helperText: field.helperText,
+          helper: field.helper,
           errorText: errorText,
           required: field.required,
           child: SimpleCheckbox(
             value: value as bool?,
             label: field.label,
+            labelWidget: field.labelWidget,
             enabled: effectiveEnabled,
             onChanged: (bool? checked) => _updateValue(field, checked ?? false),
           ),
@@ -446,7 +456,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       case SimpleFormFieldType.radio:
         child = FormFieldWrapper(
           label: field.label,
+          labelWidget: field.labelWidget,
           helperText: field.helperText,
+          helper: field.helper,
           errorText: errorText,
           required: field.required,
           child: Column(
@@ -473,11 +485,13 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       case SimpleFormFieldType.switchField:
         child = FormFieldWrapper(
           helperText: field.helperText,
+          helper: field.helper,
           errorText: errorText,
           required: field.required,
           child: SimpleSwitch(
             value: value as bool?,
             label: field.label,
+            labelWidget: field.labelWidget,
             onChanged: effectiveEnabled
                 ? (bool selected) => _updateValue(field, selected)
                 : null,

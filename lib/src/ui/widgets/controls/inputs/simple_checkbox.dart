@@ -10,6 +10,7 @@ class SimpleCheckbox extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.label,
+    this.labelWidget,
     this.textStyle,
     this.enabled = true,
   });
@@ -17,6 +18,7 @@ class SimpleCheckbox extends StatelessWidget {
   final bool? value;
   final ValueChanged<bool?>? onChanged;
   final String? label;
+  final Widget? labelWidget;
   final TextStyle? textStyle;
   final bool enabled;
 
@@ -30,7 +32,21 @@ class SimpleCheckbox extends StatelessWidget {
       onChanged: interactive ? onChanged : null,
     );
 
-    if (label == null || label!.trim().isEmpty) {
+    final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
+    final Widget? resolvedLabel = labelWidget ?? (hasTextLabel
+        ? Text(
+            label!,
+            style: JTextStyles.body2
+                .merge(textStyle)
+                .copyWith(
+                  color: enabled
+                      ? textStyle?.color
+                      : JColors.getColor(context, lightKey: 'textDisabled'),
+                ),
+          )
+        : null);
+
+    if (resolvedLabel == null) {
       return checkbox;
     }
 
@@ -42,18 +58,7 @@ class SimpleCheckbox extends StatelessWidget {
         child: Row(
           children: <Widget>[
             checkbox,
-            Expanded(
-              child: Text(
-                label!,
-                style: JTextStyles.body2
-                    .merge(textStyle)
-                    .copyWith(
-                      color: enabled
-                          ? textStyle?.color
-                          : JColors.getColor(context, lightKey: 'textDisabled'),
-                    ),
-              ),
-            ),
+            Expanded(child: resolvedLabel),
           ],
         ),
       ),

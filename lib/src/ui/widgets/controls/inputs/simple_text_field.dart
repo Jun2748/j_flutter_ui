@@ -12,6 +12,8 @@ class SimpleTextField extends StatelessWidget {
     this.hintText,
     this.helperText,
     this.errorText,
+    this.prefix,
+    this.suffix,
     this.prefixIcon,
     this.suffixIcon,
     this.keyboardType,
@@ -30,6 +32,8 @@ class SimpleTextField extends StatelessWidget {
   final String? hintText;
   final String? helperText;
   final String? errorText;
+  final Widget? prefix;
+  final Widget? suffix;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextInputType? keyboardType;
@@ -72,6 +76,8 @@ class SimpleTextField extends StatelessWidget {
         hintText: hintText,
         helperText: helperText,
         errorText: errorText,
+        prefix: prefix,
+        suffix: suffix,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         filled: readOnly || !enabled,

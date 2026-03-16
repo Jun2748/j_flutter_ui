@@ -9,7 +9,9 @@ class FormFieldWrapper extends StatelessWidget {
   const FormFieldWrapper({
     super.key,
     this.label,
+    this.labelWidget,
     this.helperText,
+    this.helper,
     this.errorText,
     this.required = false,
     required this.child,
@@ -17,7 +19,9 @@ class FormFieldWrapper extends StatelessWidget {
   });
 
   final String? label;
+  final Widget? labelWidget;
   final String? helperText;
+  final Widget? helper;
   final String? errorText;
   final bool required;
   final Widget child;
@@ -25,21 +29,25 @@ class FormFieldWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool hasLabel = label != null && label!.trim().isNotEmpty;
+    final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
+    final Widget? resolvedLabel =
+        labelWidget ??
+        (hasTextLabel
+            ? SimpleText.label(text: label!, weight: FontWeight.w600)
+            : null);
     final bool hasError = errorText != null && errorText!.trim().isNotEmpty;
-    final bool hasHelper =
+    final bool hasHelperWidget = helper != null && !hasError;
+    final bool hasHelperText =
         helperText != null && helperText!.trim().isNotEmpty && !hasError;
 
     Widget content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        if (hasLabel) ...<Widget>[
+        if (resolvedLabel != null) ...<Widget>[
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Flexible(
-                child: SimpleText.label(text: label!, weight: FontWeight.w600),
-              ),
+              Flexible(child: resolvedLabel),
               if (required) ...<Widget>[
                 const SizedBox(width: JDimens.dp4),
                 SimpleText.label(
@@ -53,7 +61,10 @@ class FormFieldWrapper extends StatelessWidget {
           Gap.h8,
         ],
         child,
-        if (hasHelper) ...<Widget>[
+        if (hasHelperWidget) ...<Widget>[
+          Gap.h8,
+          helper!,
+        ] else if (hasHelperText) ...<Widget>[
           Gap.h8,
           SimpleText.caption(
             text: helperText!,

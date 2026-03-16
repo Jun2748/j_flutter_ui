@@ -84,6 +84,9 @@ abstract final class JInsets {
   static const EdgeInsets all20 = EdgeInsets.all(JDimens.dp20);
   static const EdgeInsets all24 = EdgeInsets.all(JDimens.dp24);
 
+  static const EdgeInsets horizontal4 = EdgeInsets.symmetric(
+    horizontal: JDimens.dp4,
+  );
   static const EdgeInsets horizontal8 = EdgeInsets.symmetric(
     horizontal: JDimens.dp8,
   );

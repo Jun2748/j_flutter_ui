@@ -10,12 +10,14 @@ class SimpleSwitch extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.label,
+    this.labelWidget,
     this.description,
   });
 
   final bool? value;
   final ValueChanged<bool>? onChanged;
   final String? label;
+  final Widget? labelWidget;
   final String? description;
 
   @override
@@ -63,7 +65,8 @@ class SimpleSwitch extends StatelessWidget {
       trackOutlineWidth: const WidgetStatePropertyAll<double>(1.2),
     );
 
-    if ((label == null || label!.trim().isEmpty) &&
+    if (labelWidget == null &&
+        (label == null || label!.trim().isEmpty) &&
         (description == null || description!.trim().isEmpty)) {
       return switchWidget;
     }
@@ -74,27 +77,29 @@ class SimpleSwitch extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (label != null && label!.trim().isNotEmpty)
-                  SimpleText.body(text: label!),
-                if (description != null &&
-                    description!.trim().isNotEmpty) ...<Widget>[
-                  Gap.h8,
-                  SimpleText.caption(
-                    text: description!,
-                    color: JColors.getColor(context, lightKey: 'textSecondary'),
-                  ),
-                ],
-              ],
-            ),
+            child: labelWidget ?? _buildTextContent(context),
           ),
           Gap.w16,
           switchWidget,
         ],
       ),
+    );
+  }
+
+  Widget _buildTextContent(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (label != null && label!.trim().isNotEmpty) SimpleText.body(text: label!),
+        if (description != null && description!.trim().isNotEmpty) ...<Widget>[
+          Gap.h8,
+          SimpleText.caption(
+            text: description!,
+            color: JColors.getColor(context, lightKey: 'textSecondary'),
+          ),
+        ],
+      ],
     );
   }
 }

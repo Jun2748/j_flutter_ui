@@ -29,7 +29,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
         padding: JInsets.screenPadding,
         children: <Widget>[
           Section(
-            title: 'Label, hint, helper, and prefix',
+            title: 'Label, hint, helper, and prefix icon',
             child: SimpleTextField(
               controller: _controller,
               labelText: 'Name',
@@ -40,14 +40,18 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
           ),
           Gap.h24,
           Section(
-            title: 'Suffix action',
+            title: 'Prefix and suffix widgets',
             child: SimpleTextField(
-              labelText: 'Website',
-              hintText: 'https://example.com',
-              helperText: 'Suffix icons work well for quick actions.',
-              suffixIcon: IconButton(
+              labelText: 'Phone',
+              hintText: '123456789',
+              helperText: 'Use prefix and suffix for richer input affordances.',
+              prefix: const Padding(
+                padding: JInsets.horizontal12,
+                child: SimpleText.body(text: '+60'),
+              ),
+              suffix: IconButton(
                 onPressed: () {},
-                icon: const Icon(Icons.open_in_new_outlined),
+                icon: const Icon(Icons.contact_phone_outlined),
               ),
             ),
           ),

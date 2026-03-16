@@ -11,6 +11,8 @@ class FormBuilderDemo extends StatefulWidget {
 }
 
 class _FormBuilderDemoState extends State<FormBuilderDemo> {
+  static const String _selectedPhoneCountryCode = CountryCodes.my;
+
   late final SimpleFormController _controller = SimpleFormController(
     initialValues: <String, dynamic>{
       'name': 'Jun',
@@ -87,9 +89,29 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                 ),
                 SimpleFormFieldConfig.text(
                   name: 'phone',
-                  label: 'Phone',
+                  labelWidget: const HStack(
+                    gap: JDimens.dp8,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SimpleText.label(text: 'Phone', weight: FontWeight.w600),
+                      SimpleBadge.neutral(label: 'Widget label'),
+                    ],
+                  ),
                   hintText: 'Enter your phone number',
                   helperText: 'Optional field using reusable phone validation.',
+                  prefix: const Padding(
+                    padding: JInsets.horizontal4,
+                    child: HStack(
+                      gap: JDimens.dp8,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SimpleFlag.countryCode(
+                          _selectedPhoneCountryCode,
+                          size: JIconSizes.md,
+                        ),
+                      ],
+                    ),
+                  ),
                   keyboardType: TextInputType.phone,
                   validator: SimpleFormValidator.phone(),
                 ),
@@ -97,8 +119,22 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   name: 'password',
                   label: 'Password',
                   hintText: 'Enter your password',
-                  helperText:
-                      'Required password field with reusable min length validation.',
+                  helper: const HStack(
+                    gap: JDimens.dp8,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: JInsets.vertical4,
+                        child: Icon(Icons.info_outline, size: JIconSizes.sm),
+                      ),
+                      Expanded(
+                        child: SimpleText.caption(
+                          text:
+                              'Use at least 8 characters. This helper is rendered from a widget override.',
+                        ),
+                      ),
+                    ],
+                  ),
                   required: true,
                   obscureText: true,
                   validator: SimpleFormValidator.minLength(8),
@@ -209,6 +245,44 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   SnackBar(content: Text('Submitted: ${values.toString()}')),
                 );
               },
+            ),
+          ),
+          Gap.h16,
+          SimpleCard(
+            child: VStack(
+              gap: JDimens.dp16,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const SimpleText.heading(
+                  text: 'SimpleTextField prefix and suffix',
+                ),
+                const SimpleText.caption(
+                  text:
+                      'These examples complement the builder demo by showing the lower-level SimpleTextField API that powers many form inputs.',
+                ),
+                const SimpleTextField(
+                  labelText: 'Phone prefix',
+                  hintText: '123456789',
+                  helperText:
+                      'Prefix is useful for country codes or inline context.',
+                  prefix: Padding(
+                    padding: JInsets.horizontal12,
+                    child: SimpleText.body(text: '+60'),
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+                SimpleTextField(
+                  labelText: 'Password suffix',
+                  hintText: 'Enter your password',
+                  helperText:
+                      'Suffix can host visibility toggles or status actions.',
+                  obscureText: true,
+                  suffix: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.visibility_off_outlined),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
