@@ -1,476 +1,267 @@
+---
+
+# 2. `README.md`
+
+```md
 # j_flutter_ui
 
-`j_flutter_ui` is a reusable Flutter UI component library designed to standardize UI development across multiple applications.
+A reusable Flutter UI component library designed to standardize UI development across multiple applications.
 
-The goal of this library is to provide:
-
-- consistent design tokens
+`j_flutter_ui` provides:
+- centralized design tokens
 - reusable UI primitives
-- composable widgets
+- composable widget patterns
 - form infrastructure
 - asset helpers
-- predictable layout utilities
+- demo-driven documentation
 
-This library is intended to scale across multiple Flutter projects while keeping the UI layer easy to understand, easy to extend, and safe to evolve.
+The goal is to behave like a lightweight design system, not just a collection of random widgets.
 
-## Purpose
+---
 
-`j_flutter_ui` exists to move shared UI concerns out of individual apps and into a single reusable package. Instead of each application rebuilding its own buttons, forms, spacing rules, app bars, list rows, and asset loading patterns, this library provides a common system.
+## Features
 
-The package is designed to support:
+### Design tokens
+The library centralizes:
+- colors
+- spacing
+- dimensions
+- typography
+- insets
+- heights
 
-- shared design tokens
-- consistent widget APIs
-- predictable composition patterns
-- reusable form workflows
-- centralized asset access
-- example-driven development through the bundled demo app
+### Asset system
+The library provides:
+- icon asset constants
+- image helpers
+- flag helpers
+- illustration helpers
 
-## Design Principles
+### Reusable widgets
+The library includes:
+- buttons
+- text fields
+- cards
+- list items
+- chips
+- badges
+- banners
+- dialogs
+- bottom sheets
+- loading / empty / error states
+- navigation widgets
+- menu patterns
 
-### 1. Consistency
+### Form system
+The form layer includes:
+- `SimpleForm`
+- `SimpleFormBuilder`
+- `SimpleFormController`
+- validators
+- cross-field validators
+- backend error integration helpers
 
-All UI elements should rely on centralized design tokens.
+### Example app
+The repository contains an example app that acts as:
+- a component catalog
+- a visual QA tool
+- a usage reference
 
-Avoid magic numbers such as:
+---
 
-```dart
-const SizedBox(height: 13)
-```
+## Project Structure
 
-Prefer tokens and shared primitives such as:
-
-```dart
-const Gap.h(JDimens.dp16)
-```
-
-or:
-
-```dart
-padding: JInsets.screenPadding
-```
-
-### 2. Composability
-
-Widgets should be small, reusable primitives that compose together cleanly.
-
-Example:
-
-```text
-SimpleListItem -> base row primitive
-SimpleMenuTile -> more opinionated higher-level row
-```
-
-The package should favor layering behavior on top of primitives instead of duplicating layouts in multiple widgets.
-
-### 3. Predictable API
-
-Public widgets should follow consistent naming patterns.
-
-Examples:
-
-- `SimpleButton`
-- `SimpleTextField`
-- `SimpleCard`
-- `SimpleListItem`
-- `SimpleFlag`
-
-Helpers and resources should also be predictable:
-
-- `Images`
-- `Flags`
-- `UiIcons`
-- `Illustrations`
-- `FlagUtils`
-
-### 4. Asset Abstraction
-
-SVG assets should never be loaded directly using `SvgPicture.asset(...)` in library or demo code.
-
-Use:
-
-```dart
-Images.svg(asset)
-```
-
-This keeps asset loading centralized and package-safe.
-
-## Library Architecture
-
-Current structure under `lib/src/ui/`:
+Main code lives under:
 
 ```text
 lib/src/ui
-├── constants
-│   ├── country_codes.dart
-│   └── currency_codes.dart
-├── resources
-│   ├── colors.dart
-│   ├── dimens.dart
-│   ├── flags.dart
-│   ├── illustrations.dart
-│   ├── images.dart
-│   ├── index.dart
-│   ├── styles.dart
-│   ├── theme.dart
-│   ├── ui_icons.dart
-│   └── videos.dart
-├── utils
-│   └── flag_utils.dart
-└── widgets
-    ├── controls
-    │   ├── buttons
-    │   ├── dropdown
-    │   ├── inputs
-    │   └── segmented
-    ├── display
-    │   ├── simple_card.dart
-    │   ├── simple_chip.dart
-    │   ├── simple_divider.dart
-    │   ├── simple_list_item.dart
-    │   ├── simple_menu_page.dart
-    │   ├── simple_menu_section.dart
-    │   └── simple_menu_tile.dart
-    ├── feedback
-    │   ├── simple_badge.dart
-    │   ├── simple_banner.dart
-    │   ├── simple_dialog.dart
-    │   └── simple_snackbar.dart
-    ├── flags
-    │   └── simple_flag.dart
-    ├── forms
-    │   ├── builder
-    │   ├── controller
-    │   └── validation
-    ├── layout
-    │   ├── app_scaffold.dart
-    │   ├── gap.dart
-    │   └── section.dart
-    ├── navigation
-    │   ├── app_bar_ex.dart
-    │   ├── simple_bottom_nav_bar.dart
-    │   └── simple_tabs.dart
-    ├── overlays
-    │   └── simple_bottom_sheet.dart
-    ├── states
-    │   ├── simple_empty_state.dart
-    │   ├── simple_error_view.dart
-    │   └── simple_loading_view.dart
-    └── typography
-        └── simple_text.dart
-```
-
-### Architectural Layers
-
-- `constants/`: shared code constants such as country and currency codes
-- `resources/`: design tokens, theme, assets, and resource lookup classes
-- `utils/`: non-widget helpers such as flag lookup logic
-- `widgets/`: reusable UI components organized by domain
-
-## Design Tokens
-
-Design tokens centralize styling and layout.
-
-Current token classes include:
-
-- `JColors`
-- `JDimens`
-- `JGaps`
-- `JFontSizes`
-- `JLineHeights`
-- `JIconSizes`
-- `JInsets`
-- `JHeights`
-- `JTextStyles`
-- `JAppTheme`
-
-These tokens exist to ensure visual consistency and reduce one-off styling decisions in application code.
-
-## Assets
-
-Assets are centralized behind resource helpers rather than referenced as raw paths throughout the codebase.
-
-### Icons
-
-Use:
-
-```dart
-Images.svg(UiIcons.search)
-```
-
-### Flags
-
-Use:
-
-```dart
-SimpleFlag.countryCode(CountryCodes.my)
-```
+constants/
+resources/
+utils/
+widgets/
 
-or:
+constants
 
-```dart
-FlagUtils.flagByCountry(CountryCodes.sg, size: 20)
-```
+Shared codes and constants.
 
-### Raster Images
+Examples:
+	•	country_codes.dart
+	•	currency_codes.dart
 
-Use:
+resources
 
-```dart
-Image(
-  image: Images.asset('logo'),
-)
-```
+Design tokens and asset helpers.
 
-### Important Rule
+Examples:
+	•	colors.dart
+	•	dimens.dart
+	•	styles.dart
+	•	theme.dart
+	•	images.dart
+	•	flags.dart
+	•	illustrations.dart
+	•	ui_icons.dart
 
-Never load assets directly in feature code with raw asset paths or direct `SvgPicture.asset(...)` calls. Always go through the library resource helpers.
+utils
 
-## Country, Flag, and Currency Model
+Reusable helper utilities.
 
-The flag system is country-first.
+Examples:
+	•	flag_utils.dart
 
-Primary model:
+widgets
 
-```text
-countryCode -> flag asset
-```
+Reusable UI widgets grouped by category.
 
-Secondary convenience model:
+Examples:
+	•	controls
+	•	display
+	•	feedback
+	•	forms
+	•	layout
+	•	navigation
+	•	overlays
+	•	states
+	•	typography
 
-```text
-currencyCode -> countryCode -> flag asset
-```
+⸻
 
-This means the preferred APIs are:
+Installation
 
-```dart
-FlagUtils.flagAssetFromCountry(CountryCodes.sg);
-FlagUtils.flagByCountry(CountryCodes.my, size: 20);
-```
+Add the package to your Flutter app.
+dependencies:
+  j_flutter_ui:
+    path: ../j_flutter_ui
 
-Currency mapping still exists for convenience:
+Usage
 
-```dart
-FlagUtils.countryCodeFromCurrency(CurrencyCodes.usd);
-FlagUtils.flagByCurrency(CurrencyCodes.myr, size: 20);
-```
+Import the library through the public entry point only:
 
-## Forms System
+Design Tokens
 
-The forms layer provides reusable building blocks for complex form workflows.
+Use centralized tokens instead of hardcoded styling.
+Avoid
+SizedBox(height: 13);
+EdgeInsets.all(15);
+TextStyle(fontSize: 17);
 
-Core pieces include:
+Prefer
+JGaps.h16;
+JInsets.all16;
+JTextStyles.body;
 
-- `SimpleForm`
-- `SimpleFormController`
-- `SimpleFormBuilder`
-- `SimpleFormFieldConfig`
-- `SimpleFormFieldType`
-- `SimpleFormValidator`
-- `SimpleCrossFieldValidators`
-- `SimpleRegexPatterns`
-- `SimpleValidationMessages`
 
-This supports:
+Asset Usage
 
-- schema-driven form construction
-- centralized validation rules
-- cross-field validation
-- external form control
-- backend error injection
-- predictable submission state
+Do not load SVGs directly in app code.
 
-## Core Primitive Widgets
-
-Important base components include:
-
-- `SimpleText`
-- `SimpleButton`
-- `SimpleCard`
-- `SimpleListItem`
-- `SimpleTextField`
-- `AppScaffold`
-- `AppBarEx`
+Preferred usage
+Images.svg(UiIcons.search);
+Images.svg(Flags.malaysia);
+Images.svg(Illustrations.emptyState);
 
-Higher-level widgets should build on these primitives whenever practical.
-
-Example:
-
-```text
-SimpleListItem -> general-purpose row primitive
-SimpleMenuTile -> menu-specific row built with stronger assumptions
-```
-
-## Example App
-
-The example app under `example/` acts as living documentation for the package.
+Flag usage
+SimpleFlag.countryCode(CountryCodes.my);
+FlagUtils.flagByCountry(CountryCodes.my);
 
-It provides demo coverage for:
-
-- foundations
-- controls
-- display widgets
-- forms
-- navigation
-- layout
-- overlays
-- states
-- screen compositions
-
-The example app should be updated whenever new reusable components are added or significant APIs change.
-
-## Basic Usage
+Flags are country-first. Currency mapping is only a convenience helper.
 
-### App setup
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:j_flutter_ui/j_flutter_ui.dart';
-
-void main() {
-  runApp(const MyApp());
-}
+⸻
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Core Primitive Widgets
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: JAppTheme.lightTheme,
-      darkTheme: JAppTheme.darkTheme,
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppScaffold(
-      appBar: const AppBarEx(title: 'j_flutter_ui'),
-      bodyPadding: JInsets.screenPadding,
-      body: const Center(
-        child: SimpleText.heading(text: 'Hello from j_flutter_ui'),
-      ),
-    );
-  }
-}
-```
+Some of the main primitives include:
+	•	SimpleText
+	•	SimpleButton
+	•	SimpleCard
+	•	SimpleListItem
+	•	SimpleTextField
 
-### Primitive widget usage
+Higher-level widgets should build on top of these primitives whenever possible.
 
-```dart
-Column(
-  crossAxisAlignment: CrossAxisAlignment.stretch,
-  children: <Widget>[
-    const SimpleText.heading(text: 'Profile'),
-    Gap.h16,
-    SimpleButton.primary(
-      label: 'Save Changes',
-      onPressed: () {},
-    ),
-    Gap.h16,
-    const SimpleCard(
-      child: SimpleText.body(text: 'Shared card content'),
-    ),
-    Gap.h16,
-    const SimpleListItem(
-      title: SimpleText.body(text: 'Email'),
-      subtitle: SimpleText.caption(text: 'user@email.com'),
-    ),
-  ],
-)
-```
+⸻
 
-## Rules for Extending the Library
+Forms
 
-When adding new widgets or helpers:
+The library includes a form system for building and controlling forms consistently.
 
-1. Prefer composition over duplication.
-2. Use shared design tokens instead of hardcoded dimensions.
-3. Avoid introducing one-off naming patterns.
-4. Follow the established `Simple*` widget naming convention where appropriate.
-5. Add example/demo coverage in the example app.
-6. Export public widgets and helpers from `lib/j_flutter_ui.dart`.
-7. Keep assets and resource paths centralized.
-8. Avoid business-specific behavior in reusable package code.
+Main classes
+	•	SimpleForm
+	•	SimpleFormBuilder
+	•	SimpleFormController
+	•	SimpleFormValidator
+	•	SimpleCrossFieldValidators
 
-## Safe Extension Guidelines
+Example
+final controller = SimpleFormController();
+Use the controller-driven form system instead of ad-hoc field state where practical.
 
-When extending this library, ask:
+⸻
 
-- Is this a primitive or a composed widget?
-- Does this belong in `resources`, `utils`, or `widgets`?
-- Can it be built from an existing primitive?
-- Is there already a token for the spacing, size, or color I need?
-- Does the new API match the rest of the package?
+Example App
 
-Good extension pattern:
+The example app lives under:
+example/lib
 
-```text
-primitive widget
--> reusable composed widget
--> example demo
--> barrel export
-```
+It contains demos for:
+	•	controls
+	•	forms
+	•	layout
+	•	navigation
+	•	states
+	•	feedback
+	•	assets
 
-Avoid:
+Use the example app to:
+	•	understand intended usage
+	•	test dark mode
+	•	validate visual consistency
+	•	review component composition
 
-- direct SVG loading in widget code
-- magic numbers for spacing and sizing
-- duplicating existing widget layouts
-- introducing app-specific logic into the library
+⸻
 
-## AI Assistant Guidelines
+Rules for Extending the Library
 
-This section is intentionally written for AI tools such as Codex and ChatGPT.
+When adding new components:
+	1.	Prefer composition over duplication
+	2.	Use design tokens instead of magic numbers
+	3.	Follow existing naming conventions
+	4.	Keep primitives thin
+	5.	Add or update demo pages
+	6.	Export new public APIs through j_flutter_ui.dart
 
-When modifying this library:
+⸻
 
-- Do not break existing public widget APIs without clear justification.
-- Avoid renaming public classes casually.
-- Keep design tokens centralized.
-- Use `Images.svg(...)` for SVG rendering.
-- Use `UiIcons`, `Flags`, `Illustrations`, and `Images` resource helpers instead of raw asset paths.
-- Use `CountryCodes` and `CurrencyCodes` constants instead of hardcoded values.
-- Avoid introducing magic numbers when tokens already exist.
-- Preserve the current folder structure unless there is a strong architectural reason to change it.
-- Prefer low-level primitives over creating many highly opinionated one-off widgets.
-- Update the example app when adding or changing public components.
-- Export new public APIs from `lib/j_flutter_ui.dart`.
+Library Philosophy
 
-When uncertain, prefer:
+This project is intended to grow as a reusable UI platform.
 
-- composition over duplication
-- clarity over cleverness
-- stable public APIs over churn
+The focus is on:
+	•	composable primitives
+	•	predictable APIs
+	•	token-based styling
+	•	reusable patterns
+	•	demo-backed development
 
-## Development Notes
+The library should remain:
+	•	clean
+	•	maintainable
+	•	scalable
+	•	app-agnostic
 
-- Asset SVGs are loaded through `flutter_svg` via `Images.svg(...)`.
-- The package currently uses a mix of newer resource names such as `UiIcons`, `Images`, `Flags`, and `Illustrations`, alongside older token names such as `JColors`, `JDimens`, and `JTextStyles`.
-- The example app under `example/` is part of the development workflow and should be kept in sync with the public library API.
+⸻
 
-## Roadmap
+Versioning
 
-Future improvements may include:
+Semantic versioning should be used.
 
-- more layout primitives
-- animation helpers
-- theme extensions
-- advanced form features
-- more asset-backed widgets
-- richer example coverage
+General guideline:
+0.x → evolving architecture
+1.0 → stable API
 
-## Versioning
-
-Semantic versioning is used.
-
-- `0.x`: evolving architecture and API refinement
-- `1.0`: stable public API target
-
+Example roadmap:
+0.1.0 → core widgets and asset system
+0.2.0 → form system
+0.3.0 → navigation and menu patterns
+0.4.0 → scenario demos and stabilization
+1.0.0 → stable public API
