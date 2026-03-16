@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:j_flutter_ui/j_flutter_ui.dart';
+import 'package:provider/provider.dart';
 
 import 'core/demo_category.dart';
 import 'core/demo_item.dart';
 import 'core/demo_registry.dart';
+import '../theme/theme_controller.dart';
 import 'widget_demo_page.dart';
 
 class WidgetCatalog extends StatefulWidget {
@@ -42,7 +44,16 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
     ];
 
     return AppScaffold(
-      appBar: const AppBarEx(title: 'Widget Catalog'),
+      appBar: AppBarEx(
+        title: 'Widget Catalog',
+        actions: <Widget>[
+          IconButton(
+            tooltip: _themeTooltip(context.watch<ThemeController>().themeMode),
+            onPressed: () => context.read<ThemeController>().toggle(),
+            icon: Icon(_themeIcon(context.watch<ThemeController>().themeMode)),
+          ),
+        ],
+      ),
       body: Column(
         children: <Widget>[
           Padding(
@@ -130,6 +141,28 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
       grouped.putIfAbsent(item.category, () => <DemoItem>[]).add(item);
     }
     return grouped;
+  }
+
+  IconData _themeIcon(ThemeMode themeMode) {
+    switch (themeMode) {
+      case ThemeMode.light:
+        return Icons.light_mode;
+      case ThemeMode.dark:
+        return Icons.dark_mode;
+      case ThemeMode.system:
+        return Icons.brightness_auto;
+    }
+  }
+
+  String _themeTooltip(ThemeMode themeMode) {
+    switch (themeMode) {
+      case ThemeMode.light:
+        return 'Theme: Light';
+      case ThemeMode.dark:
+        return 'Theme: Dark';
+      case ThemeMode.system:
+        return 'Theme: System';
+    }
   }
 }
 
