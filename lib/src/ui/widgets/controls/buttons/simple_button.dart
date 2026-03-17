@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../resources/colors.dart';
+import '../../../resources/app_theme_tokens.dart';
 import '../../../resources/dimens.dart';
 import '../../../resources/styles.dart';
-import '../../layout/gap.dart';
 
 enum _SimpleButtonVariant { primary, secondary, outline, text }
 
@@ -17,6 +16,9 @@ class SimpleButton extends StatelessWidget {
     this.icon,
     this.width,
     this.padding,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.borderColor,
   }) : _variant = variant;
 
   const SimpleButton.primary({
@@ -27,6 +29,9 @@ class SimpleButton extends StatelessWidget {
     IconData? icon,
     double? width,
     EdgeInsets? padding,
+    Color? backgroundColor,
+    Color? foregroundColor,
+    Color? borderColor,
   }) : this._(
          key: key,
          label: label,
@@ -36,6 +41,9 @@ class SimpleButton extends StatelessWidget {
          icon: icon,
          width: width,
          padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
        );
 
   const SimpleButton.secondary({
@@ -46,6 +54,9 @@ class SimpleButton extends StatelessWidget {
     IconData? icon,
     double? width,
     EdgeInsets? padding,
+    Color? backgroundColor,
+    Color? foregroundColor,
+    Color? borderColor,
   }) : this._(
          key: key,
          label: label,
@@ -55,6 +66,9 @@ class SimpleButton extends StatelessWidget {
          icon: icon,
          width: width,
          padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
        );
 
   const SimpleButton.outline({
@@ -65,6 +79,9 @@ class SimpleButton extends StatelessWidget {
     IconData? icon,
     double? width,
     EdgeInsets? padding,
+    Color? backgroundColor,
+    Color? foregroundColor,
+    Color? borderColor,
   }) : this._(
          key: key,
          label: label,
@@ -74,6 +91,9 @@ class SimpleButton extends StatelessWidget {
          icon: icon,
          width: width,
          padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
        );
 
   const SimpleButton.text({
@@ -84,6 +104,9 @@ class SimpleButton extends StatelessWidget {
     IconData? icon,
     double? width,
     EdgeInsets? padding,
+    Color? backgroundColor,
+    Color? foregroundColor,
+    Color? borderColor,
   }) : this._(
          key: key,
          label: label,
@@ -93,7 +116,15 @@ class SimpleButton extends StatelessWidget {
          icon: icon,
          width: width,
          padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
        );
+
+  static const Set<WidgetState> _enabledState = <WidgetState>{};
+  static const Set<WidgetState> _disabledState = <WidgetState>{
+    WidgetState.disabled,
+  };
 
   final String? label;
   final VoidCallback? onPressed;
@@ -101,84 +132,85 @@ class SimpleButton extends StatelessWidget {
   final IconData? icon;
   final double? width;
   final EdgeInsets? padding;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final Color? borderColor;
   final _SimpleButtonVariant _variant;
 
   @override
   Widget build(BuildContext context) {
-    final EdgeInsets resolvedPadding =
-        padding ?? JInsets.horizontal16Vertical12;
-    final VoidCallback? resolvedOnPressed = loading ? null : onPressed;
-
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
-    final Color surface = JColors.getColor(context, lightKey: 'surface');
-    final Color border = JColors.getColor(context, lightKey: 'border');
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
-
-    final ButtonStyle baseStyle = ButtonStyle(
-      minimumSize: const WidgetStatePropertyAll<Size>(Size(0, JHeights.button)),
-      padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(resolvedPadding),
-      textStyle: const WidgetStatePropertyAll<TextStyle>(JTextStyles.button),
-      shape: WidgetStatePropertyAll<OutlinedBorder>(
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final ButtonStyle themeStyle = _themeStyle(theme);
+    final bool isEnabled = onPressed != null;
+    final bool isInteractive = isEnabled && !loading;
+    final bool showDisabledState = !isEnabled;
+    final EdgeInsetsGeometry resolvedPadding =
+        padding ??
+        themeStyle.padding?.resolve(_enabledState) ??
+        JInsets.horizontal16Vertical12;
+    final TextStyle resolvedTextStyle =
+        themeStyle.textStyle?.resolve(_enabledState) ?? JTextStyles.button;
+    final OutlinedBorder resolvedShape =
+        themeStyle.shape?.resolve(_enabledState) ??
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(JDimens.dp12),
-        ),
-      ),
-      elevation: const WidgetStatePropertyAll<double>(0),
+        );
+    final Size resolvedMinimumSize =
+        themeStyle.minimumSize?.resolve(_enabledState) ??
+        const Size(0, JHeights.button);
+    final double resolvedElevation =
+        themeStyle.elevation?.resolve(_enabledState) ?? 0;
+    final Color foregroundColor = _foregroundColor(
+      theme,
+      tokens: tokens,
+      showDisabledState: showDisabledState,
+    );
+    final Color backgroundColor = _backgroundColor(
+      theme,
+      tokens: tokens,
+      showDisabledState: showDisabledState,
+    );
+    final BorderSide resolvedBorderSide = _borderSide(
+      themeStyle,
+      theme,
+      tokens: tokens,
+      showDisabledState: showDisabledState,
     );
 
-    final Widget child = _buildChild(
-      color: _foregroundColor(primary: primary, textPrimary: textPrimary),
+    final ButtonStyle style = themeStyle.copyWith(
+      minimumSize: WidgetStatePropertyAll<Size>(resolvedMinimumSize),
+      padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(resolvedPadding),
+      textStyle: WidgetStatePropertyAll<TextStyle>(resolvedTextStyle),
+      shape: WidgetStatePropertyAll<OutlinedBorder>(resolvedShape),
+      elevation: WidgetStatePropertyAll<double>(resolvedElevation),
+      backgroundColor: WidgetStatePropertyAll<Color>(backgroundColor),
+      foregroundColor: WidgetStatePropertyAll<Color>(foregroundColor),
+      side: WidgetStatePropertyAll<BorderSide>(resolvedBorderSide),
+      shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
     );
+
+    final Widget child = _buildChild(foregroundColor);
 
     final Widget button;
     switch (_variant) {
       case _SimpleButtonVariant.primary:
       case _SimpleButtonVariant.secondary:
         button = ElevatedButton(
-          onPressed: resolvedOnPressed,
-          style: baseStyle.copyWith(
-            backgroundColor: WidgetStatePropertyAll<Color>(
-              _variant == _SimpleButtonVariant.primary ? primary : surface,
-            ),
-            foregroundColor: WidgetStatePropertyAll<Color>(
-              _foregroundColor(primary: primary, textPrimary: textPrimary),
-            ),
-            shadowColor: const WidgetStatePropertyAll<Color>(Color(0x00000000)),
-            side: WidgetStatePropertyAll<BorderSide>(
-              BorderSide(
-                color: _variant == _SimpleButtonVariant.secondary
-                    ? border
-                    : primary,
-              ),
-            ),
-          ),
+          onPressed: isInteractive ? onPressed : null,
+          style: style,
           child: child,
         );
       case _SimpleButtonVariant.outline:
         button = OutlinedButton(
-          onPressed: resolvedOnPressed,
-          style: baseStyle.copyWith(
-            backgroundColor: const WidgetStatePropertyAll<Color>(
-              Color(0x00000000),
-            ),
-            foregroundColor: WidgetStatePropertyAll<Color>(textPrimary),
-            side: WidgetStatePropertyAll<BorderSide>(BorderSide(color: border)),
-          ),
+          onPressed: isInteractive ? onPressed : null,
+          style: style,
           child: child,
         );
       case _SimpleButtonVariant.text:
         button = TextButton(
-          onPressed: resolvedOnPressed,
-          style: baseStyle.copyWith(
-            backgroundColor: const WidgetStatePropertyAll<Color>(
-              Color(0x00000000),
-            ),
-            foregroundColor: WidgetStatePropertyAll<Color>(primary),
-            overlayColor: WidgetStatePropertyAll<Color>(primary.withAlpha(18)),
-          ),
+          onPressed: isInteractive ? onPressed : null,
+          style: style,
           child: child,
         );
     }
@@ -186,14 +218,26 @@ class SimpleButton extends StatelessWidget {
     return SizedBox(width: width, child: button);
   }
 
-  Widget _buildChild({required Color color}) {
+  ButtonStyle _themeStyle(ThemeData theme) {
+    switch (_variant) {
+      case _SimpleButtonVariant.primary:
+      case _SimpleButtonVariant.secondary:
+        return theme.elevatedButtonTheme.style ?? const ButtonStyle();
+      case _SimpleButtonVariant.outline:
+        return theme.outlinedButtonTheme.style ?? const ButtonStyle();
+      case _SimpleButtonVariant.text:
+        return theme.textButtonTheme.style ?? const ButtonStyle();
+    }
+  }
+
+  Widget _buildChild(Color foregroundColor) {
     if (loading) {
       return SizedBox(
         height: JIconSizes.sm,
         width: JIconSizes.sm,
         child: CircularProgressIndicator(
           strokeWidth: JDimens.dp2,
-          color: color,
+          color: foregroundColor,
         ),
       );
     }
@@ -202,7 +246,10 @@ class SimpleButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        if (icon != null) ...<Widget>[Icon(icon, size: JIconSizes.md), Gap.w8],
+        if (icon != null) ...<Widget>[
+          Icon(icon, size: JIconSizes.md),
+          JGaps.w8,
+        ],
         Flexible(
           child: Text(
             label ?? '',
@@ -216,15 +263,91 @@ class SimpleButton extends StatelessWidget {
     );
   }
 
-  Color _foregroundColor({required Color primary, required Color textPrimary}) {
+  Color _backgroundColor(
+    ThemeData theme, {
+    required AppThemeTokens tokens,
+    required bool showDisabledState,
+  }) {
+    final Color fallbackColor;
+
     switch (_variant) {
       case _SimpleButtonVariant.primary:
-        return JColors.white;
+        fallbackColor = showDisabledState
+            ? theme.disabledColor.withAlpha(31)
+            : tokens.primary;
       case _SimpleButtonVariant.secondary:
+        fallbackColor = showDisabledState
+            ? theme.disabledColor.withAlpha(16)
+            : Color.alphaBlend(
+                tokens.secondary.withAlpha(18),
+                tokens.cardBackground,
+              );
       case _SimpleButtonVariant.outline:
-        return textPrimary;
       case _SimpleButtonVariant.text:
-        return primary;
+        fallbackColor = Colors.transparent;
+    }
+
+    return backgroundColor ?? fallbackColor;
+  }
+
+  Color _foregroundColor(
+    ThemeData theme, {
+    required AppThemeTokens tokens,
+    required bool showDisabledState,
+  }) {
+    final Color fallbackColor;
+
+    if (showDisabledState) {
+      fallbackColor = theme.disabledColor;
+    } else {
+      switch (_variant) {
+        case _SimpleButtonVariant.primary:
+          fallbackColor = theme.colorScheme.onPrimary;
+        case _SimpleButtonVariant.secondary:
+          fallbackColor = tokens.secondary;
+        case _SimpleButtonVariant.outline:
+          fallbackColor = tokens.primary;
+        case _SimpleButtonVariant.text:
+          fallbackColor = tokens.primary;
+      }
+    }
+
+    return foregroundColor ?? fallbackColor;
+  }
+
+  BorderSide _borderSide(
+    ButtonStyle themeStyle,
+    ThemeData theme, {
+    required AppThemeTokens tokens,
+    required bool showDisabledState,
+  }) {
+    final BorderSide? themedSide = themeStyle.side?.resolve(
+      showDisabledState ? _disabledState : _enabledState,
+    );
+    final double resolvedWidth = themedSide?.width ?? JDimens.dp1;
+
+    if (borderColor != null) {
+      return BorderSide(color: borderColor!, width: resolvedWidth);
+    }
+
+    switch (_variant) {
+      case _SimpleButtonVariant.secondary:
+        return BorderSide(
+          color: showDisabledState
+              ? theme.disabledColor.withAlpha(64)
+              : tokens.secondary.withAlpha(56),
+          width: resolvedWidth,
+        );
+      case _SimpleButtonVariant.outline:
+        return BorderSide(
+          color: showDisabledState
+              ? theme.disabledColor.withAlpha(64)
+              : tokens.primary,
+          width: resolvedWidth,
+        );
+      case _SimpleButtonVariant.primary:
+      case _SimpleButtonVariant.text:
+        return BorderSide.none;
     }
   }
 }

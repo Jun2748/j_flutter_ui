@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../resources/colors.dart';
 import '../../../resources/dimens.dart';
 import '../../../resources/styles.dart';
 import '../../typography/simple_text.dart';
@@ -29,23 +28,20 @@ class SimpleDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final List<DropdownMenuItem<T>> resolvedItems =
         items ?? List<DropdownMenuItem<T>>.empty();
     final bool hasMatchingValue = resolvedItems.any(
       (DropdownMenuItem<T> item) => item.value == value,
     );
-    final Color border = JColors.getColor(context, lightKey: 'border');
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
-    final Color textSecondary = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
+    final Color border = theme.colorScheme.outline;
+    final Color textPrimary =
+        theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface;
+    final Color textSecondary =
+        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurfaceVariant;
     final OutlineInputBorder inputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(color: border),
+      borderSide: BorderSide(color: border, width: JDimens.dp1),
     );
 
     return DropdownButtonFormField<T>(
@@ -65,8 +61,8 @@ class SimpleDropdown<T> extends StatelessWidget {
         enabledBorder: inputBorder,
         focusedBorder: inputBorder.copyWith(
           borderSide: BorderSide(
-            color: JColors.getColor(context, lightKey: 'primary'),
-            width: 1.4,
+            color: theme.colorScheme.primary,
+            width: JDimens.dp1_5,
           ),
         ),
       ),

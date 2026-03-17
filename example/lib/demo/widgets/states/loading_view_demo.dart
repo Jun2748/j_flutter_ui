@@ -14,7 +14,7 @@ class LoadingViewDemo extends StatelessWidget {
         padding: JInsets.screenPadding,
         children: const <Widget>[
           SimpleCard(child: SimpleLoadingView(message: 'Loading bookings...')),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(child: SimpleLoadingView()),
         ],
       ),

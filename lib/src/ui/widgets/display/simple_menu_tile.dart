@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../feedback/simple_badge.dart';
-import '../layout/gap.dart';
+import '../display/simple_divider.dart';
 import '../typography/simple_text.dart';
 
 class SimpleMenuTile extends StatelessWidget {
@@ -22,7 +22,7 @@ class SimpleMenuTile extends StatelessWidget {
     this.showBottomDivider = true,
     this.enabled = true,
     this.padding,
-    this.minHeight = 72,
+    this.minHeight = JHeights.menuTile,
     this.onTap,
   });
 
@@ -36,7 +36,7 @@ class SimpleMenuTile extends StatelessWidget {
     bool showBottomDivider = true,
     bool enabled = true,
     EdgeInsets? padding,
-    double minHeight = 72,
+    double minHeight = JHeights.menuTile,
     VoidCallback? onTap,
   }) : this(
          key: key,
@@ -65,7 +65,7 @@ class SimpleMenuTile extends StatelessWidget {
     bool showBottomDivider = true,
     bool enabled = true,
     EdgeInsets? padding,
-    double minHeight = 72,
+    double minHeight = JHeights.menuTile,
     VoidCallback? onTap,
   }) : this(
          key: key,
@@ -95,7 +95,7 @@ class SimpleMenuTile extends StatelessWidget {
     bool showBottomDivider = true,
     bool enabled = true,
     EdgeInsets? padding,
-    double minHeight = 72,
+    double minHeight = JHeights.menuTile,
     VoidCallback? onTap,
   }) : this(
          key: key,
@@ -170,11 +170,11 @@ class SimpleMenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EdgeInsets resolvedPadding =
-        padding ??
-        const EdgeInsets.symmetric(
-          horizontal: JDimens.dp16,
-          vertical: JDimens.dp14,
-        );
+        padding ?? JInsets.horizontal16Vertical14;
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final Color dividerColor = tokens.dividerColor;
+    final Color mutedTextColor = tokens.mutedText;
 
     final Widget tile = Material(
       color: Colors.transparent,
@@ -190,18 +190,18 @@ class SimpleMenuTile extends StatelessWidget {
               children: <Widget>[
                 if (leading != null) ...<Widget>[
                   IconTheme(
-                    data: IconThemeData(
-                      color: JColors.getColor(context, lightKey: 'textPrimary'),
+                    data: theme.iconTheme.copyWith(
+                      color: theme.colorScheme.onSurface,
                       size: JIconSizes.md,
                     ),
                     child: leading!,
                   ),
-                  Gap.w16,
+                  JGaps.w16,
                 ],
-                Expanded(child: _buildContent(context)),
+                Expanded(child: _buildContent(context, mutedTextColor)),
                 if (_hasTrailingContent) ...<Widget>[
-                  Gap.w16,
-                  _buildTrailing(context),
+                  JGaps.w16,
+                  _buildTrailing(mutedTextColor),
                 ],
               ],
             ),
@@ -214,10 +214,16 @@ class SimpleMenuTile extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         if (showTopDivider)
-          _MenuTileDivider(horizontalInset: resolvedPadding.horizontal / 2),
+          _MenuTileDivider(
+            horizontalInset: resolvedPadding.horizontal / 2,
+            color: dividerColor,
+          ),
         tile,
         if (showBottomDivider)
-          _MenuTileDivider(horizontalInset: resolvedPadding.horizontal / 2),
+          _MenuTileDivider(
+            horizontalInset: resolvedPadding.horizontal / 2,
+            color: dividerColor,
+          ),
       ],
     );
   }
@@ -233,12 +239,7 @@ class SimpleMenuTile extends StatelessWidget {
   bool get _hasTrailingContent =>
       trailing != null || _hasTrailingText || showChevron;
 
-  Widget _buildContent(BuildContext context) {
-    final Color subtitleColor = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
-
+  Widget _buildContent(BuildContext context, Color mutedTextColor) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,14 +253,14 @@ class SimpleMenuTile extends StatelessWidget {
                 maxLines: 2,
               ),
             ),
-            if (_resolvedBadge != null) ...<Widget>[Gap.w8, _resolvedBadge!],
+            if (_resolvedBadge != null) ...<Widget>[JGaps.w8, _resolvedBadge!],
           ],
         ),
         if (_hasSubtitle) ...<Widget>[
-          Gap.h8,
+          JGaps.h8,
           SimpleText.caption(
             text: subtitle!,
-            color: subtitleColor,
+            color: mutedTextColor,
             maxLines: 3,
           ),
         ],
@@ -279,12 +280,8 @@ class SimpleMenuTile extends StatelessWidget {
     return null;
   }
 
-  Widget _buildTrailing(BuildContext context) {
+  Widget _buildTrailing(Color mutedTextColor) {
     final List<Widget> children = <Widget>[];
-    final Color trailingTextColor = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
     final String? resolvedTrailingText = trailingText ?? trailingLabel;
 
     if (_hasTrailingText) {
@@ -292,7 +289,7 @@ class SimpleMenuTile extends StatelessWidget {
         Flexible(
           child: SimpleText.caption(
             text: resolvedTrailingText!,
-            color: trailingTextColor,
+            color: mutedTextColor,
             align: TextAlign.right,
             maxLines: 2,
           ),
@@ -302,19 +299,15 @@ class SimpleMenuTile extends StatelessWidget {
 
     if (trailing != null) {
       if (children.isNotEmpty) {
-        children.add(Gap.w8);
+        children.add(JGaps.w8);
       }
       children.add(trailing!);
     } else if (showChevron) {
       if (children.isNotEmpty) {
-        children.add(Gap.w8);
+        children.add(JGaps.w8);
       }
       children.add(
-        Icon(
-          Icons.chevron_right,
-          size: JIconSizes.lg,
-          color: trailingTextColor,
-        ),
+        Icon(Icons.chevron_right, size: JIconSizes.lg, color: mutedTextColor),
       );
     }
 
@@ -326,18 +319,19 @@ class SimpleMenuTile extends StatelessWidget {
 }
 
 class _MenuTileDivider extends StatelessWidget {
-  const _MenuTileDivider({required this.horizontalInset});
+  const _MenuTileDivider({required this.horizontalInset, required this.color});
 
   final double horizontalInset;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Divider(
-      height: 1,
-      thickness: 1,
+    return SimpleDivider(
+      color: color,
+      height: JDimens.dp1,
+      thickness: JDimens.dp1,
       indent: horizontalInset,
       endIndent: horizontalInset,
-      color: JColors.getColor(context, lightKey: 'divider'),
     );
   }
 }

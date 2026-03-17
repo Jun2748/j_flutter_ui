@@ -40,9 +40,9 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SimpleText.label(text: 'Current destination'),
-                Gap.h8,
+                JGaps.h8,
                 SimpleText.heading(text: _labels[_currentIndex]),
-                const Gap.h(JDimens.dp12),
+                JGaps.h12,
                 const SimpleText.body(
                   text:
                       'Tap the bottom navigation items to verify state updates.',

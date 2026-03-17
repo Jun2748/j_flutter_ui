@@ -1,6 +1,9 @@
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+
 import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
 import '../widgets/controls/segmented_control_demo.dart';
+import '../widgets/foundations/theme_demo.dart';
 import '../widgets/images_display/flag_demo.dart';
 import '../widgets/images_display/image_helper_demo.dart';
 import '../widgets/feedback/badge_demo.dart';
@@ -45,9 +48,9 @@ class DemoRegistry {
 
   static final List<DemoItem> items = <DemoItem>[
     DemoItem(
-      title: const TextDemo().title,
+      titleKey: L.demoTextTitle,
       category: DemoCategory.foundations,
-      description: 'Typography scale and color usage powered by SimpleText.',
+      descriptionKey: L.demoTextRegistryDescription,
       builder: (_) => const TextDemo(),
     ),
     DemoItem(
@@ -56,6 +59,12 @@ class DemoRegistry {
       description:
           'Higher-level text widget with localization and optional auto-fit support.',
       builder: (_) => const AppTextDemo(),
+    ),
+    DemoItem(
+      titleKey: L.demoThemeTitle,
+      category: DemoCategory.foundations,
+      descriptionKey: L.demoThemeRegistryDescription,
+      builder: (_) => const ThemeDemo(),
     ),
     DemoItem(
       title: const FlagDemo().title,
@@ -73,16 +82,15 @@ class DemoRegistry {
     ),
 
     DemoItem(
-      title: const ButtonDemo().title,
+      titleKey: L.demoButtonTitle,
       category: DemoCategory.controls,
-      description: 'Primary, secondary, outline, text, and loading buttons.',
+      descriptionKey: L.demoButtonRegistryDescription,
       builder: (_) => const ButtonDemo(),
     ),
     DemoItem(
-      title: const TextFieldDemo().title,
+      titleKey: L.demoTextFieldTitle,
       category: DemoCategory.controls,
-      description:
-          'Text field states with labels, helper text, prefix, suffix, and errors.',
+      descriptionKey: L.demoTextFieldRegistryDescription,
       builder: (_) => const TextFieldDemo(),
     ),
     DemoItem(
@@ -178,16 +186,15 @@ class DemoRegistry {
       builder: (_) => const ErrorViewDemo(),
     ),
     DemoItem(
-      title: const AccountMenuDemo().title,
+      titleKey: L.demoAccountTitle,
       category: DemoCategory.screens,
-      description:
-          'End-to-end menu patterns using SimpleMenuPage, SimpleMenuSection, and SimpleMenuTile in a realistic account screen.',
+      descriptionKey: L.demoAccountRegistryDescription,
       builder: (_) => const AccountMenuDemo(),
     ),
     DemoItem(
       title: const GapDemo().title,
       category: DemoCategory.layout,
-      description: 'Spacing helpers using the shared Gap tokens.',
+      description: 'Spacing helpers using the shared JGaps tokens.',
       builder: (_) => const GapDemo(),
     ),
     DemoItem(

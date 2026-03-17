@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide SimpleDialog;
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
 import '../typography/simple_text.dart';
@@ -58,14 +57,9 @@ class SimpleDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
-    final Color textSecondary = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
+    final ThemeData theme = Theme.of(context);
+    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color textSecondary = theme.colorScheme.onSurfaceVariant;
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
     final Widget? resolvedContent = _buildContent(context, textSecondary);
 

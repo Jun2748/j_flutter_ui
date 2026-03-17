@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../../localization/intl.dart';
+import '../../../localization/l.dart';
+import 'simple_text_field.dart';
+
 class SimpleSearchField extends StatefulWidget {
   const SimpleSearchField({
     super.key,
     this.controller,
     this.focusNode,
-    this.hintText = 'Search',
+    this.hintText,
     this.onChanged,
     this.enabled = true,
   });
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
-  final String hintText;
+  final String? hintText;
   final ValueChanged<String>? onChanged;
   final bool enabled;
 
@@ -43,30 +47,38 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return SimpleTextField(
       controller: _controller,
       focusNode: widget.focusNode,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
-      decoration: InputDecoration(
-        hintText: widget.hintText,
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: _controller.text.isEmpty
-            ? null
-            : IconButton(
-                onPressed: widget.enabled
-                    ? () {
-                        _controller.clear();
-                        widget.onChanged?.call('');
-                      }
-                    : null,
-                icon: const Icon(Icons.close),
-              ),
-      ),
+      hintText: _resolvedHintText(context),
+      prefixIcon: const Icon(Icons.search),
+      suffixIcon: _controller.text.isEmpty
+          ? null
+          : IconButton(
+              onPressed: widget.enabled
+                  ? () {
+                      _controller.clear();
+                      widget.onChanged?.call('');
+                    }
+                  : null,
+              icon: const Icon(Icons.close),
+            ),
     );
   }
 
   void _handleTextChanged() {
     setState(() {});
+  }
+
+  String _resolvedHintText(BuildContext context) {
+    final String? customHint = widget.hintText?.trim();
+    if (customHint != null && customHint.isNotEmpty) {
+      return customHint;
+    }
+
+    final String localizedHint = Intl.text(L.commonSearch, context: context);
+    return localizedHint == L.commonSearch ? 'Search' : localizedHint;
   }
 }

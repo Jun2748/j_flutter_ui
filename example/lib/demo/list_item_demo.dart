@@ -32,7 +32,7 @@ class _ListItemDemoState extends State<ListItemDemo> {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {},
           ),
-          const Gap.h(JDimens.dp16),
+          JGaps.h16,
           SimpleListItem(
             title: const SimpleText.body(
               text: 'Notifications',
@@ -50,7 +50,7 @@ class _ListItemDemoState extends State<ListItemDemo> {
               },
             ),
           ),
-          const Gap.h(JDimens.dp16),
+          JGaps.h16,
           const SimpleListItem(
             title: SimpleText.body(text: 'Email', weight: FontWeight.w600),
             subtitle: SimpleText.caption(text: 'user@email.com'),

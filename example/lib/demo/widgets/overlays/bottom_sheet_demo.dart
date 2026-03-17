@@ -29,7 +29,7 @@ class BottomSheetDemo extends StatelessWidget {
               );
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleButton.secondary(
             label: 'Open Action List Sheet',
             onPressed: () {
@@ -63,7 +63,7 @@ class BottomSheetDemo extends StatelessWidget {
               );
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleButton.outline(
             label: 'Open Scrollable Sheet',
             onPressed: () {

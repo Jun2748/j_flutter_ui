@@ -18,7 +18,7 @@ class CrossValidationDemo extends StatelessWidget {
             message:
                 'This example focuses on cross-field validation where confirm password must match password.',
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               fields: <SimpleFormFieldConfig<dynamic>>[

@@ -4,56 +4,70 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 class ButtonDemo extends StatelessWidget {
   const ButtonDemo({super.key});
 
-  String get title => 'Buttons';
-
   @override
   Widget build(BuildContext context) {
+    String tr(String key) => Intl.text(key, context: context);
+
     return AppScaffold(
-      appBar: AppBarEx(title: title),
+      appBar: AppBarEx(title: tr(L.demoButtonTitle)),
       body: ListView(
         padding: JInsets.screenPadding,
         children: <Widget>[
           Section(
-            title: 'Variants',
-            child: Column(
+            title: tr(L.demoButtonVariantsTitle),
+            child: VStack(
+              gap: JDimens.dp16,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 SimpleButton.primary(
-                  label: 'Primary Button',
+                  label: tr(L.demoButtonPrimaryLabel),
                   icon: Icons.check_circle_outline,
                   onPressed: () {},
                 ),
-                Gap.h16,
                 SimpleButton.secondary(
-                  label: 'Secondary Button',
+                  label: tr(L.demoButtonSecondaryLabel),
                   onPressed: () {},
                 ),
-                Gap.h16,
-                SimpleButton.outline(label: 'Outline Button', onPressed: () {}),
-                Gap.h16,
-                SimpleButton.text(label: 'Text Button', onPressed: () {}),
+                SimpleButton.outline(
+                  label: tr(L.demoButtonOutlineLabel),
+                  onPressed: () {},
+                ),
+                SimpleButton.text(
+                  label: tr(L.demoButtonTextLabel),
+                  onPressed: () {},
+                ),
               ],
             ),
           ),
-          Gap.h16,
+          JGaps.h24,
           Section(
-            title: 'Loading state',
-            child: Row(
+            title: tr(L.demoButtonStatesTitle),
+            child: VStack(
+              gap: JDimens.dp12,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Expanded(
-                  child: SimpleButton.primary(
-                    label: 'Saving',
-                    loading: true,
-                    onPressed: () {},
-                  ),
+                HStack(
+                  gap: JDimens.dp12,
+                  children: <Widget>[
+                    Expanded(
+                      child: SimpleButton.primary(
+                        label: tr(L.demoButtonLoadingPrimary),
+                        loading: true,
+                        onPressed: () {},
+                      ),
+                    ),
+                    Expanded(
+                      child: SimpleButton.outline(
+                        label: tr(L.demoButtonLoadingOutline),
+                        loading: true,
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
                 ),
-                const Gap.w(JDimens.dp12),
-                Expanded(
-                  child: SimpleButton.outline(
-                    label: 'Syncing',
-                    loading: true,
-                    onPressed: () {},
-                  ),
+                SimpleButton.secondary(
+                  label: tr(L.demoButtonDisabledLabel),
+                  onPressed: null,
                 ),
               ],
             ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 import 'simple_card.dart';
 import 'simple_menu_tile.dart';
@@ -16,7 +14,7 @@ class SimpleMenuSection extends StatelessWidget {
     this.tiles = const <SimpleMenuTile>[],
     this.children,
     this.padding,
-    this.spacing = 12,
+    this.spacing = JDimens.dp12,
   }) : assert(
          tiles.length > 0 || (children != null && children.length > 0),
          'Provide either tiles or children.',
@@ -50,21 +48,14 @@ class SimpleMenuSection extends StatelessWidget {
                   Expanded(
                     child: SimpleText.heading(text: title!, maxLines: 2),
                   ),
-                  if (action != null) ...<Widget>[
-                    const Gap.w(JDimens.dp12),
-                    action!,
-                  ],
+                  if (action != null) ...<Widget>[JGaps.w12, action!],
                 ],
               ),
             if (hasSubtitle) ...<Widget>[
-              if (hasTitle) Gap.h8,
-              SimpleText.caption(
-                text: subtitle!,
-                color: JColors.getColor(context, lightKey: 'textSecondary'),
-                maxLines: 3,
-              ),
+              if (hasTitle) JGaps.h8,
+              SimpleText.caption(text: subtitle!, maxLines: 3),
             ],
-            Gap.h(spacing),
+            SizedBox(height: spacing),
           ],
           ...content,
         ],

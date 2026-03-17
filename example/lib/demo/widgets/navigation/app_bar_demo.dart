@@ -17,12 +17,12 @@ class AppBarDemo extends StatelessWidget {
             title: 'Default app bar',
             child: AppBarEx(title: 'Bookings'),
           ),
-          Gap.h16,
+          JGaps.h16,
           const _AppBarPreviewCard(
             title: 'Centered title',
             child: AppBarEx(title: 'Explore', centerTitle: true),
           ),
-          Gap.h16,
+          JGaps.h16,
           const _AppBarPreviewCard(
             title: 'Leading and actions',
             child: AppBarEx(
@@ -34,7 +34,7 @@ class AppBarDemo extends StatelessWidget {
               ],
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           _AppBarPreviewCard(
             title: 'Lightweight auth header',
             child: AppBarEx(
@@ -80,7 +80,7 @@ class _AppBarPreviewCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SimpleText.label(text: title),
-          const Gap.h(JDimens.dp12),
+          JGaps.h12,
           ClipRRect(
             borderRadius: BorderRadius.circular(JDimens.dp12),
             child: SizedBox(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 class FormSection extends StatelessWidget {
@@ -23,6 +21,7 @@ class FormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
     final bool hasDescription =
         description != null && description!.trim().isNotEmpty;
@@ -37,17 +36,17 @@ class FormSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(child: SimpleText.heading(text: title!, maxLines: 2)),
-                if (action != null) ...<Widget>[action!],
+                if (action != null) ...<Widget>[JGaps.w16, action!],
               ],
             ),
-            if (hasDescription) Gap.h8 else Gap.h16,
+            if (hasDescription) JGaps.h8 else JGaps.h16,
           ],
           if (hasDescription) ...<Widget>[
             SimpleText.caption(
               text: description!,
-              color: JColors.getColor(context, lightKey: 'textSecondary'),
+              color: theme.colorScheme.onSurfaceVariant,
             ),
-            Gap.h16,
+            JGaps.h16,
           ],
           child,
         ],

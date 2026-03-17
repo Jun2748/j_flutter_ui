@@ -54,7 +54,7 @@ class _FormControllerDemoState extends State<FormControllerDemo> {
               ),
             ],
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               controller: _controller,
@@ -77,7 +77,7 @@ class _FormControllerDemoState extends State<FormControllerDemo> {
               onSubmit: (Map<String, dynamic> values) async {},
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           AnimatedBuilder(
             animation: _controller,
             builder: (BuildContext context, _) {
@@ -86,7 +86,7 @@ class _FormControllerDemoState extends State<FormControllerDemo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const SimpleText.heading(text: 'controller.values'),
-                    Gap.h8,
+                    JGaps.h8,
                     SimpleText.body(text: _controller.values.toString()),
                   ],
                 ),

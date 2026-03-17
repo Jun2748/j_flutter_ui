@@ -24,12 +24,12 @@ class _BannerDemoState extends State<BannerDemo> {
             title: 'Heads up',
             message: 'This is a lightweight inline banner for contextual info.',
           ),
-          Gap.h16,
+          JGaps.h16,
           const SimpleBanner.success(
             title: 'Profile updated',
             message: 'Your account details were saved successfully.',
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleBanner.warning(
             title: 'Incomplete profile',
             message: 'Please complete your profile before continuing.',
@@ -39,7 +39,7 @@ class _BannerDemoState extends State<BannerDemo> {
               onPressed: () {},
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           if (_showDismissibleBanner)
             SimpleBanner.error(
               title: 'Payment failed',

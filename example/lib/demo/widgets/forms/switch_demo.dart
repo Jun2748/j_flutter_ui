@@ -37,7 +37,7 @@ class _SwitchDemoState extends State<SwitchDemo> {
                       });
                     },
                   ),
-                  Gap.h16,
+                  JGaps.h16,
                   SimpleSwitch(
                     value: _marketing,
                     label: 'Marketing emails',
@@ -53,13 +53,13 @@ class _SwitchDemoState extends State<SwitchDemo> {
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SimpleText.label(text: 'Current values'),
-                Gap.h8,
+                JGaps.h8,
                 SimpleText.body(
                   text: 'notifications=$_notifications, marketing=$_marketing',
                 ),

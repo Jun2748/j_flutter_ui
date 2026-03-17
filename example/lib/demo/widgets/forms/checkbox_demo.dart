@@ -35,7 +35,7 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
                       });
                     },
                   ),
-                  Gap.h8,
+                  JGaps.h8,
                   SimpleCheckbox(
                     value: _termsAccepted,
                     label: 'I agree to the terms and conditions',
@@ -45,7 +45,7 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
                       });
                     },
                   ),
-                  Gap.h8,
+                  JGaps.h8,
                   const SimpleCheckbox(
                     value: true,
                     label: 'This checked option is disabled',
@@ -55,13 +55,13 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SimpleText.label(text: 'Current values'),
-                Gap.h8,
+                JGaps.h8,
                 SimpleText.body(
                   text:
                       'newsletter=$_newsletter, termsAccepted=$_termsAccepted',

@@ -2,8 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'app_localizations.dart';
 
-class AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 
   @override

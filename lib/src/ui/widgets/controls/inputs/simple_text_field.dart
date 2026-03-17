@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../resources/colors.dart';
+import '../../../resources/app_theme_tokens.dart';
 import '../../../resources/dimens.dart';
+import '../../../resources/styles.dart';
 
 class SimpleTextField extends StatelessWidget {
   const SimpleTextField({
@@ -16,6 +17,8 @@ class SimpleTextField extends StatelessWidget {
     this.suffix,
     this.prefixIcon,
     this.suffixIcon,
+    this.fillColor,
+    this.borderColor,
     this.keyboardType,
     this.textInputAction,
     this.obscureText = false,
@@ -24,7 +27,7 @@ class SimpleTextField extends StatelessWidget {
     this.maxLines = 1,
     this.onChanged,
     this.validator,
-  });
+  }) : assert(maxLines > 0, 'maxLines must be greater than 0.');
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -36,6 +39,8 @@ class SimpleTextField extends StatelessWidget {
   final Widget? suffix;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final Color? fillColor;
+  final Color? borderColor;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final bool obscureText;
@@ -47,18 +52,15 @@ class SimpleTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color surface = JColors.getColor(context, lightKey: 'surface');
-    final Color card = JColors.getColor(context, lightKey: 'card');
-    final Color textDisabled = JColors.getColor(
-      context,
-      lightKey: 'textDisabled',
-    );
-    final OutlineInputBorder inputBorder = _buildBorder(
-      context,
-      lightKey: 'border',
-    );
+    final ThemeData theme = Theme.of(context);
+    final TextStyle baseTextStyle =
+        theme.textTheme.bodyLarge ??
+        JTextStyles.body1.copyWith(color: theme.colorScheme.onSurface);
+    final TextStyle resolvedTextStyle = enabled
+        ? baseTextStyle
+        : baseTextStyle.copyWith(color: theme.disabledColor);
 
-    final Widget textField = TextFormField(
+    return TextFormField(
       controller: controller,
       focusNode: focusNode,
       keyboardType: keyboardType,
@@ -66,61 +68,82 @@ class SimpleTextField extends StatelessWidget {
       obscureText: obscureText,
       enabled: enabled,
       readOnly: readOnly,
-      showCursor: !readOnly,
-      enableInteractiveSelection: !readOnly,
+      showCursor: enabled && !readOnly,
       maxLines: obscureText ? 1 : maxLines,
       onChanged: onChanged,
       validator: validator,
-      decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-        helperText: helperText,
-        errorText: errorText,
-        prefix: prefix,
-        suffix: suffix,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        filled: readOnly || !enabled,
-        fillColor: readOnly
-            ? surface
-            : (!enabled ? surface.withAlpha(180) : card),
-        border: inputBorder,
-        enabledBorder: inputBorder,
-        focusedBorder: _buildBorder(context, lightKey: 'primary', width: 1.4),
-        disabledBorder: inputBorder,
-        errorBorder: _buildBorder(context, lightKey: 'error'),
-        focusedErrorBorder: _buildBorder(
-          context,
-          lightKey: 'error',
-          width: 1.4,
-        ),
-        hintStyle: TextStyle(color: readOnly ? textDisabled : null),
-      ),
-      style: TextStyle(color: readOnly ? textDisabled : null),
-    );
-
-    if (!readOnly) {
-      return textField;
-    }
-
-    return Focus(
-      canRequestFocus: false,
-      skipTraversal: true,
-      child: IgnorePointer(ignoring: true, child: textField),
+      style: resolvedTextStyle,
+      decoration: _buildDecoration(theme),
     );
   }
 
-  OutlineInputBorder _buildBorder(
-    BuildContext context, {
-    required String lightKey,
-    double width = 1,
+  InputDecoration _buildDecoration(ThemeData theme) {
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final InputDecoration themedDecoration = InputDecoration(
+      labelText: labelText,
+      hintText: hintText,
+      helperText: helperText,
+      errorText: errorText,
+      prefix: prefix,
+      suffix: suffix,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+    ).applyDefaults(theme.inputDecorationTheme);
+    final Color resolvedFillColor = fillColor ?? tokens.inputBackground;
+    final Color resolvedBorderColor = borderColor ?? tokens.inputBorderColor;
+    final Color mutedTextColor = tokens.mutedText;
+    final Color dividerColor = tokens.dividerColor;
+
+    return themedDecoration.copyWith(
+      filled: themedDecoration.filled ?? true,
+      fillColor: resolvedFillColor,
+      contentPadding:
+          themedDecoration.contentPadding ?? JInsets.horizontal16Vertical12,
+      constraints:
+          themedDecoration.constraints ??
+          const BoxConstraints(minHeight: JHeights.input),
+      border: _buildBorder(color: resolvedBorderColor),
+      enabledBorder: _buildBorder(color: resolvedBorderColor),
+      focusedBorder: _buildBorder(
+        color: theme.colorScheme.primary,
+        width: JDimens.dp1_5,
+      ),
+      disabledBorder: _buildBorder(color: dividerColor),
+      errorBorder: _buildBorder(color: theme.colorScheme.error),
+      focusedErrorBorder: _buildBorder(
+        color: theme.colorScheme.error,
+        width: JDimens.dp1_5,
+      ),
+      hintStyle:
+          (themedDecoration.hintStyle ??
+                  theme.textTheme.bodyMedium ??
+                  JTextStyles.body2)
+              .copyWith(color: mutedTextColor),
+      labelStyle:
+          (themedDecoration.labelStyle ??
+                  theme.textTheme.bodyMedium ??
+                  JTextStyles.body2)
+              .copyWith(color: mutedTextColor),
+      helperStyle:
+          (themedDecoration.helperStyle ??
+                  theme.textTheme.labelSmall ??
+                  JTextStyles.label)
+              .copyWith(color: mutedTextColor),
+      errorStyle:
+          (themedDecoration.errorStyle ??
+                  theme.textTheme.labelSmall ??
+                  JTextStyles.label)
+              .copyWith(color: theme.colorScheme.error),
+    );
+  }
+
+  OutlineInputBorder _buildBorder({
+    required Color color,
+    double width = JDimens.dp1,
   }) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(
-        color: JColors.getColor(context, lightKey: lightKey),
-        width: width,
-      ),
+      borderSide: BorderSide(color: color, width: width),
     );
   }
 }

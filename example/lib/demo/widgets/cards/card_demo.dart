@@ -15,7 +15,7 @@ class CardDemo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SimpleCard(child: SimpleText.body(text: 'Example card')),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(

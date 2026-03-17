@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
+import '../layout/h_stack.dart';
+import '../typography/simple_text.dart';
 
 class SimpleBottomNavItem {
   const SimpleBottomNavItem({
@@ -22,11 +24,15 @@ class SimpleBottomNavBar extends StatelessWidget {
     required this.currentIndex,
     required this.onTap,
     required this.items,
+    this.backgroundColor,
+    this.borderColor,
   });
 
   final int? currentIndex;
   final ValueChanged<int>? onTap;
   final List<SimpleBottomNavItem>? items;
+  final Color? backgroundColor;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +42,17 @@ class SimpleBottomNavBar extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final int safeIndex = currentIndex == null
         ? 0
         : currentIndex!.clamp(0, resolvedItems.length - 1);
-    final Color card = JColors.getColor(context, lightKey: 'card');
-    final Color border = JColors.getColor(context, lightKey: 'border');
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
-    final Color textSecondary = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
+    final Color card = backgroundColor ?? tokens.cardBackground;
+    final Color border = borderColor ?? tokens.cardBorderColor;
+    final Color primary = tokens.primary;
+    final Color textSecondary = tokens.mutedText;
+    final TextStyle labelStyle =
+        theme.textTheme.labelSmall ?? JTextStyles.label;
 
     if (resolvedItems.length < 2) {
       final SimpleBottomNavItem item = resolvedItems.first;
@@ -56,12 +63,12 @@ class SimpleBottomNavBar extends StatelessWidget {
           child: SizedBox(
             height: JHeights.appBar,
             child: Center(
-              child: Row(
+              child: HStack(
+                gap: JDimens.dp8,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Icon(item.activeIcon ?? item.icon ?? Icons.circle_outlined),
-                  const SizedBox(width: JDimens.dp8),
-                  Text(item.label ?? ''),
+                  SimpleText.label(text: item.label ?? ''),
                 ],
               ),
             ),
@@ -87,13 +94,11 @@ class SimpleBottomNavBar extends StatelessWidget {
           showUnselectedLabels: true,
           selectedItemColor: primary,
           unselectedItemColor: textSecondary,
-          selectedLabelStyle: JTextStyles.label.copyWith(
+          selectedLabelStyle: labelStyle.copyWith(
             color: primary,
             fontWeight: FontWeight.w600,
           ),
-          unselectedLabelStyle: JTextStyles.label.copyWith(
-            color: textSecondary,
-          ),
+          unselectedLabelStyle: labelStyle.copyWith(color: textSecondary),
           iconSize: JIconSizes.md,
           items: resolvedItems
               .map(

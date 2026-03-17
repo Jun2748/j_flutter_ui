@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
@@ -107,42 +108,46 @@ class SimpleSnackbar {
     BuildContext context,
     _SimpleSnackbarVariant variant,
   ) {
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final JStatusColors statusColors =
+        theme.extension<JStatusColors>() ??
+        JStatusColors.fallback(brightness: theme.brightness);
+    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color cardBackground = tokens.cardBackground;
+    final Color cardBorderColor = tokens.cardBorderColor;
 
     switch (variant) {
       case _SimpleSnackbarVariant.info:
-        final Color info = JColors.getColor(context, lightKey: 'info');
+        final Color info = statusColors.info;
         return _SimpleSnackbarColors(
-          background: info.withAlpha(22),
+          background: Color.alphaBlend(info.withAlpha(22), cardBackground),
           foreground: textPrimary,
-          border: info.withAlpha(48),
+          border: Color.alphaBlend(info.withAlpha(48), cardBorderColor),
           actionColor: info,
         );
       case _SimpleSnackbarVariant.success:
-        final Color success = JColors.getColor(context, lightKey: 'success');
+        final Color success = statusColors.success;
         return _SimpleSnackbarColors(
-          background: success.withAlpha(22),
+          background: Color.alphaBlend(success.withAlpha(22), cardBackground),
           foreground: textPrimary,
-          border: success.withAlpha(48),
+          border: Color.alphaBlend(success.withAlpha(48), cardBorderColor),
           actionColor: success,
         );
       case _SimpleSnackbarVariant.warning:
-        final Color warning = JColors.getColor(context, lightKey: 'warning');
+        final Color warning = statusColors.warning;
         return _SimpleSnackbarColors(
-          background: warning.withAlpha(22),
+          background: Color.alphaBlend(warning.withAlpha(22), cardBackground),
           foreground: textPrimary,
-          border: warning.withAlpha(48),
+          border: Color.alphaBlend(warning.withAlpha(48), cardBorderColor),
           actionColor: warning,
         );
       case _SimpleSnackbarVariant.error:
-        final Color error = JColors.getColor(context, lightKey: 'error');
+        final Color error = theme.colorScheme.error;
         return _SimpleSnackbarColors(
-          background: error.withAlpha(20),
+          background: Color.alphaBlend(error.withAlpha(20), cardBackground),
           foreground: textPrimary,
-          border: error.withAlpha(48),
+          border: Color.alphaBlend(error.withAlpha(48), cardBorderColor),
           actionColor: error,
         );
     }

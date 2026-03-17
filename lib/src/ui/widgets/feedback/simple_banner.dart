@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 enum _SimpleBannerVariant { info, success, warning, error }
@@ -95,7 +95,8 @@ class SimpleBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _SimpleBannerColors colors = _resolveColors(context);
+    final ThemeData theme = Theme.of(context);
+    final _SimpleBannerColors colors = _resolveColors(theme);
     final IconData resolvedIcon = icon ?? _resolveIcon();
     final bool hasMessage = message != null && message!.trim().isNotEmpty;
 
@@ -124,7 +125,7 @@ class SimpleBanner extends StatelessWidget {
                 color: colors.foreground,
               ),
             ),
-            Gap.w16,
+            JGaps.w16,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +137,7 @@ class SimpleBanner extends StatelessWidget {
                     maxLines: 2,
                   ),
                   if (hasMessage) ...<Widget>[
-                    Gap.h8,
+                    JGaps.h8,
                     SimpleText.caption(
                       text: message!,
                       color: colors.messageColor,
@@ -144,14 +145,14 @@ class SimpleBanner extends StatelessWidget {
                     ),
                   ],
                   if (action != null) ...<Widget>[
-                    Gap.h8,
+                    JGaps.h8,
                     Align(alignment: Alignment.centerLeft, child: action!),
                   ],
                 ],
               ),
             ),
             if (onDismiss != null) ...<Widget>[
-              Gap.w8,
+              JGaps.w8,
               IconButton(
                 visualDensity: VisualDensity.compact,
                 splashRadius: JDimens.dp20,
@@ -182,49 +183,49 @@ class SimpleBanner extends StatelessWidget {
     }
   }
 
-  _SimpleBannerColors _resolveColors(BuildContext context) {
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
-    final Color textSecondary = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
+  _SimpleBannerColors _resolveColors(ThemeData theme) {
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final JStatusColors statusColors =
+        theme.extension<JStatusColors>() ??
+        JStatusColors.fallback(brightness: theme.brightness);
+    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color textSecondary = tokens.mutedText;
+    final Color cardBackground = tokens.cardBackground;
+    final Color cardBorderColor = tokens.cardBorderColor;
 
     switch (_variant) {
       case _SimpleBannerVariant.info:
-        final Color info = JColors.getColor(context, lightKey: 'info');
+        final Color info = statusColors.info;
         return _SimpleBannerColors(
-          background: info.withAlpha(16),
-          border: info.withAlpha(48),
+          background: Color.alphaBlend(info.withAlpha(16), cardBackground),
+          border: Color.alphaBlend(info.withAlpha(48), cardBorderColor),
           foreground: info,
           titleColor: textPrimary,
           messageColor: textSecondary,
         );
       case _SimpleBannerVariant.success:
-        final Color success = JColors.getColor(context, lightKey: 'success');
+        final Color success = statusColors.success;
         return _SimpleBannerColors(
-          background: success.withAlpha(16),
-          border: success.withAlpha(48),
+          background: Color.alphaBlend(success.withAlpha(16), cardBackground),
+          border: Color.alphaBlend(success.withAlpha(48), cardBorderColor),
           foreground: success,
           titleColor: textPrimary,
           messageColor: textSecondary,
         );
       case _SimpleBannerVariant.warning:
-        final Color warning = JColors.getColor(context, lightKey: 'warning');
+        final Color warning = statusColors.warning;
         return _SimpleBannerColors(
-          background: warning.withAlpha(16),
-          border: warning.withAlpha(48),
+          background: Color.alphaBlend(warning.withAlpha(16), cardBackground),
+          border: Color.alphaBlend(warning.withAlpha(48), cardBorderColor),
           foreground: warning,
           titleColor: textPrimary,
           messageColor: textSecondary,
         );
       case _SimpleBannerVariant.error:
-        final Color error = JColors.getColor(context, lightKey: 'error');
+        final Color error = theme.colorScheme.error;
         return _SimpleBannerColors(
-          background: error.withAlpha(16),
-          border: error.withAlpha(48),
+          background: Color.alphaBlend(error.withAlpha(16), cardBackground),
+          border: Color.alphaBlend(error.withAlpha(48), cardBorderColor),
           foreground: error,
           titleColor: textPrimary,
           messageColor: textSecondary,

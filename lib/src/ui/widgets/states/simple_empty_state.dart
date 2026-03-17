@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 class SimpleEmptyState extends StatelessWidget {
@@ -33,6 +31,7 @@ class SimpleEmptyState extends StatelessWidget {
         actionLabel != null &&
         actionLabel!.trim().isNotEmpty &&
         onActionPressed != null;
+    final ThemeData theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -41,19 +40,19 @@ class SimpleEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             illustration ?? _buildIcon(context),
-            Gap.h16,
+            JGaps.h16,
             SimpleText.heading(text: title, align: TextAlign.center),
             if (hasMessage) ...<Widget>[
-              Gap.h8,
+              JGaps.h8,
               SimpleText.body(
                 text: message!,
-                color: JColors.getColor(context, lightKey: 'textSecondary'),
+                color: theme.colorScheme.onSurfaceVariant,
                 align: TextAlign.center,
                 maxLines: 4,
               ),
             ],
             if (hasAction) ...<Widget>[
-              Gap.h16,
+              JGaps.h16,
               SimpleButton.primary(
                 label: actionLabel!,
                 onPressed: onActionPressed,
@@ -67,7 +66,7 @@ class SimpleEmptyState extends StatelessWidget {
 
   Widget _buildIcon(BuildContext context) {
     final IconData resolvedIcon = icon ?? Icons.inbox_outlined;
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
+    final Color primary = Theme.of(context).colorScheme.primary;
 
     return Container(
       width: JDimens.dp64,

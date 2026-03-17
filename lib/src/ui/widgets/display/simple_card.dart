@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 
 class SimpleCard extends StatelessWidget {
@@ -10,6 +10,8 @@ class SimpleCard extends StatelessWidget {
     this.padding = JInsets.all16,
     this.margin = JInsets.all16,
     this.radius,
+    this.backgroundColor,
+    this.borderColor,
     this.onTap,
   });
 
@@ -17,11 +19,17 @@ class SimpleCard extends StatelessWidget {
   final EdgeInsets padding;
   final EdgeInsets margin;
   final double? radius;
+  final Color? backgroundColor;
+  final Color? borderColor;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final double resolvedRadius = radius ?? JDimens.dp16;
+    final AppThemeTokens tokens = AppThemeTokens.resolve(Theme.of(context));
+    final Color resolvedBackgroundColor =
+        backgroundColor ?? tokens.cardBackground;
+    final Color resolvedBorderColor = borderColor ?? tokens.cardBorderColor;
     final Widget content = Padding(
       padding: padding,
       child: child ?? const SizedBox.shrink(),
@@ -31,10 +39,10 @@ class SimpleCard extends StatelessWidget {
       margin: margin,
       elevation: 0,
       clipBehavior: Clip.antiAlias,
-      color: JColors.getColor(context, lightKey: 'card'),
+      color: resolvedBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(resolvedRadius),
-        side: BorderSide(color: JColors.getColor(context, lightKey: 'border')),
+        side: BorderSide(color: resolvedBorderColor),
       ),
       child: onTap == null
           ? content

@@ -4,6 +4,8 @@ abstract final class JDimens {
   const JDimens._();
 
   static const double dp0 = 0;
+  static const double dp1 = 1;
+  static const double dp1_5 = 1.5;
   static const double dp2 = 2;
   static const double dp4 = 4;
   static const double dp8 = 8;
@@ -19,6 +21,7 @@ abstract final class JDimens {
   static const double dp52 = 52;
   static const double dp56 = 56;
   static const double dp64 = 64;
+  static const double dp72 = 72;
   static const double dp120 = 120;
 }
 
@@ -126,6 +129,14 @@ abstract final class JInsets {
     horizontal: JDimens.dp16,
     vertical: JDimens.dp12,
   );
+  static const EdgeInsets horizontal12Vertical8 = EdgeInsets.symmetric(
+    horizontal: JDimens.dp12,
+    vertical: JDimens.dp8,
+  );
+  static const EdgeInsets horizontal16Vertical14 = EdgeInsets.symmetric(
+    horizontal: JDimens.dp16,
+    vertical: JDimens.dp14,
+  );
   static const EdgeInsets screen = EdgeInsets.all(JDimens.dp16);
   static const EdgeInsets screenPadding = screen;
   static const EdgeInsets card = EdgeInsets.all(JDimens.dp16);
@@ -138,5 +149,6 @@ abstract final class JHeights {
   static const double button = JDimens.dp48;
   static const double input = JDimens.dp52;
   static const double listItem = JDimens.dp56;
+  static const double menuTile = JDimens.dp72;
   static const double cardMin = JDimens.dp120;
 }

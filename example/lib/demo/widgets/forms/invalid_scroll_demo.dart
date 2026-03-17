@@ -18,7 +18,7 @@ class InvalidScrollDemo extends StatelessWidget {
             message:
                 'Leave the form empty and submit to verify that the builder scrolls and focuses the first invalid field.',
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               fields: <SimpleFormFieldConfig<dynamic>>[

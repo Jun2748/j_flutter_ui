@@ -47,13 +47,13 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
             text:
                 'This page focuses on SimpleFormBuilder as a schema-driven form and shows the recommended controller initialization pattern. Dedicated demos cover controller actions, backend errors, validation states, and invalid-scroll behavior in more detail.',
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SimpleText.heading(text: 'Controller initialization'),
-                Gap.h8,
+                JGaps.h8,
                 const SimpleText.caption(
                   text:
                       'This form is connected to a SimpleFormController with initialValues so the builder starts with prefilled data.',
@@ -61,7 +61,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
               ],
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               controller: _controller,
@@ -247,7 +247,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
               },
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: VStack(
               gap: JDimens.dp16,

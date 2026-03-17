@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 
 class SimpleTabs extends StatelessWidget {
   const SimpleTabs({
@@ -22,12 +20,12 @@ class SimpleTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
-    final Color textSecondary = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
-    final Color divider = JColors.getColor(context, lightKey: 'divider');
+    final ThemeData theme = Theme.of(context);
+    final Color primary = theme.colorScheme.primary;
+    final Color textSecondary =
+        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurfaceVariant;
+    final Color divider =
+        DividerTheme.of(context).color ?? theme.colorScheme.outlineVariant;
 
     return DefaultTabController(
       length: tabs.length,
@@ -48,7 +46,7 @@ class SimpleTabs extends StatelessWidget {
                 horizontal: JDimens.dp12,
               ),
             ),
-            Gap.h16,
+            JGaps.h16,
             Expanded(child: TabBarView(children: children)),
           ],
         ),

@@ -20,7 +20,7 @@ class EmptyStateDemo extends StatelessWidget {
               message: 'New bookings will appear here.',
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleEmptyState(
               icon: Icons.search_off_outlined,
@@ -30,7 +30,7 @@ class EmptyStateDemo extends StatelessWidget {
               onActionPressed: () {},
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleEmptyState(
               title: 'Nothing saved',

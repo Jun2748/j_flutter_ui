@@ -44,7 +44,7 @@ class _DropdownDemoState extends State<DropdownDemo> {
               });
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleText.caption(
             text: 'Selected value: ${_selectedRole ?? 'None'}',
           ),

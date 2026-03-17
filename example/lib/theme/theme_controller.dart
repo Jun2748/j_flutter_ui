@@ -24,10 +24,13 @@ class ThemeController extends ChangeNotifier {
     switch (_themeMode) {
       case ThemeMode.system:
         setLight();
+        return;
       case ThemeMode.light:
         setDark();
+        return;
       case ThemeMode.dark:
         setSystem();
+        return;
     }
   }
 

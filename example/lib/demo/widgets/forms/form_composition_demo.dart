@@ -31,7 +31,7 @@ class FormCompositionDemo extends StatelessWidget {
                       prefixIcon: Icon(Icons.person_outline),
                     ),
                   ),
-                  Gap.h16,
+                  JGaps.h16,
                   FormFieldWrapper(
                     label: 'Email',
                     child: SimpleTextField(
@@ -40,7 +40,7 @@ class FormCompositionDemo extends StatelessWidget {
                       prefixIcon: Icon(Icons.email_outlined),
                     ),
                   ),
-                  Gap.h16,
+                  JGaps.h16,
                   FormFieldWrapper(
                     label: 'Role',
                     helperText: 'Select the most relevant role.',

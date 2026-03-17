@@ -8,9 +8,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Widget Catalog'), findsOneWidget);
+    expect(find.text('Foundations'), findsWidgets);
+    expect(find.text('Text'), findsWidgets);
 
-    expect(find.widgetWithText(ListTile, 'Buttons'), findsOneWidget);
-    expect(find.widgetWithText(ListTile, 'Cards'), findsOneWidget);
-    expect(find.widgetWithText(ListTile, 'Text'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Buttons'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Buttons'), findsWidgets);
+
+    await tester.scrollUntilVisible(
+      find.text('Cards'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cards'), findsWidgets);
   });
 }

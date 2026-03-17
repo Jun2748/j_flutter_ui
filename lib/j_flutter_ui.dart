@@ -40,7 +40,6 @@ export 'src/ui/widgets/forms/validation/simple_form_validator.dart';
 export 'src/ui/widgets/forms/validation/simple_regex_patterns.dart';
 export 'src/ui/widgets/forms/validation/simple_validation_messages.dart';
 export 'src/ui/widgets/layout/app_scaffold.dart';
-export 'src/ui/widgets/layout/gap.dart';
 export 'src/ui/widgets/layout/h_stack.dart';
 export 'src/ui/widgets/layout/section.dart';
 export 'src/ui/widgets/layout/v_stack.dart';

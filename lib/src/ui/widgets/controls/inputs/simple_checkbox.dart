@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../resources/colors.dart';
 import '../../../resources/dimens.dart';
 import '../../../resources/styles.dart';
 
@@ -24,6 +23,7 @@ class SimpleCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final bool resolvedValue = value ?? false;
     final bool interactive = enabled && onChanged != null;
 
@@ -33,18 +33,18 @@ class SimpleCheckbox extends StatelessWidget {
     );
 
     final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
-    final Widget? resolvedLabel = labelWidget ?? (hasTextLabel
-        ? Text(
-            label!,
-            style: JTextStyles.body2
-                .merge(textStyle)
-                .copyWith(
-                  color: enabled
-                      ? textStyle?.color
-                      : JColors.getColor(context, lightKey: 'textDisabled'),
-                ),
-          )
-        : null);
+    final Widget? resolvedLabel =
+        labelWidget ??
+        (hasTextLabel
+            ? Text(
+                label!,
+                style: JTextStyles.body2
+                    .merge(textStyle)
+                    .copyWith(
+                      color: enabled ? textStyle?.color : theme.disabledColor,
+                    ),
+              )
+            : null);
 
     if (resolvedLabel == null) {
       return checkbox;

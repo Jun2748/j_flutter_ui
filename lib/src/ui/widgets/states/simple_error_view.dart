@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 class SimpleErrorView extends StatelessWidget {
@@ -31,6 +29,7 @@ class SimpleErrorView extends StatelessWidget {
     final bool hasMessage = message != null && message!.trim().isNotEmpty;
     final bool hasRetry =
         retryLabel != null && retryLabel!.trim().isNotEmpty && onRetry != null;
+    final ThemeData theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -39,19 +38,19 @@ class SimpleErrorView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             illustration ?? _buildIcon(context),
-            Gap.h16,
+            JGaps.h16,
             SimpleText.heading(text: title, align: TextAlign.center),
             if (hasMessage) ...<Widget>[
-              Gap.h8,
+              JGaps.h8,
               SimpleText.body(
                 text: message!,
-                color: JColors.getColor(context, lightKey: 'textSecondary'),
+                color: theme.colorScheme.onSurfaceVariant,
                 align: TextAlign.center,
                 maxLines: 4,
               ),
             ],
             if (hasRetry) ...<Widget>[
-              Gap.h16,
+              JGaps.h16,
               SimpleButton.primary(label: retryLabel!, onPressed: onRetry),
             ],
           ],
@@ -62,7 +61,7 @@ class SimpleErrorView extends StatelessWidget {
 
   Widget _buildIcon(BuildContext context) {
     final IconData resolvedIcon = icon ?? Icons.error_outline;
-    final Color error = JColors.getColor(context, lightKey: 'error');
+    final Color error = Theme.of(context).colorScheme.error;
 
     return Container(
       width: JDimens.dp64,

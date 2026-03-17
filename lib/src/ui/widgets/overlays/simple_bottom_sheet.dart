@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 class SimpleBottomSheet {
@@ -17,8 +15,11 @@ class SimpleBottomSheet {
     bool showHandle = true,
     EdgeInsets? padding,
   }) {
-    final Color card = JColors.getColor(context, lightKey: 'card');
-    final Color border = JColors.getColor(context, lightKey: 'border');
+    final ThemeData theme = Theme.of(context);
+    final Color card = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final Color border = theme.colorScheme.outline;
+    final Color messageColor =
+        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurfaceVariant;
     final String? titleText = title != null && title.trim().isNotEmpty
         ? title
         : null;
@@ -57,18 +58,15 @@ class SimpleBottomSheet {
                   ),
                 if (titleText != null) ...<Widget>[
                   SimpleText.heading(text: titleText),
-                  Gap.h8,
+                  JGaps.h8,
                 ],
                 if (messageText != null) ...<Widget>[
                   SimpleText.caption(
                     text: messageText,
-                    color: JColors.getColor(
-                      bottomSheetContext,
-                      lightKey: 'textSecondary',
-                    ),
+                    color: messageColor,
                     maxLines: 4,
                   ),
-                  Gap.h16,
+                  JGaps.h16,
                 ],
                 child,
               ],

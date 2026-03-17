@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
-import 'gap.dart';
 
 class Section extends StatelessWidget {
   const Section({
@@ -31,10 +30,10 @@ class Section extends StatelessWidget {
             Row(
               children: <Widget>[
                 Expanded(child: SimpleText.heading(text: title!, maxLines: 1)),
-                if (action != null) ...<Widget>[Gap.w16, action!],
+                if (action != null) ...<Widget>[JGaps.w16, action!],
               ],
             ),
-            Gap.h16,
+            JGaps.h16,
           ],
           child ?? const SizedBox.shrink(),
         ],

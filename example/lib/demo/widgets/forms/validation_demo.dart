@@ -18,7 +18,7 @@ class ValidationDemo extends StatelessWidget {
             message:
                 'This form focuses on reusable required and email validation with inline error rendering.',
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               fields: <SimpleFormFieldConfig<dynamic>>[

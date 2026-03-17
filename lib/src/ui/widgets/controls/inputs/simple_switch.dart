@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../resources/colors.dart';
-import '../../layout/gap.dart';
+import '../../../resources/dimens.dart';
 import '../../typography/simple_text.dart';
 
 class SimpleSwitch extends StatelessWidget {
@@ -22,13 +21,14 @@ class SimpleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final bool resolvedValue = value ?? false;
     final bool interactive = onChanged != null;
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
-    final Color card = JColors.getColor(context, lightKey: 'card');
-    final Color border = JColors.getColor(context, lightKey: 'border');
-    final Color disabled = JColors.getColor(context, lightKey: 'textDisabled');
-    final Color trackOff = JColors.getColor(context, lightKey: 'surface');
+    final Color primary = theme.colorScheme.primary;
+    final Color thumbOff = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final Color border = theme.colorScheme.outline;
+    final Color disabled = theme.disabledColor;
+    final Color trackOff = theme.colorScheme.surface;
 
     final Widget switchWidget = Switch(
       value: resolvedValue,
@@ -38,9 +38,9 @@ class SimpleSwitch extends StatelessWidget {
           return disabled;
         }
         if (states.contains(WidgetState.selected)) {
-          return JColors.white;
+          return theme.colorScheme.onPrimary;
         }
-        return card;
+        return thumbOff;
       }),
       trackColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
         if (states.contains(WidgetState.disabled)) {
@@ -73,13 +73,11 @@ class SimpleSwitch extends StatelessWidget {
 
     return InkWell(
       onTap: interactive ? () => onChanged?.call(!resolvedValue) : null,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(JDimens.dp12),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: labelWidget ?? _buildTextContent(context),
-          ),
-          Gap.w16,
+          Expanded(child: labelWidget ?? _buildTextContent(context)),
+          JGaps.w16,
           switchWidget,
         ],
       ),
@@ -87,17 +85,19 @@ class SimpleSwitch extends StatelessWidget {
   }
 
   Widget _buildTextContent(BuildContext context) {
+    final Color descriptionColor = Theme.of(
+      context,
+    ).colorScheme.onSurfaceVariant;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        if (label != null && label!.trim().isNotEmpty) SimpleText.body(text: label!),
+        if (label != null && label!.trim().isNotEmpty)
+          SimpleText.body(text: label!),
         if (description != null && description!.trim().isNotEmpty) ...<Widget>[
-          Gap.h8,
-          SimpleText.caption(
-            text: description!,
-            color: JColors.getColor(context, lightKey: 'textSecondary'),
-          ),
+          JGaps.h8,
+          SimpleText.caption(text: description!, color: descriptionColor),
         ],
       ],
     );

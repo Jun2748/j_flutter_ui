@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 
 class SimpleListItem extends StatelessWidget {
   const SimpleListItem({
@@ -26,11 +25,7 @@ class SimpleListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EdgeInsetsGeometry resolvedPadding =
-        padding ??
-        const EdgeInsets.symmetric(
-          horizontal: JDimens.dp16,
-          vertical: JDimens.dp12,
-        );
+        padding ?? JInsets.horizontal16Vertical12;
     final Widget content = Container(
       constraints: BoxConstraints(minHeight: minHeight ?? JHeights.listItem),
       padding: resolvedPadding,
@@ -38,27 +33,18 @@ class SimpleListItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          if (leading != null) ...<Widget>[
-            leading!,
-            const Gap.w(JDimens.dp12),
-          ],
+          if (leading != null) ...<Widget>[leading!, JGaps.w12],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 title,
-                if (subtitle != null) ...<Widget>[
-                  const Gap.h(JDimens.dp4),
-                  subtitle!,
-                ],
+                if (subtitle != null) ...<Widget>[JGaps.h4, subtitle!],
               ],
             ),
           ),
-          if (trailing != null) ...<Widget>[
-            const Gap.w(JDimens.dp12),
-            trailing!,
-          ],
+          if (trailing != null) ...<Widget>[JGaps.w12, trailing!],
         ],
       ),
     );
@@ -69,10 +55,7 @@ class SimpleListItem extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: content,
-      ),
+      child: InkWell(onTap: onTap, child: content),
     );
   }
 }

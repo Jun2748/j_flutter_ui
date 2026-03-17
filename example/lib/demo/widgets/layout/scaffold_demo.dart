@@ -37,7 +37,7 @@ class ScaffoldDemo extends StatelessWidget {
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           Section(
             title: 'Why use it',
             child: SimpleCard(

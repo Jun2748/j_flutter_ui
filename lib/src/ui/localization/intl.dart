@@ -28,7 +28,8 @@ abstract final class Intl {
       return AppLocalizations.of(context).maybeTr(key, args: args) ?? key;
     }
 
-    final AppLocalizations? cachedLocalizations = AppLocalizations.maybeCached();
+    final AppLocalizations? cachedLocalizations =
+        AppLocalizations.maybeCached();
     if (cachedLocalizations != null) {
       return cachedLocalizations.maybeTr(key, args: args) ?? key;
     }

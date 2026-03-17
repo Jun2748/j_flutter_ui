@@ -22,7 +22,7 @@ class SnackbarDemo extends StatelessWidget {
               );
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleButton.secondary(
             label: 'Show Success Snackbar',
             onPressed: () {
@@ -32,7 +32,7 @@ class SnackbarDemo extends StatelessWidget {
               );
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleButton.outline(
             label: 'Show Warning Snackbar',
             onPressed: () {
@@ -44,7 +44,7 @@ class SnackbarDemo extends StatelessWidget {
               );
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleButton.text(
             label: 'Show Error Snackbar',
             onPressed: () {

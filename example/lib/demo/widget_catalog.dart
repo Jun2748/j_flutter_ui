@@ -16,7 +16,7 @@ class WidgetCatalog extends StatefulWidget {
 }
 
 class _WidgetCatalogState extends State<WidgetCatalog> {
-  static const String _allCategory = 'All';
+  static const String _allCategory = '_all';
 
   String _searchQuery = '';
   String _selectedCategory = _allCategory;
@@ -30,7 +30,8 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
 
   @override
   Widget build(BuildContext context) {
-    final List<DemoItem> filteredItems = _filteredItems;
+    final ThemeMode themeMode = context.watch<ThemeController>().themeMode;
+    final List<DemoItem> filteredItems = _filteredItems(context);
     final Map<String, List<DemoItem>> groupedItems = _groupByCategory(
       filteredItems,
     );
@@ -45,12 +46,12 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
 
     return AppScaffold(
       appBar: AppBarEx(
-        title: 'Widget Catalog',
+        title: Intl.text(L.demoCatalogTitle, context: context),
         actions: <Widget>[
           IconButton(
-            tooltip: _themeTooltip(context.watch<ThemeController>().themeMode),
+            tooltip: _themeTooltip(context, themeMode),
             onPressed: () => context.read<ThemeController>().toggle(),
-            icon: Icon(_themeIcon(context.watch<ThemeController>().themeMode)),
+            icon: Icon(_themeIcon(themeMode)),
           ),
         ],
       ),
@@ -63,29 +64,31 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
               children: <Widget>[
                 SimpleSearchField(
                   controller: _searchController,
+                  hintText: Intl.text(
+                    L.demoCatalogSearchHint,
+                    context: context,
+                  ),
                   onChanged: (String value) {
                     setState(() {
                       _searchQuery = value.trim();
                     });
                   },
                 ),
-                Gap.h16,
+                JGaps.h16,
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
+                  child: Wrap(
+                    spacing: JDimens.dp8,
                     children: availableCategories
                         .map(
-                          (String category) => Padding(
-                            padding: const EdgeInsets.only(right: JDimens.dp8),
-                            child: ChoiceChip(
-                              label: Text(category),
-                              selected: _selectedCategory == category,
-                              onSelected: (_) {
-                                setState(() {
-                                  _selectedCategory = category;
-                                });
-                              },
-                            ),
+                          (String category) => ChoiceChip(
+                            label: Text(_categoryLabel(context, category)),
+                            selected: _selectedCategory == category,
+                            onSelected: (_) {
+                              setState(() {
+                                _selectedCategory = category;
+                              });
+                            },
                           ),
                         )
                         .toList(),
@@ -94,7 +97,7 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
               ],
             ),
           ),
-          const SimpleDivider(height: 1),
+          const SimpleDivider(height: JDimens.dp1),
           Expanded(
             child: filteredItems.isEmpty
                 ? const _EmptyResults()
@@ -104,7 +107,9 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
                         if (groupedItems.containsKey(category)) ...<Widget>[
                           Padding(
                             padding: JInsets.screenPadding,
-                            child: SimpleText.heading(text: category),
+                            child: SimpleText.heading(
+                              text: DemoCategory.label(context, category),
+                            ),
                           ),
                           ...groupedItems[category]!.map(
                             (DemoItem item) => _DemoTile(item: item),
@@ -119,13 +124,15 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
     );
   }
 
-  List<DemoItem> get _filteredItems {
+  List<DemoItem> _filteredItems(BuildContext context) {
     return DemoRegistry.items.where((DemoItem item) {
       final bool matchesCategory =
           _selectedCategory == _allCategory ||
           item.category == _selectedCategory;
       final String searchableText =
-          '${item.title} ${item.category} ${item.description ?? ''}'
+          '${item.resolvedTitle(context)} '
+                  '${DemoCategory.label(context, item.category)} '
+                  '${item.resolvedDescription(context) ?? ''}'
               .toLowerCase();
       final bool matchesQuery =
           _searchQuery.isEmpty ||
@@ -133,6 +140,14 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
 
       return matchesCategory && matchesQuery;
     }).toList();
+  }
+
+  String _categoryLabel(BuildContext context, String category) {
+    if (category == _allCategory) {
+      return Intl.text(L.demoCatalogAll, context: context);
+    }
+
+    return DemoCategory.label(context, category);
   }
 
   Map<String, List<DemoItem>> _groupByCategory(List<DemoItem> items) {
@@ -154,14 +169,14 @@ class _WidgetCatalogState extends State<WidgetCatalog> {
     }
   }
 
-  String _themeTooltip(ThemeMode themeMode) {
+  String _themeTooltip(BuildContext context, ThemeMode themeMode) {
     switch (themeMode) {
       case ThemeMode.light:
-        return 'Theme: Light';
+        return Intl.text(L.demoCatalogThemeLight, context: context);
       case ThemeMode.dark:
-        return 'Theme: Dark';
+        return Intl.text(L.demoCatalogThemeDark, context: context);
       case ThemeMode.system:
-        return 'Theme: System';
+        return Intl.text(L.demoCatalogThemeSystem, context: context);
     }
   }
 }
@@ -174,15 +189,16 @@ class _EmptyResults extends StatelessWidget {
     return Center(
       child: Padding(
         padding: JInsets.screenPadding,
-        child: Column(
+        child: VStack(
+          gap: JDimens.dp8,
           mainAxisSize: MainAxisSize.min,
-          children: const <Widget>[
-            Icon(Icons.search_off, size: JIconSizes.xl),
-            Gap.h16,
-            SimpleText.heading(text: 'No demos found'),
-            Gap.h8,
+          children: <Widget>[
+            const Icon(Icons.search_off, size: JIconSizes.xl),
+            SimpleText.heading(
+              text: Intl.text(L.demoCatalogNoResultsTitle, context: context),
+            ),
             SimpleText.body(
-              text: 'Try a different keyword or switch categories.',
+              text: Intl.text(L.demoCatalogNoResultsMessage, context: context),
               align: TextAlign.center,
             ),
           ],
@@ -199,10 +215,12 @@ class _DemoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? description = item.resolvedDescription(context);
+
     return ListTile(
       contentPadding: JInsets.screenPadding,
-      title: Text(item.title),
-      subtitle: item.description == null ? null : Text(item.description!),
+      title: Text(item.resolvedTitle(context)),
+      subtitle: description == null ? null : Text(description),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
         Navigator.of(context).push(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 enum _SimpleBadgeVariant { neutral, primary, success, warning, error }
@@ -88,7 +88,8 @@ class SimpleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _SimpleBadgeColors colors = _resolveColors(context);
+    final ThemeData theme = Theme.of(context);
+    final _SimpleBadgeColors colors = _resolveColors(theme);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -108,7 +109,7 @@ class SimpleBadge extends StatelessWidget {
           children: <Widget>[
             if (icon != null) ...<Widget>[
               Icon(icon, size: JIconSizes.xs, color: colors.foreground),
-              Gap.w8,
+              JGaps.w8,
             ],
             SimpleText.label(
               text: label,
@@ -122,47 +123,49 @@ class SimpleBadge extends StatelessWidget {
     );
   }
 
-  _SimpleBadgeColors _resolveColors(BuildContext context) {
-    final Color border = JColors.getColor(context, lightKey: 'border');
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
+  _SimpleBadgeColors _resolveColors(ThemeData theme) {
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final JStatusColors statusColors =
+        theme.extension<JStatusColors>() ??
+        JStatusColors.fallback(brightness: theme.brightness);
+    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color cardBackground = tokens.cardBackground;
+    final Color cardBorderColor = tokens.cardBorderColor;
 
     switch (_variant) {
       case _SimpleBadgeVariant.neutral:
         return _SimpleBadgeColors(
-          background: JColors.getColor(context, lightKey: 'surface'),
+          background: cardBackground,
           foreground: textPrimary,
-          border: border,
+          border: cardBorderColor,
         );
       case _SimpleBadgeVariant.primary:
-        final Color primary = JColors.getColor(context, lightKey: 'primary');
+        final Color primary = theme.colorScheme.primary;
         return _SimpleBadgeColors(
-          background: primary.withAlpha(22),
+          background: Color.alphaBlend(primary.withAlpha(22), cardBackground),
           foreground: primary,
-          border: primary.withAlpha(56),
+          border: Color.alphaBlend(primary.withAlpha(56), cardBorderColor),
         );
       case _SimpleBadgeVariant.success:
-        final Color success = JColors.getColor(context, lightKey: 'success');
+        final Color success = statusColors.success;
         return _SimpleBadgeColors(
-          background: success.withAlpha(22),
+          background: Color.alphaBlend(success.withAlpha(22), cardBackground),
           foreground: success,
-          border: success.withAlpha(56),
+          border: Color.alphaBlend(success.withAlpha(56), cardBorderColor),
         );
       case _SimpleBadgeVariant.warning:
-        final Color warning = JColors.getColor(context, lightKey: 'warning');
+        final Color warning = statusColors.warning;
         return _SimpleBadgeColors(
-          background: warning.withAlpha(24),
+          background: Color.alphaBlend(warning.withAlpha(24), cardBackground),
           foreground: warning,
-          border: warning.withAlpha(60),
+          border: Color.alphaBlend(warning.withAlpha(60), cardBorderColor),
         );
       case _SimpleBadgeVariant.error:
-        final Color error = JColors.getColor(context, lightKey: 'error');
+        final Color error = theme.colorScheme.error;
         return _SimpleBadgeColors(
-          background: error.withAlpha(20),
+          background: Color.alphaBlend(error.withAlpha(20), cardBackground),
           foreground: error,
-          border: error.withAlpha(56),
+          border: Color.alphaBlend(error.withAlpha(56), cardBorderColor),
         );
     }
   }

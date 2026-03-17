@@ -26,7 +26,7 @@ class StackDemo extends StatelessWidget {
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           Section(
             title: 'HStack basic example',
             child: SimpleCard(
@@ -41,7 +41,7 @@ class StackDemo extends StatelessWidget {
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           Section(
             title: 'VStack form-like example',
             child: SimpleCard(
@@ -58,15 +58,12 @@ class StackDemo extends StatelessWidget {
                     labelText: 'Email address',
                     hintText: 'name@example.com',
                   ),
-                  SimpleButton.primary(
-                    label: 'Continue',
-                    onPressed: () {},
-                  ),
+                  SimpleButton.primary(label: 'Continue', onPressed: () {}),
                 ],
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           Section(
             title: 'HStack action row example',
             child: SimpleCard(

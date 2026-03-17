@@ -39,8 +39,12 @@ class AppText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String resolvedText = _resolveText(context);
+    final ThemeData theme = Theme.of(context);
     final TextStyle resolvedStyle =
-        JTextStyles.body1.merge(DefaultTextStyle.of(context).style).merge(style);
+        (theme.textTheme.bodyLarge ??
+                JTextStyles.body1.copyWith(color: theme.colorScheme.onSurface))
+            .merge(DefaultTextStyle.of(context).style)
+            .merge(style);
     final double textScale = TextScaleUtils.getClampedScale(context);
     final Widget textWidget = useHtml
         ? _buildHtmlText(
@@ -100,10 +104,7 @@ class AppText extends StatelessWidget {
     return Html(
       data: text,
       style: <String, Style>{
-        'html': Style(
-          margin: Margins.zero,
-          padding: HtmlPaddings.zero,
-        ),
+        'html': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
         'body': Style(
           margin: Margins.zero,
           padding: HtmlPaddings.zero,
@@ -113,10 +114,7 @@ class AppText extends StatelessWidget {
           color: style.color,
           textAlign: textAlign,
         ),
-        'p': Style(
-          margin: Margins.zero,
-          padding: HtmlPaddings.zero,
-        ),
+        'p': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
       },
     );
   }

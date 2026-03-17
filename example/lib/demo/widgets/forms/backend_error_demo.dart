@@ -52,12 +52,12 @@ class _BackendErrorDemoState extends State<BackendErrorDemo> {
               ),
             ],
           ),
-          Gap.h16,
+          JGaps.h16,
           const SimpleBanner.warning(
             title: 'Manual test hint',
             message: 'Editing a field should clear its backend error.',
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleFormBuilder(
               controller: _controller,

@@ -27,13 +27,13 @@ class _SearchFieldDemoState extends State<SearchFieldDemo> {
               });
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SimpleText.label(text: 'Current query'),
-                Gap.h8,
+                JGaps.h8,
                 SimpleText.body(
                   text: _query.isEmpty ? 'Nothing entered yet.' : _query,
                 ),

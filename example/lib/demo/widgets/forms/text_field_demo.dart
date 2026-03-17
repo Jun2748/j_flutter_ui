@@ -4,16 +4,12 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 class TextFieldDemo extends StatefulWidget {
   const TextFieldDemo({super.key});
 
-  String get title => 'Text Field';
-
   @override
   State<TextFieldDemo> createState() => _TextFieldDemoState();
 }
 
 class _TextFieldDemoState extends State<TextFieldDemo> {
-  late final TextEditingController _controller = TextEditingController(
-    text: 'Initial value',
-  );
+  late final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
@@ -23,31 +19,33 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
 
   @override
   Widget build(BuildContext context) {
+    String tr(String key) => Intl.text(key, context: context);
+
     return AppScaffold(
-      appBar: AppBarEx(title: widget.title),
+      appBar: AppBarEx(title: tr(L.demoTextFieldTitle)),
       body: ListView(
         padding: JInsets.screenPadding,
         children: <Widget>[
           Section(
-            title: 'Label, hint, helper, and prefix icon',
+            title: tr(L.demoTextFieldBasicTitle),
             child: SimpleTextField(
               controller: _controller,
-              labelText: 'Name',
-              hintText: 'Enter your name',
-              helperText: 'This field uses SimpleTextField.',
+              labelText: tr(L.commonName),
+              hintText: tr(L.demoTextFieldNameHint),
+              helperText: tr(L.demoTextFieldBasicHelper),
               prefixIcon: const Icon(Icons.person_outline),
             ),
           ),
-          Gap.h24,
+          JGaps.h24,
           Section(
-            title: 'Prefix and suffix widgets',
+            title: tr(L.demoTextFieldAffordancesTitle),
             child: SimpleTextField(
-              labelText: 'Phone',
-              hintText: '123456789',
-              helperText: 'Use prefix and suffix for richer input affordances.',
+              labelText: tr(L.loginPhone),
+              hintText: '000000000',
+              helperText: tr(L.demoTextFieldPhoneHelper),
               prefix: const Padding(
                 padding: JInsets.horizontal12,
-                child: SimpleText.body(text: '+60'),
+                child: SimpleText.body(text: '+00'),
               ),
               suffix: IconButton(
                 onPressed: () {},
@@ -55,23 +53,33 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
               ),
             ),
           ),
-          Gap.h24,
+          JGaps.h24,
           Section(
-            title: 'Read only',
-            child: const SimpleTextField(
-              labelText: 'Reference',
-              hintText: 'Read only',
-              helperText: 'Useful for generated or synced values.',
+            title: tr(L.demoTextFieldReadOnlyTitle),
+            child: SimpleTextField(
+              labelText: tr(L.commonReference),
+              hintText: tr(L.demoTextFieldReadOnlyHint),
+              helperText: tr(L.demoTextFieldReadOnlyHelper),
               readOnly: true,
             ),
           ),
-          Gap.h24,
+          JGaps.h24,
           Section(
-            title: 'Error state',
-            child: const SimpleTextField(
-              labelText: 'Email',
-              hintText: 'name@example.com',
-              errorText: 'Please enter a valid email address.',
+            title: tr(L.demoTextFieldDisabledTitle),
+            child: SimpleTextField(
+              labelText: tr(L.commonName),
+              hintText: tr(L.demoTextFieldNameHint),
+              helperText: tr(L.demoTextFieldDisabledHelper),
+              enabled: false,
+            ),
+          ),
+          JGaps.h24,
+          Section(
+            title: tr(L.demoTextFieldErrorTitle),
+            child: SimpleTextField(
+              labelText: tr(L.commonEmail),
+              hintText: tr(L.demoTextFieldEmailHint),
+              errorText: tr(L.demoTextFieldEmailError),
               keyboardType: TextInputType.emailAddress,
               suffixIcon: Icon(Icons.error_outline),
             ),

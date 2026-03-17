@@ -16,7 +16,7 @@ class ErrorViewDemo extends StatelessWidget {
           const SimpleCard(
             child: SimpleErrorView(message: 'We could not load your bookings.'),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: SimpleErrorView(
               title: 'Unable to refresh',
@@ -25,7 +25,7 @@ class ErrorViewDemo extends StatelessWidget {
               onRetry: () {},
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           Section(
             title: 'Inline section error',
             child: SimpleCard(

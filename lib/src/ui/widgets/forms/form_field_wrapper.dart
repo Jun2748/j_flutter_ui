@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
-import '../layout/gap.dart';
 import '../typography/simple_text.dart';
 
 class FormFieldWrapper extends StatelessWidget {
@@ -29,6 +27,7 @@ class FormFieldWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
     final Widget? resolvedLabel =
         labelWidget ??
@@ -49,34 +48,31 @@ class FormFieldWrapper extends StatelessWidget {
             children: <Widget>[
               Flexible(child: resolvedLabel),
               if (required) ...<Widget>[
-                const SizedBox(width: JDimens.dp4),
+                JGaps.w4,
                 SimpleText.label(
                   text: '*',
-                  color: JColors.getColor(context, lightKey: 'error'),
+                  color: theme.colorScheme.error,
                   weight: FontWeight.w700,
                 ),
               ],
             ],
           ),
-          Gap.h8,
+          JGaps.h8,
         ],
         child,
         if (hasHelperWidget) ...<Widget>[
-          Gap.h8,
+          JGaps.h8,
           helper!,
         ] else if (hasHelperText) ...<Widget>[
-          Gap.h8,
+          JGaps.h8,
           SimpleText.caption(
             text: helperText!,
-            color: JColors.getColor(context, lightKey: 'textSecondary'),
+            color: theme.colorScheme.onSurfaceVariant,
           ),
         ],
         if (hasError) ...<Widget>[
-          Gap.h8,
-          SimpleText.caption(
-            text: errorText!,
-            color: JColors.getColor(context, lightKey: 'error'),
-          ),
+          JGaps.h8,
+          SimpleText.caption(text: errorText!, color: theme.colorScheme.error),
         ],
       ],
     );

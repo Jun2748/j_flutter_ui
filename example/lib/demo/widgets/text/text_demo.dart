@@ -4,47 +4,50 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 class TextDemo extends StatelessWidget {
   const TextDemo({super.key});
 
-  String get title => 'Text';
-
   @override
   Widget build(BuildContext context) {
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
-    final Color success = JColors.getColor(context, lightKey: 'success');
-    final Color error = JColors.getColor(context, lightKey: 'error');
+    final ThemeData theme = Theme.of(context);
+    String tr(String key) => Intl.text(key, context: context);
+    final Color primary = theme.colorScheme.primary;
+    final Color success =
+        theme.extension<JStatusColors>()?.success ?? theme.colorScheme.tertiary;
+    final Color error = theme.colorScheme.error;
 
     return AppScaffold(
-      appBar: AppBarEx(title: title),
+      appBar: AppBarEx(title: tr(L.demoTextTitle)),
       body: ListView(
         padding: JInsets.screenPadding,
         children: <Widget>[
-          const Section(
-            title: 'Typography scale',
-            child: Column(
+          Section(
+            title: tr(L.demoTextScaleTitle),
+            child: VStack(
+              gap: JDimens.dp16,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SimpleText.title(text: 'SimpleText.title'),
-                Gap.h16,
-                SimpleText.heading(text: 'SimpleText.heading'),
-                Gap.h16,
-                SimpleText.body(text: 'SimpleText.body'),
-                Gap.h16,
-                SimpleText.caption(text: 'SimpleText.caption'),
-                Gap.h16,
-                SimpleText.label(text: 'SimpleText.label'),
+                SimpleText.title(text: tr(L.demoTextTitleSample)),
+                SimpleText.heading(text: tr(L.demoTextHeadingSample)),
+                SimpleText.body(text: tr(L.demoTextBodySample)),
+                SimpleText.caption(text: tr(L.demoTextCaptionSample)),
+                SimpleText.label(text: tr(L.demoTextLabelSample)),
               ],
             ),
           ),
-          Gap.h24,
+          JGaps.h24,
           Section(
-            title: 'Color usage',
-            child: Column(
+            title: tr(L.demoTextColorsTitle),
+            child: VStack(
+              gap: JDimens.dp12,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SimpleText.body(text: 'Primary emphasis', color: primary),
-                const Gap.h(JDimens.dp12),
-                SimpleText.body(text: 'Success status', color: success),
-                const Gap.h(JDimens.dp12),
-                SimpleText.body(text: 'Error status', color: error),
+                SimpleText.body(
+                  text: tr(L.demoTextPrimaryLabel),
+                  color: primary,
+                ),
+                SimpleText.body(
+                  text: tr(L.demoTextSuccessLabel),
+                  color: success,
+                ),
+                SimpleText.body(text: tr(L.demoTextErrorLabel), color: error),
               ],
             ),
           ),

@@ -1,5 +1,54 @@
 import 'package:flutter/material.dart';
 
+@immutable
+class JStatusColors extends ThemeExtension<JStatusColors> {
+  const JStatusColors({
+    required this.success,
+    required this.warning,
+    required this.info,
+  });
+
+  factory JStatusColors.fallback({required Brightness brightness}) {
+    return brightness == Brightness.dark
+        ? const JStatusColors(
+            success: Color(0xFF4ADE80),
+            warning: Color(0xFFFBBF24),
+            info: Color(0xFF38BDF8),
+          )
+        : const JStatusColors(
+            success: Color(0xFF16A34A),
+            warning: Color(0xFFF59E0B),
+            info: Color(0xFF0EA5E9),
+          );
+  }
+
+  final Color success;
+  final Color warning;
+  final Color info;
+
+  @override
+  JStatusColors copyWith({Color? success, Color? warning, Color? info}) {
+    return JStatusColors(
+      success: success ?? this.success,
+      warning: warning ?? this.warning,
+      info: info ?? this.info,
+    );
+  }
+
+  @override
+  JStatusColors lerp(ThemeExtension<JStatusColors>? other, double t) {
+    if (other is! JStatusColors) {
+      return this;
+    }
+
+    return JStatusColors(
+      success: Color.lerp(success, other.success, t) ?? success,
+      warning: Color.lerp(warning, other.warning, t) ?? warning,
+      info: Color.lerp(info, other.info, t) ?? info,
+    );
+  }
+}
+
 abstract final class JColors {
   const JColors._();
 
@@ -73,18 +122,47 @@ abstract final class JColors {
     required String lightKey,
     String? darkKey,
   }) {
+    final ThemeData theme = Theme.of(context);
     final bool isDark = isDarkTheme(context);
-    final Map<String, Color> activePalette = isDark
-        ? darkPalette
-        : lightPalette;
     final String resolvedKey = isDark ? (darkKey ?? lightKey) : lightKey;
 
-    final Color? resolvedColor = activePalette[resolvedKey];
-    if (resolvedColor != null) {
-      return resolvedColor;
+    switch (resolvedKey) {
+      case 'background':
+        return theme.scaffoldBackgroundColor;
+      case 'surface':
+        return theme.colorScheme.surface;
+      case 'card':
+        return theme.cardTheme.color ?? theme.colorScheme.surface;
+      case 'textPrimary':
+        return theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface;
+      case 'textSecondary':
+        return theme.textTheme.bodyMedium?.color ??
+            theme.textTheme.labelSmall?.color ??
+            theme.colorScheme.onSurfaceVariant;
+      case 'textDisabled':
+        return theme.disabledColor;
+      case 'border':
+        return theme.colorScheme.outline;
+      case 'divider':
+        return DividerTheme.of(context).color ??
+            theme.colorScheme.outlineVariant;
+      case 'primary':
+        return theme.colorScheme.primary;
+      case 'success':
+        return theme.extension<JStatusColors>()?.success ??
+            _fallbackColor(isDark, resolvedKey);
+      case 'warning':
+        return theme.extension<JStatusColors>()?.warning ??
+            _fallbackColor(isDark, resolvedKey);
+      case 'error':
+        return theme.colorScheme.error;
+      case 'info':
+        return theme.extension<JStatusColors>()?.info ??
+            _fallbackColor(isDark, resolvedKey);
     }
 
-    final Color? fallbackColor = lightPalette[lightKey];
+    final Color? fallbackColor =
+        _activePalette(isDark)[resolvedKey] ?? lightPalette[lightKey];
     if (fallbackColor != null) {
       return fallbackColor;
     }
@@ -94,5 +172,13 @@ abstract final class JColors {
       'lightKey',
       'Unknown semantic color key.',
     );
+  }
+
+  static Map<String, Color> _activePalette(bool isDark) {
+    return isDark ? darkPalette : lightPalette;
+  }
+
+  static Color _fallbackColor(bool isDark, String key) {
+    return _activePalette(isDark)[key] ?? lightPalette[key]!;
   }
 }

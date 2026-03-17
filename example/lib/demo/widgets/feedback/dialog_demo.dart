@@ -26,7 +26,7 @@ class DialogDemo extends StatelessWidget {
               );
             },
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleButton.secondary(
             label: 'Show Custom Content Dialog',
             onPressed: () {
@@ -42,7 +42,7 @@ class DialogDemo extends StatelessWidget {
                     SimpleText.body(
                       text: 'Your session is about to expire in 2 minutes.',
                     ),
-                    Gap.h8,
+                    JGaps.h8,
                     SimpleBadge.warning(
                       label: 'Action needed',
                       icon: Icons.timelapse_outlined,

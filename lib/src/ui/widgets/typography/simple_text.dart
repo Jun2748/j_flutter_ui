@@ -13,7 +13,7 @@ class SimpleText extends StatelessWidget {
     this.align,
     this.style,
     this.weight,
-    this.maxLines = 10,
+    this.maxLines,
   }) : _variant = variant;
 
   const SimpleText.title({
@@ -126,24 +126,47 @@ class SimpleText extends StatelessWidget {
       textAlign: align,
       maxLines: maxLines,
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
-      style: _resolveStyle()
-          .merge(style)
-          .copyWith(color: color, fontWeight: weight),
+      style: _resolveStyle(
+        context,
+      ).merge(style).copyWith(color: color, fontWeight: weight),
     );
   }
 
-  TextStyle _resolveStyle() {
+  TextStyle _resolveStyle(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color primaryTextColor = theme.colorScheme.onSurface;
+    final Color secondaryTextColor = theme.colorScheme.onSurfaceVariant;
+
     switch (_variant) {
       case _SimpleTextVariant.title:
-        return JTextStyles.title1;
+        return _withFallbackColor(
+          theme.textTheme.displayLarge ?? JTextStyles.title1,
+          primaryTextColor,
+        );
       case _SimpleTextVariant.heading:
-        return JTextStyles.heading1;
+        return _withFallbackColor(
+          theme.textTheme.headlineLarge ?? JTextStyles.heading1,
+          primaryTextColor,
+        );
       case _SimpleTextVariant.body:
-        return JTextStyles.body1;
+        return _withFallbackColor(
+          theme.textTheme.bodyLarge ?? JTextStyles.body1,
+          primaryTextColor,
+        );
       case _SimpleTextVariant.caption:
-        return JTextStyles.body2;
+        return _withFallbackColor(
+          theme.textTheme.bodyMedium ?? JTextStyles.body2,
+          secondaryTextColor,
+        );
       case _SimpleTextVariant.label:
-        return JTextStyles.label;
+        return _withFallbackColor(
+          theme.textTheme.labelSmall ?? JTextStyles.label,
+          secondaryTextColor,
+        );
     }
+  }
+
+  TextStyle _withFallbackColor(TextStyle style, Color fallbackColor) {
+    return style.color == null ? style.copyWith(color: fallbackColor) : style;
   }
 }

@@ -49,13 +49,13 @@ class _RadioDemoState extends State<RadioDemo> {
               ),
             ),
           ),
-          Gap.h16,
+          JGaps.h16,
           SimpleCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SimpleText.label(text: 'Current selection'),
-                Gap.h8,
+                JGaps.h8,
                 SimpleText.heading(text: _selectedPlan.name),
               ],
             ),

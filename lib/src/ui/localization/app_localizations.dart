@@ -9,9 +9,7 @@ class AppLocalizations {
   static const String _packageName = 'j_flutter_ui';
   static const String _baseAssetPath = 'assets/localization';
 
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
   static final Map<String, AppLocalizations> _cache =
       <String, AppLocalizations>{};
@@ -100,10 +98,7 @@ class AppLocalizations {
 
     String resolvedValue = value;
     args.forEach((String placeholder, String replacement) {
-      resolvedValue = resolvedValue.replaceAll(
-        '{$placeholder}',
-        replacement,
-      );
+      resolvedValue = resolvedValue.replaceAll('{$placeholder}', replacement);
     });
     return resolvedValue;
   }

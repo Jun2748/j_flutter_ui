@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../resources/colors.dart';
 import '../../../resources/dimens.dart';
-import '../../layout/gap.dart';
 import '../../typography/simple_text.dart';
 
 class SimpleSegmentedItem<T> {
@@ -35,8 +33,9 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color surface = JColors.getColor(context, lightKey: 'surface');
-    final Color border = JColors.getColor(context, lightKey: 'border');
+    final ThemeData theme = Theme.of(context);
+    final Color surface = theme.colorScheme.surface;
+    final Color border = theme.colorScheme.outline;
 
     return Container(
       padding: padding ?? JInsets.all4,
@@ -60,16 +59,12 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
     SimpleSegmentedItem<T> item,
     int index,
   ) {
+    final ThemeData theme = Theme.of(context);
     final bool isSelected = item.value == value;
-    final Color primary = JColors.getColor(context, lightKey: 'primary');
-    final Color textPrimary = JColors.getColor(
-      context,
-      lightKey: 'textPrimary',
-    );
-    final Color textSecondary = JColors.getColor(
-      context,
-      lightKey: 'textSecondary',
-    );
+    final Color primary = theme.colorScheme.primary;
+    final Color onPrimary = theme.colorScheme.onPrimary;
+    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color textSecondary = theme.colorScheme.onSurfaceVariant;
 
     Widget child = InkWell(
       borderRadius: BorderRadius.circular(JDimens.dp12),
@@ -93,14 +88,14 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
               Icon(
                 item.icon,
                 size: JIconSizes.sm,
-                color: isSelected ? JColors.white : textSecondary,
+                color: isSelected ? onPrimary : textSecondary,
               ),
-              Gap.w8,
+              JGaps.w8,
             ],
             Flexible(
               child: SimpleText.label(
                 text: item.label,
-                color: isSelected ? JColors.white : textPrimary,
+                color: isSelected ? onPrimary : textPrimary,
                 weight: FontWeight.w600,
                 align: TextAlign.center,
                 maxLines: 1,

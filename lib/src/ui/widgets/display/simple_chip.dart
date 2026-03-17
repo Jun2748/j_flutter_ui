@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
@@ -33,13 +34,11 @@ class SimpleChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _ChipColors colors = _resolveColors(context);
+    final ThemeData theme = Theme.of(context);
+    final _ChipColors colors = _resolveColors(theme);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: JDimens.dp12,
-        vertical: JDimens.dp8,
-      ),
+      padding: JInsets.horizontal12Vertical8,
       decoration: BoxDecoration(
         color: colors.background,
         borderRadius: BorderRadius.circular(JDimens.dp24),
@@ -48,44 +47,49 @@ class SimpleChip extends StatelessWidget {
     );
   }
 
-  _ChipColors _resolveColors(BuildContext context) {
+  _ChipColors _resolveColors(ThemeData theme) {
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final JStatusColors statusColors =
+        theme.extension<JStatusColors>() ??
+        JStatusColors.fallback(brightness: theme.brightness);
+
     switch (_variant) {
       case _SimpleChipVariant.neutral:
         return _ChipColors(
-          background: JColors.getColor(context, lightKey: 'surface'),
-          foreground: JColors.getColor(context, lightKey: 'textPrimary'),
+          background: tokens.cardBackground,
+          foreground: theme.colorScheme.onSurface,
         );
       case _SimpleChipVariant.primary:
         return _ChipColors(
-          background: JColors.getColor(
-            context,
-            lightKey: 'primary',
-          ).withAlpha(24),
-          foreground: JColors.getColor(context, lightKey: 'primary'),
+          background: Color.alphaBlend(
+            tokens.primary.withAlpha(24),
+            tokens.cardBackground,
+          ),
+          foreground: tokens.primary,
         );
       case _SimpleChipVariant.success:
         return _ChipColors(
-          background: JColors.getColor(
-            context,
-            lightKey: 'success',
-          ).withAlpha(24),
-          foreground: JColors.getColor(context, lightKey: 'success'),
+          background: Color.alphaBlend(
+            statusColors.success.withAlpha(24),
+            tokens.cardBackground,
+          ),
+          foreground: statusColors.success,
         );
       case _SimpleChipVariant.warning:
         return _ChipColors(
-          background: JColors.getColor(
-            context,
-            lightKey: 'warning',
-          ).withAlpha(24),
-          foreground: JColors.getColor(context, lightKey: 'warning'),
+          background: Color.alphaBlend(
+            statusColors.warning.withAlpha(24),
+            tokens.cardBackground,
+          ),
+          foreground: statusColors.warning,
         );
       case _SimpleChipVariant.error:
         return _ChipColors(
-          background: JColors.getColor(
-            context,
-            lightKey: 'error',
-          ).withAlpha(24),
-          foreground: JColors.getColor(context, lightKey: 'error'),
+          background: Color.alphaBlend(
+            theme.colorScheme.error.withAlpha(24),
+            tokens.cardBackground,
+          ),
+          foreground: theme.colorScheme.error,
         );
     }
   }
