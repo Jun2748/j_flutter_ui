@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
 import '../typography/simple_text.dart';
@@ -32,6 +33,7 @@ class SimpleEmptyState extends StatelessWidget {
         actionLabel!.trim().isNotEmpty &&
         onActionPressed != null;
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
 
     return Center(
       child: Padding(
@@ -46,7 +48,7 @@ class SimpleEmptyState extends StatelessWidget {
               JGaps.h8,
               SimpleText.body(
                 text: message!,
-                color: theme.colorScheme.onSurfaceVariant,
+                color: tokens.mutedText,
                 align: TextAlign.center,
                 maxLines: 4,
               ),
@@ -65,14 +67,20 @@ class SimpleEmptyState extends StatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final IconData resolvedIcon = icon ?? Icons.inbox_outlined;
-    final Color primary = Theme.of(context).colorScheme.primary;
+    final Color primary = tokens.primary;
+    final Color background = Color.alphaBlend(
+      primary.withAlpha(16),
+      tokens.cardBackground,
+    );
 
     return Container(
       width: JDimens.dp64,
       height: JDimens.dp64,
       decoration: BoxDecoration(
-        color: primary.withAlpha(16),
+        color: background,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,

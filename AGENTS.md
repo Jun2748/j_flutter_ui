@@ -1,21 +1,11 @@
-# j_flutter_ui Agent Guide
+# j_flutter_ui Agent Rules
 
-Read this file first before making code changes.
+Read this file before changing code.
 
-
-## Project Role
-Your role:
-You are the senior flutter implementation engineer for this design system. Your job is to extend and refine the library while preserving consistency, composability, and a stable developer experience.
-
-You are NOT working on one app feature.
-You are working on a shared UI library that will be reused across multiple Flutter projects.
-
-`j_flutter_ui` is a reusable Flutter UI library, not a feature app.
-
-- Keep the library app-agnostic.
-- Optimize for long-term reuse across multiple apps.
-- Prefer stable, readable, boring code over clever architecture.
-- Reject non-compliant changes and propose the closest compliant alternative.
+## Purpose
+- `j_flutter_ui` is a reusable Flutter UI library and design system.
+- Keep it app-agnostic, production-grade, readable, maintainable, and reusable across multiple apps.
+- Do not solve library debt by changing consumer app code.
 
 ## Core Rules
 
@@ -129,3 +119,15 @@ Before modifying code, check:
 - Normalize nullable values once near the top of `build`.
 - Avoid `!` unless the guarantee is obvious and safe.
 - Never assume theme subfields are non-null without fallback.
+
+## Addendum
+
+- Keep the existing content in this file intact unless the task explicitly asks to replace it.
+- Use [`THEMING_RULEBOOK.md`] as the short reference for the final approved theming and localization standard.
+- When deciding between styling sources, prefer:
+  `explicit widget parameter -> Material semantic theme source when correct -> AppThemeTokens -> final fallback constants`
+- Treat these labels consistently in reviews and follow-up work:
+  `fully migrated`
+  `partially migrated`
+  `acceptable fallback`
+  `intentional Material semantic usage`

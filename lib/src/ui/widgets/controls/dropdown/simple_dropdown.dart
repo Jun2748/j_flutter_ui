@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../resources/app_theme_tokens.dart';
 import '../../../resources/dimens.dart';
 import '../../../resources/styles.dart';
-import '../../typography/simple_text.dart';
 
 class SimpleDropdown<T> extends StatelessWidget {
   const SimpleDropdown({
@@ -29,43 +29,86 @@ class SimpleDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final List<DropdownMenuItem<T>> resolvedItems =
         items ?? List<DropdownMenuItem<T>>.empty();
     final bool hasMatchingValue = resolvedItems.any(
       (DropdownMenuItem<T> item) => item.value == value,
     );
-    final Color border = theme.colorScheme.outline;
-    final Color textPrimary =
-        theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface;
-    final Color textSecondary =
-        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurfaceVariant;
-    final OutlineInputBorder inputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(color: border, width: JDimens.dp1),
-    );
+    final TextStyle resolvedTextStyle =
+        theme.textTheme.bodyLarge ??
+        JTextStyles.body1.copyWith(color: theme.colorScheme.onSurface);
 
     return DropdownButtonFormField<T>(
       initialValue: hasMatchingValue ? value : null,
       items: resolvedItems,
       onChanged: enabled && resolvedItems.isNotEmpty ? onChanged : null,
-      style: JTextStyles.body2.copyWith(color: textPrimary),
-      hint: hintText == null
-          ? null
-          : SimpleText.caption(text: hintText!, color: textSecondary),
-      decoration: InputDecoration(
-        labelText: labelText,
-        helperText: helperText,
-        errorText: errorText,
-        enabled: enabled,
-        border: inputBorder,
-        enabledBorder: inputBorder,
-        focusedBorder: inputBorder.copyWith(
-          borderSide: BorderSide(
-            color: theme.colorScheme.primary,
-            width: JDimens.dp1_5,
-          ),
-        ),
+      style: resolvedTextStyle,
+      iconEnabledColor: tokens.mutedText,
+      iconDisabledColor: theme.disabledColor,
+      decoration: _buildDecoration(theme, tokens),
+    );
+  }
+
+  InputDecoration _buildDecoration(ThemeData theme, AppThemeTokens tokens) {
+    final InputDecoration themedDecoration = InputDecoration(
+      labelText: labelText,
+      hintText: hintText,
+      helperText: helperText,
+      errorText: errorText,
+      enabled: enabled,
+    ).applyDefaults(theme.inputDecorationTheme);
+
+    return themedDecoration.copyWith(
+      filled: themedDecoration.filled ?? true,
+      fillColor: tokens.inputBackground,
+      contentPadding:
+          themedDecoration.contentPadding ?? JInsets.horizontal16Vertical12,
+      constraints:
+          themedDecoration.constraints ??
+          const BoxConstraints(minHeight: JHeights.input),
+      border: _buildBorder(color: tokens.inputBorderColor),
+      enabledBorder: _buildBorder(color: tokens.inputBorderColor),
+      focusedBorder: _buildBorder(
+        color: theme.colorScheme.primary,
+        width: JDimens.dp1_5,
       ),
+      disabledBorder: _buildBorder(color: tokens.dividerColor),
+      errorBorder: _buildBorder(color: theme.colorScheme.error),
+      focusedErrorBorder: _buildBorder(
+        color: theme.colorScheme.error,
+        width: JDimens.dp1_5,
+      ),
+      hintStyle:
+          (themedDecoration.hintStyle ??
+                  theme.textTheme.bodyMedium ??
+                  JTextStyles.body2)
+              .copyWith(color: tokens.mutedText),
+      labelStyle:
+          (themedDecoration.labelStyle ??
+                  theme.textTheme.bodyMedium ??
+                  JTextStyles.body2)
+              .copyWith(color: tokens.mutedText),
+      helperStyle:
+          (themedDecoration.helperStyle ??
+                  theme.textTheme.labelSmall ??
+                  JTextStyles.label)
+              .copyWith(color: tokens.mutedText),
+      errorStyle:
+          (themedDecoration.errorStyle ??
+                  theme.textTheme.labelSmall ??
+                  JTextStyles.label)
+              .copyWith(color: theme.colorScheme.error),
+    );
+  }
+
+  OutlineInputBorder _buildBorder({
+    required Color color,
+    double width = JDimens.dp1,
+  }) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(JDimens.dp12),
+      borderSide: BorderSide(color: color, width: width),
     );
   }
 }

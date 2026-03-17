@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SimpleDialog;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:j_flutter_ui/j_flutter_ui.dart';
 
@@ -105,7 +105,14 @@ void main() {
         dividerColor: Color(0xFFF59E0B),
         mutedText: Color(0xFF92400E),
       );
-      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+      final ThemeData theme = _withTokens(
+        JAppTheme.lightTheme.copyWith(
+          textTheme: JAppTheme.lightTheme.textTheme.copyWith(
+            bodyMedium: const TextStyle(fontSize: 14),
+          ),
+        ),
+        tokens,
+      );
 
       await tester.pumpWidget(
         MaterialApp(
@@ -155,6 +162,280 @@ void main() {
       expect(decoration.fillColor, const Color(0xFFECFEFF));
       expect(enabledBorder.borderSide.color, const Color(0xFF0891B2));
       expect(subtitle.style?.color, const Color(0xFF92400E));
+    });
+
+    testWidgets('AppThemeTokens update dropdown input styling', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: SimpleDropdown<String>(
+              hintText: 'Select an option',
+              items: const <DropdownMenuItem<String>>[
+                DropdownMenuItem<String>(value: 'one', child: Text('One')),
+              ],
+              onChanged: _noopDropdownChanged,
+            ),
+          ),
+        ),
+      );
+
+      final InputDecorator decorator = tester.widget<InputDecorator>(
+        find.byType(InputDecorator),
+      );
+      final InputDecoration decoration = decorator.decoration;
+      final OutlineInputBorder enabledBorder =
+          decoration.enabledBorder! as OutlineInputBorder;
+
+      expect(decoration.fillColor, const Color(0xFFECFEFF));
+      expect(enabledBorder.borderSide.color, const Color(0xFF0891B2));
+      expect(decoration.hintStyle?.color, const Color(0xFF92400E));
+    });
+
+    testWidgets('AppThemeTokens update switch and checkbox colors', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: Column(
+              children: <Widget>[
+                SimpleSwitch(
+                  value: false,
+                  label: 'Notifications',
+                  description: 'Stay informed',
+                ),
+                SimpleCheckbox(
+                  value: true,
+                  label: 'Accept terms',
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
+      final Checkbox checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
+      final Text descriptionText = tester.widget<Text>(find.text('Stay informed'));
+
+      expect(
+        switchWidget.thumbColor?.resolve(<WidgetState>{}),
+        const Color(0xFFFDFBF4),
+      );
+      expect(
+        switchWidget.trackColor?.resolve(<WidgetState>{}),
+        const Color(0xFFECFEFF),
+      );
+      expect(
+        switchWidget.trackOutlineColor?.resolve(<WidgetState>{}),
+        const Color(0xFF0891B2),
+      );
+      expect(
+        checkbox.fillColor?.resolve(<WidgetState>{WidgetState.selected}),
+        const Color(0xFF0F766E),
+      );
+      expect(descriptionText.style?.color, const Color(0xFF92400E));
+    });
+
+    testWidgets('AppThemeTokens update segmented control and tabs', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: Column(
+              children: <Widget>[
+                SimpleSegmentedControl<int>(
+                  items: const <SimpleSegmentedItem<int>>[
+                    SimpleSegmentedItem<int>(value: 0, label: 'One'),
+                    SimpleSegmentedItem<int>(value: 1, label: 'Two'),
+                  ],
+                  value: 0,
+                  onChanged: _noopSegmentedChanged,
+                ),
+                const SizedBox(height: 240, child: _TabsHarness()),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final AnimatedContainer selectedSegment = tester.widget<AnimatedContainer>(
+        find.byType(AnimatedContainer).first,
+      );
+      final BoxDecoration segmentDecoration =
+          selectedSegment.decoration! as BoxDecoration;
+      final TabBar tabBar = tester.widget<TabBar>(find.byType(TabBar));
+
+      expect(segmentDecoration.color, const Color(0xFF0F766E));
+      expect(tabBar.labelColor, const Color(0xFF0F766E));
+      expect(tabBar.unselectedLabelColor, const Color(0xFF92400E));
+      expect(tabBar.dividerColor, const Color(0xFFF59E0B));
+    });
+
+    testWidgets('SimpleDialog uses tokens and localized default confirm text', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: SimpleDialog(
+              title: 'Delete item',
+              message: 'This action cannot be undone.',
+            ),
+          ),
+        ),
+      );
+
+      final AlertDialog dialog = tester.widget<AlertDialog>(
+        find.byType(AlertDialog),
+      );
+      final RoundedRectangleBorder shape =
+          dialog.shape! as RoundedRectangleBorder;
+      final Text messageText = tester.widget<Text>(
+        find.text('This action cannot be undone.'),
+      );
+
+      expect(dialog.backgroundColor, const Color(0xFFFDFBF4));
+      expect(shape.side.color, const Color(0xFFD97706));
+      expect(messageText.style?.color, const Color(0xFF92400E));
+      expect(find.text('Okay'), findsOneWidget);
+    });
+
+    testWidgets('AppThemeTokens update shared muted text and divider', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: Column(
+              children: <Widget>[
+                FormFieldWrapper(
+                  helperText: 'Helper text',
+                  child: SizedBox.shrink(),
+                ),
+                SimpleDivider(),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final Text caption = tester.widget<Text>(find.text('Helper text'));
+      final Divider divider = tester.widget<Divider>(find.byType(Divider));
+
+      expect(caption.style?.color, const Color(0xFF92400E));
+      expect(divider.color, const Color(0xFFF59E0B));
+    });
+
+    testWidgets('AppBarEx uses AppThemeTokens surface styling', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            appBar: AppBarEx(title: 'Profile'),
+          ),
+        ),
+      );
+
+      final Material appBarMaterial = tester.widget<Material>(
+        find.descendant(
+          of: find.byType(AppBarEx),
+          matching: find.byType(Material),
+        ),
+      );
+      final DecoratedBox decoratedBox = tester.widget<DecoratedBox>(
+        find.descendant(
+          of: find.byType(AppBarEx),
+          matching: find.byType(DecoratedBox),
+        ),
+      );
+      final BoxDecoration decoration =
+          decoratedBox.decoration as BoxDecoration;
+
+      expect(appBarMaterial.color, const Color(0xFFFDFBF4));
+      expect(decoration.border?.bottom.color, const Color(0xFFF59E0B));
     });
 
     testWidgets(
@@ -237,3 +518,25 @@ ThemeData _withTokens(ThemeData base, AppThemeTokens tokens) {
 }
 
 void _noopTap(int _) {}
+
+void _noopDropdownChanged(String? _) {}
+
+void _noopSegmentedChanged(int _) {}
+
+class _TabsHarness extends StatelessWidget {
+  const _TabsHarness();
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleTabs(
+      tabs: <Tab>[
+        Tab(text: 'One'),
+        Tab(text: 'Two'),
+      ],
+      children: <Widget>[
+        SizedBox.expand(),
+        SizedBox.expand(),
+      ],
+    );
+  }
+}

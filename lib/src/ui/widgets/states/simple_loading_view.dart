@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
 
@@ -13,6 +14,7 @@ class SimpleLoadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool hasMessage = message != null && message!.trim().isNotEmpty;
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
 
     return Center(
       child: Padding(
@@ -25,14 +27,14 @@ class SimpleLoadingView extends StatelessWidget {
               height: JDimens.dp32,
               child: CircularProgressIndicator(
                 strokeWidth: JDimens.dp2,
-                color: theme.colorScheme.primary,
+                color: tokens.primary,
               ),
             ),
             if (hasMessage) ...<Widget>[
               JGaps.h16,
               SimpleText.body(
                 text: message!,
-                color: theme.colorScheme.onSurfaceVariant,
+                color: tokens.mutedText,
                 align: TextAlign.center,
               ),
             ],

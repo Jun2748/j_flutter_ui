@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
 
@@ -28,6 +29,7 @@ class FormFieldWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
     final Widget? resolvedLabel =
         labelWidget ??
@@ -67,7 +69,7 @@ class FormFieldWrapper extends StatelessWidget {
           JGaps.h8,
           SimpleText.caption(
             text: helperText!,
-            color: theme.colorScheme.onSurfaceVariant,
+            color: tokens.mutedText,
           ),
         ],
         if (hasError) ...<Widget>[

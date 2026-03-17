@@ -6,31 +6,33 @@ typedef SimpleValidator = String? Function(dynamic value);
 class SimpleFormValidator {
   SimpleFormValidator._();
 
-  static SimpleValidator required({
-    String message = SimpleValidationMessages.required,
-  }) {
+  static SimpleValidator required({String? message}) {
+    final String resolvedMessage = message ?? SimpleValidationMessages.required;
+
     return (dynamic value) {
       if (value == null) {
-        return message;
+        return resolvedMessage;
       }
 
       if (value is String && value.trim().isEmpty) {
-        return message;
+        return resolvedMessage;
       }
 
       return null;
     };
   }
 
-  static SimpleValidator email({
-    String message = SimpleValidationMessages.invalidEmail,
-  }) {
-    return pattern(SimpleRegexPatterns.email, message: message);
+  static SimpleValidator email({String? message}) {
+    return pattern(
+      SimpleRegexPatterns.email,
+      message: message ?? SimpleValidationMessages.invalidEmail,
+    );
   }
 
-  static SimpleValidator phone({
-    String message = SimpleValidationMessages.invalidPhone,
-  }) {
+  static SimpleValidator phone({String? message}) {
+    final String resolvedMessage =
+        message ?? SimpleValidationMessages.invalidPhone;
+
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
       if (normalizedValue == null || normalizedValue.isEmpty) {
@@ -38,7 +40,7 @@ class SimpleFormValidator {
       }
 
       if (!SimpleRegexPatterns.phone.hasMatch(normalizedValue)) {
-        return message;
+        return resolvedMessage;
       }
 
       final String digitsOnly = normalizedValue.replaceAll(
@@ -47,7 +49,7 @@ class SimpleFormValidator {
       );
 
       if (digitsOnly.length < 7 || digitsOnly.length > 15) {
-        return message;
+        return resolvedMessage;
       }
 
       return null;
@@ -56,19 +58,25 @@ class SimpleFormValidator {
 
   static SimpleValidator pattern(
     RegExp regex, {
-    String message = SimpleValidationMessages.invalidFormat,
+    String? message,
   }) {
+    final String resolvedMessage =
+        message ?? SimpleValidationMessages.invalidFormat;
+
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
       if (normalizedValue == null || normalizedValue.isEmpty) {
         return null;
       }
 
-      return regex.hasMatch(normalizedValue) ? null : message;
+      return regex.hasMatch(normalizedValue) ? null : resolvedMessage;
     };
   }
 
   static SimpleValidator minLength(int length, {String? message}) {
+    final String resolvedMessage =
+        message ?? SimpleValidationMessages.minLength(length);
+
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
       if (normalizedValue == null || normalizedValue.isEmpty) {
@@ -79,11 +87,14 @@ class SimpleFormValidator {
         return null;
       }
 
-      return message ?? 'Must be at least $length characters';
+      return resolvedMessage;
     };
   }
 
   static SimpleValidator maxLength(int length, {String? message}) {
+    final String resolvedMessage =
+        message ?? SimpleValidationMessages.maxLength(length);
+
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
       if (normalizedValue == null || normalizedValue.isEmpty) {
@@ -94,7 +105,7 @@ class SimpleFormValidator {
         return null;
       }
 
-      return message ?? 'Must be at most $length characters';
+      return resolvedMessage;
     };
   }
 

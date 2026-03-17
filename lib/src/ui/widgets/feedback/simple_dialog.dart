@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart' hide SimpleDialog;
 
+import '../../localization/intl.dart';
+import '../../localization/l.dart';
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
 import '../typography/simple_text.dart';
@@ -10,7 +13,7 @@ class SimpleDialog extends StatelessWidget {
     this.title,
     this.message,
     this.content,
-    this.confirmText = 'OK',
+    this.confirmText,
     this.cancelText,
     this.onConfirm,
     this.onCancel,
@@ -20,7 +23,7 @@ class SimpleDialog extends StatelessWidget {
   final String? title;
   final String? message;
   final Widget? content;
-  final String confirmText;
+  final String? confirmText;
   final String? cancelText;
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
@@ -31,7 +34,7 @@ class SimpleDialog extends StatelessWidget {
     String? title,
     String? message,
     Widget? content,
-    String confirmText = 'OK',
+    String? confirmText,
     String? cancelText,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
@@ -58,14 +61,19 @@ class SimpleDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final Color textPrimary = theme.colorScheme.onSurface;
-    final Color textSecondary = theme.colorScheme.onSurfaceVariant;
+    final Color textSecondary = tokens.mutedText;
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
     final Widget? resolvedContent = _buildContent(context, textSecondary);
+    final String resolvedConfirmText = _resolveConfirmText(context);
 
     return AlertDialog(
+      backgroundColor: tokens.cardBackground,
+      surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(JDimens.dp16),
+        side: BorderSide(color: tokens.cardBorderColor),
       ),
       titlePadding: const EdgeInsets.fromLTRB(
         JDimens.dp24,
@@ -99,7 +107,7 @@ class SimpleDialog extends StatelessWidget {
             },
           ),
         SimpleButton.primary(
-          label: confirmText,
+          label: resolvedConfirmText,
           onPressed: () {
             Navigator.of(context).pop();
             onConfirm?.call();
@@ -119,5 +127,19 @@ class SimpleDialog extends StatelessWidget {
     }
 
     return SimpleText.body(text: message!, color: textSecondary, maxLines: 6);
+  }
+
+  String _resolveConfirmText(BuildContext context) {
+    final String? customLabel = confirmText?.trim();
+    if (customLabel != null && customLabel.isNotEmpty) {
+      return customLabel;
+    }
+
+    final String localizedLabel = Intl.text(L.commonOkay, context: context);
+    if (localizedLabel.isNotEmpty && localizedLabel != L.commonOkay) {
+      return localizedLabel;
+    }
+
+    return 'Okay';
   }
 }

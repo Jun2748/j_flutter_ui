@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../localization/intl.dart';
+import '../../localization/l.dart';
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
 import '../typography/simple_text.dart';
@@ -9,7 +12,7 @@ class SimpleErrorView extends StatelessWidget {
     super.key,
     this.illustration,
     this.icon,
-    this.title = 'Something went wrong',
+    this.title = '',
     this.message,
     this.retryLabel,
     this.onRetry,
@@ -30,6 +33,7 @@ class SimpleErrorView extends StatelessWidget {
     final bool hasRetry =
         retryLabel != null && retryLabel!.trim().isNotEmpty && onRetry != null;
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
 
     return Center(
       child: Padding(
@@ -39,12 +43,15 @@ class SimpleErrorView extends StatelessWidget {
           children: <Widget>[
             illustration ?? _buildIcon(context),
             JGaps.h16,
-            SimpleText.heading(text: title, align: TextAlign.center),
+            SimpleText.heading(
+              text: _resolveTitle(context),
+              align: TextAlign.center,
+            ),
             if (hasMessage) ...<Widget>[
               JGaps.h8,
               SimpleText.body(
                 text: message!,
-                color: theme.colorScheme.onSurfaceVariant,
+                color: tokens.mutedText,
                 align: TextAlign.center,
                 maxLines: 4,
               ),
@@ -73,5 +80,19 @@ class SimpleErrorView extends StatelessWidget {
       alignment: Alignment.center,
       child: Icon(resolvedIcon, size: JIconSizes.xl, color: error),
     );
+  }
+
+  String _resolveTitle(BuildContext context) {
+    final String customTitle = title.trim();
+    if (customTitle.isNotEmpty) {
+      return customTitle;
+    }
+
+    final String localizedTitle = Intl.text(L.stateErrorTitle, context: context);
+    if (localizedTitle.isNotEmpty && localizedTitle != L.stateErrorTitle) {
+      return localizedTitle;
+    }
+
+    return 'Something went wrong';
   }
 }

@@ -78,7 +78,22 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
       return customHint;
     }
 
-    final String localizedHint = Intl.text(L.commonSearch, context: context);
-    return localizedHint == L.commonSearch ? 'Search' : localizedHint;
+    return _localizedText(
+      L.commonSearch,
+      context: context,
+      fallback: 'Search',
+    );
+  }
+
+  String _localizedText(
+    String key, {
+    required BuildContext context,
+    required String fallback,
+  }) {
+    final String localized = Intl.text(key, context: context);
+    if (localized.isEmpty || localized == key) {
+      return fallback;
+    }
+    return localized;
   }
 }

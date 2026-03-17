@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../resources/app_theme_tokens.dart';
 import '../../../resources/dimens.dart';
 import '../../typography/simple_text.dart';
 
@@ -34,8 +35,9 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color surface = theme.colorScheme.surface;
-    final Color border = theme.colorScheme.outline;
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final Color surface = tokens.cardBackground;
+    final Color border = tokens.cardBorderColor;
 
     return Container(
       padding: padding ?? JInsets.all4,
@@ -60,11 +62,12 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
     int index,
   ) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final bool isSelected = item.value == value;
-    final Color primary = theme.colorScheme.primary;
+    final Color primary = tokens.primary;
     final Color onPrimary = theme.colorScheme.onPrimary;
     final Color textPrimary = theme.colorScheme.onSurface;
-    final Color textSecondary = theme.colorScheme.onSurfaceVariant;
+    final Color textSecondary = tokens.mutedText;
 
     Widget child = InkWell(
       borderRadius: BorderRadius.circular(JDimens.dp12),
@@ -72,12 +75,9 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(
-          horizontal: JDimens.dp12,
-          vertical: JDimens.dp8,
-        ),
+        padding: JInsets.horizontal12Vertical8,
         decoration: BoxDecoration(
-          color: isSelected ? primary : const Color(0x00000000),
+          color: isSelected ? primary : Colors.transparent,
           borderRadius: BorderRadius.circular(JDimens.dp12),
         ),
         child: Row(
@@ -110,7 +110,7 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
       child = Expanded(child: child);
     } else if (index > 0) {
       child = Padding(
-        padding: const EdgeInsets.only(left: JDimens.dp4),
+        padding: const EdgeInsetsDirectional.only(start: JDimens.dp4),
         child: child,
       );
     }

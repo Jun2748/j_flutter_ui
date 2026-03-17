@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 
 class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
@@ -40,6 +41,7 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final Widget? resolvedLeading = _buildLeading(context);
     final Widget? resolvedTrailing = _buildTrailing();
     final EdgeInsetsGeometry resolvedPadding =
@@ -73,16 +75,17 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
     );
 
     return Material(
-      color:
-          backgroundColor ??
-          theme.appBarTheme.backgroundColor ??
-          theme.colorScheme.surface,
+      color: backgroundColor ?? tokens.cardBackground,
       elevation: elevation,
       surfaceTintColor: Colors.transparent,
       shadowColor: elevation == 0 ? Colors.transparent : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: bottomBorder != null ? Border(bottom: bottomBorder!) : null,
+          border: Border(
+            bottom:
+                bottomBorder ??
+                BorderSide(color: tokens.dividerColor, width: JDimens.dp1),
+          ),
         ),
         child: SafeArea(
           top: primary,

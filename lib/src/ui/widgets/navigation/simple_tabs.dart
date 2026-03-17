@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 
 class SimpleTabs extends StatelessWidget {
@@ -21,11 +22,10 @@ class SimpleTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color primary = theme.colorScheme.primary;
-    final Color textSecondary =
-        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurfaceVariant;
-    final Color divider =
-        DividerTheme.of(context).color ?? theme.colorScheme.outlineVariant;
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final Color primary = tokens.primary;
+    final Color textSecondary = tokens.mutedText;
+    final Color divider = tokens.dividerColor;
 
     return DefaultTabController(
       length: tabs.length,
@@ -42,9 +42,7 @@ class SimpleTabs extends StatelessWidget {
               unselectedLabelColor: textSecondary,
               indicatorColor: primary,
               dividerColor: divider,
-              labelPadding: const EdgeInsets.symmetric(
-                horizontal: JDimens.dp12,
-              ),
+              labelPadding: JInsets.horizontal12,
             ),
             JGaps.h16,
             Expanded(child: TabBarView(children: children)),

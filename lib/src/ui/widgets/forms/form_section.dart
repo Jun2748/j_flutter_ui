@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
 
@@ -21,7 +22,7 @@ class FormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(Theme.of(context));
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
     final bool hasDescription =
         description != null && description!.trim().isNotEmpty;
@@ -44,7 +45,7 @@ class FormSection extends StatelessWidget {
           if (hasDescription) ...<Widget>[
             SimpleText.caption(
               text: description!,
-              color: theme.colorScheme.onSurfaceVariant,
+              color: tokens.mutedText,
             ),
             JGaps.h16,
           ],

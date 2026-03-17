@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/styles.dart';
 
 enum _SimpleTextVariant { title, heading, body, caption, label }
@@ -134,8 +135,9 @@ class SimpleText extends StatelessWidget {
 
   TextStyle _resolveStyle(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final Color primaryTextColor = theme.colorScheme.onSurface;
-    final Color secondaryTextColor = theme.colorScheme.onSurfaceVariant;
+    final Color secondaryTextColor = tokens.mutedText;
 
     switch (_variant) {
       case _SimpleTextVariant.title:

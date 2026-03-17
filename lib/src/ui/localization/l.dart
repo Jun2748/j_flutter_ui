@@ -24,6 +24,22 @@ class L {
   static const String loginSubtitle = 'login.subtitle';
   static const String loginPhone = 'login.phone';
 
+  static const String formSubmit = 'form.submit';
+  static const String formValidationRequired = 'form.validation.required';
+  static const String formValidationRequiredField =
+      'form.validation.requiredField';
+  static const String formValidationInvalidEmail =
+      'form.validation.invalidEmail';
+  static const String formValidationInvalidPhone =
+      'form.validation.invalidPhone';
+  static const String formValidationInvalidFormat =
+      'form.validation.invalidFormat';
+  static const String formValidationMinLength =
+      'form.validation.minLength';
+  static const String formValidationMaxLength =
+      'form.validation.maxLength';
+  static const String stateErrorTitle = 'state.error.title';
+
   static const String demoHtmlLocalized = 'demo.html.localized';
   static const String demoCatalogTitle = 'demo.catalog.title';
   static const String demoCatalogSearchHint = 'demo.catalog.searchHint';

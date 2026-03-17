@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../typography/simple_text.dart';
 
@@ -16,10 +17,11 @@ class SimpleBottomSheet {
     EdgeInsets? padding,
   }) {
     final ThemeData theme = Theme.of(context);
-    final Color card = theme.cardTheme.color ?? theme.colorScheme.surface;
-    final Color border = theme.colorScheme.outline;
-    final Color messageColor =
-        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurfaceVariant;
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final Color card = tokens.cardBackground;
+    final Color border = tokens.cardBorderColor;
+    final Color handleColor = tokens.dividerColor;
+    final Color messageColor = tokens.mutedText;
     final String? titleText = title != null && title.trim().isNotEmpty
         ? title
         : null;
@@ -31,8 +33,11 @@ class SimpleBottomSheet {
       context: context,
       isScrollControlled: isScrollControlled,
       backgroundColor: card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(JDimens.dp24)),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(JDimens.dp24),
+        ),
+        side: BorderSide(color: border),
       ),
       builder: (BuildContext bottomSheetContext) {
         return SafeArea(
@@ -51,7 +56,7 @@ class SimpleBottomSheet {
                       height: JDimens.dp4,
                       margin: const EdgeInsets.only(bottom: JDimens.dp16),
                       decoration: BoxDecoration(
-                        color: border,
+                        color: handleColor,
                         borderRadius: BorderRadius.circular(JDimens.dp12),
                       ),
                     ),

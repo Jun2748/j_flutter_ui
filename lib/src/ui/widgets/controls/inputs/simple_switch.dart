@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../resources/app_theme_tokens.dart';
 import '../../../resources/dimens.dart';
 import '../../typography/simple_text.dart';
 
@@ -22,13 +23,14 @@ class SimpleSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final bool resolvedValue = value ?? false;
     final bool interactive = onChanged != null;
-    final Color primary = theme.colorScheme.primary;
-    final Color thumbOff = theme.cardTheme.color ?? theme.colorScheme.surface;
-    final Color border = theme.colorScheme.outline;
+    final Color primary = tokens.primary;
+    final Color thumbOff = tokens.cardBackground;
+    final Color border = tokens.inputBorderColor;
     final Color disabled = theme.disabledColor;
-    final Color trackOff = theme.colorScheme.surface;
+    final Color trackOff = tokens.inputBackground;
 
     final Widget switchWidget = Switch(
       value: resolvedValue,
@@ -85,9 +87,9 @@ class SimpleSwitch extends StatelessWidget {
   }
 
   Widget _buildTextContent(BuildContext context) {
-    final Color descriptionColor = Theme.of(
-      context,
-    ).colorScheme.onSurfaceVariant;
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final Color descriptionColor = tokens.mutedText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

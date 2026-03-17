@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../resources/app_theme_tokens.dart';
 import '../../../resources/dimens.dart';
 import '../../../resources/styles.dart';
 
@@ -24,25 +25,42 @@ class SimpleCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
     final bool resolvedValue = value ?? false;
     final bool interactive = enabled && onChanged != null;
 
     final Widget checkbox = Checkbox(
       value: resolvedValue,
       onChanged: interactive ? onChanged : null,
+      fillColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+        if (states.contains(WidgetState.disabled)) {
+          return theme.disabledColor.withAlpha(140);
+        }
+        if (states.contains(WidgetState.selected)) {
+          return tokens.primary;
+        }
+        return Colors.transparent;
+      }),
+      checkColor: theme.colorScheme.onPrimary,
+      side: BorderSide(color: tokens.inputBorderColor),
     );
 
     final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
+    final TextStyle baseTextStyle =
+        theme.textTheme.bodyMedium ?? JTextStyles.body2;
     final Widget? resolvedLabel =
         labelWidget ??
         (hasTextLabel
             ? Text(
                 label!,
-                style: JTextStyles.body2
-                    .merge(textStyle)
-                    .copyWith(
-                      color: enabled ? textStyle?.color : theme.disabledColor,
-                    ),
+                style: baseTextStyle.merge(textStyle).copyWith(
+                  color:
+                      enabled
+                          ? textStyle?.color ??
+                              baseTextStyle.color ??
+                              theme.colorScheme.onSurface
+                          : theme.disabledColor,
+                ),
               )
             : null);
 

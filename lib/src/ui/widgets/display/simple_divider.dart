@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 
 class SimpleDivider extends StatelessWidget {
@@ -20,15 +21,14 @@ class SimpleDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppThemeTokens tokens = AppThemeTokens.resolve(Theme.of(context));
+
     return Divider(
       height: height,
       thickness: thickness,
       indent: indent,
       endIndent: endIndent,
-      color:
-          color ??
-          DividerTheme.of(context).color ??
-          Theme.of(context).colorScheme.outlineVariant,
+      color: color ?? tokens.dividerColor,
     );
   }
 }

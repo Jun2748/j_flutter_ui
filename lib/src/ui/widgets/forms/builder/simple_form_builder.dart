@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../localization/intl.dart';
+import '../../../localization/l.dart';
 import '../../controls/buttons/simple_button.dart';
 import '../../controls/dropdown/simple_dropdown.dart';
 import '../../controls/inputs/simple_checkbox.dart';
@@ -28,7 +30,7 @@ class SimpleFormBuilder extends StatefulWidget {
     this.padding,
     this.fieldSpacing = 16,
     this.showSubmitButton = false,
-    this.submitLabel = 'Submit',
+    this.submitLabel = '',
     this.clearBackendErrorsOnSubmit = true,
     this.enabled = true,
     this.controller,
@@ -108,6 +110,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
           SizedBox(height: widget.fieldSpacing),
       ],
     ];
+    final String resolvedSubmitLabel = _resolveSubmitLabel();
 
     if (widget.showSubmitButton && widget.onSubmit != null) {
       if (children.isNotEmpty) {
@@ -115,7 +118,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       }
       children.add(
         SimpleButton.primary(
-          label: widget.submitLabel,
+          label: resolvedSubmitLabel,
           width: double.infinity,
           loading: _isSubmitting,
           onPressed: _isFormEnabled && !_isSubmitting ? submit : null,
@@ -412,7 +415,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
           child: SimpleSearchField(
             controller: _controllers[field.name],
             focusNode: focusNode,
-            hintText: field.hintText ?? 'Search',
+            hintText: field.hintText,
             enabled: effectiveEnabled,
             onChanged: (String text) => _updateValue(field, text),
           ),
@@ -823,7 +826,28 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     if (label.isEmpty) {
       return SimpleValidationMessages.required;
     }
-    return '$label is required';
+    return SimpleValidationMessages.requiredField(label);
+  }
+
+  String _resolveSubmitLabel() {
+    final String customLabel = widget.submitLabel.trim();
+    if (customLabel.isNotEmpty) {
+      return customLabel;
+    }
+
+    return _localizedText(L.formSubmit, fallback: 'Submit');
+  }
+
+  String _localizedText(
+    String key, {
+    required String fallback,
+    Map<String, String>? args,
+  }) {
+    final String localized = Intl.text(key, context: context, args: args);
+    if (localized.isEmpty || localized == key) {
+      return fallback;
+    }
+    return localized;
   }
 
   String? _normalizeError(String? error) {
