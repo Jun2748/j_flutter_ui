@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../resources/app_theme_tokens.dart';
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
+import '../../resources/tinted_surface.dart';
 import '../typography/simple_text.dart';
 
 enum _SimpleBannerVariant { info, success, warning, error }
@@ -197,8 +198,8 @@ class SimpleBanner extends StatelessWidget {
       case _SimpleBannerVariant.info:
         final Color info = statusColors.info;
         return _SimpleBannerColors(
-          background: Color.alphaBlend(info.withAlpha(16), cardBackground),
-          border: Color.alphaBlend(info.withAlpha(48), cardBorderColor),
+          background: JTints.surface(cardBackground, info, alpha: 16),
+          border: JTints.border(cardBorderColor, info, alpha: 48),
           foreground: info,
           titleColor: textPrimary,
           messageColor: textSecondary,
@@ -206,8 +207,8 @@ class SimpleBanner extends StatelessWidget {
       case _SimpleBannerVariant.success:
         final Color success = statusColors.success;
         return _SimpleBannerColors(
-          background: Color.alphaBlend(success.withAlpha(16), cardBackground),
-          border: Color.alphaBlend(success.withAlpha(48), cardBorderColor),
+          background: JTints.surface(cardBackground, success, alpha: 16),
+          border: JTints.border(cardBorderColor, success, alpha: 48),
           foreground: success,
           titleColor: textPrimary,
           messageColor: textSecondary,
@@ -215,8 +216,8 @@ class SimpleBanner extends StatelessWidget {
       case _SimpleBannerVariant.warning:
         final Color warning = statusColors.warning;
         return _SimpleBannerColors(
-          background: Color.alphaBlend(warning.withAlpha(16), cardBackground),
-          border: Color.alphaBlend(warning.withAlpha(48), cardBorderColor),
+          background: JTints.surface(cardBackground, warning, alpha: 16),
+          border: JTints.border(cardBorderColor, warning, alpha: 48),
           foreground: warning,
           titleColor: textPrimary,
           messageColor: textSecondary,
@@ -224,8 +225,8 @@ class SimpleBanner extends StatelessWidget {
       case _SimpleBannerVariant.error:
         final Color error = theme.colorScheme.error;
         return _SimpleBannerColors(
-          background: Color.alphaBlend(error.withAlpha(16), cardBackground),
-          border: Color.alphaBlend(error.withAlpha(48), cardBorderColor),
+          background: JTints.surface(cardBackground, error, alpha: 16),
+          border: JTints.border(cardBorderColor, error, alpha: 48),
           foreground: error,
           titleColor: textPrimary,
           messageColor: textSecondary,

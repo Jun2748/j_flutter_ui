@@ -39,6 +39,9 @@ The repo already has the right *shape* for a shared UI library (tokens, primitiv
 - **Input decoration consistency**:
   - preserved host-provided border *shape* and width when building input borders
   - kept `AppThemeTokens` as the primary semantic override mechanism for input fill/border colors
+- **De-duplication for consistency**:
+  - centralized shared input decoration building in `JInputDecorations`
+  - centralized tinted surface/border recipes in `JTints`
 - **Token consistency**:
   - `SimpleFormBuilder.fieldSpacing` default now uses `JDimens.dp16`
   - radio option spacing uses `JDimens` (no raw `8`)

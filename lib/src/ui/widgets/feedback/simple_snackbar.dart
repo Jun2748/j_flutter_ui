@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../resources/app_theme_tokens.dart';
 import '../../resources/colors.dart';
 import '../../resources/dimens.dart';
+import '../../resources/tinted_surface.dart';
 import '../typography/simple_text.dart';
 
 enum _SimpleSnackbarVariant { info, success, warning, error }
@@ -121,33 +122,33 @@ class SimpleSnackbar {
       case _SimpleSnackbarVariant.info:
         final Color info = statusColors.info;
         return _SimpleSnackbarColors(
-          background: Color.alphaBlend(info.withAlpha(22), cardBackground),
+          background: JTints.surface(cardBackground, info, alpha: 22),
           foreground: textPrimary,
-          border: Color.alphaBlend(info.withAlpha(48), cardBorderColor),
+          border: JTints.border(cardBorderColor, info, alpha: 48),
           actionColor: info,
         );
       case _SimpleSnackbarVariant.success:
         final Color success = statusColors.success;
         return _SimpleSnackbarColors(
-          background: Color.alphaBlend(success.withAlpha(22), cardBackground),
+          background: JTints.surface(cardBackground, success, alpha: 22),
           foreground: textPrimary,
-          border: Color.alphaBlend(success.withAlpha(48), cardBorderColor),
+          border: JTints.border(cardBorderColor, success, alpha: 48),
           actionColor: success,
         );
       case _SimpleSnackbarVariant.warning:
         final Color warning = statusColors.warning;
         return _SimpleSnackbarColors(
-          background: Color.alphaBlend(warning.withAlpha(22), cardBackground),
+          background: JTints.surface(cardBackground, warning, alpha: 22),
           foreground: textPrimary,
-          border: Color.alphaBlend(warning.withAlpha(48), cardBorderColor),
+          border: JTints.border(cardBorderColor, warning, alpha: 48),
           actionColor: warning,
         );
       case _SimpleSnackbarVariant.error:
         final Color error = theme.colorScheme.error;
         return _SimpleSnackbarColors(
-          background: Color.alphaBlend(error.withAlpha(20), cardBackground),
+          background: JTints.surface(cardBackground, error, alpha: 20),
           foreground: textPrimary,
-          border: Color.alphaBlend(error.withAlpha(48), cardBorderColor),
+          border: JTints.border(cardBorderColor, error, alpha: 48),
           actionColor: error,
         );
     }

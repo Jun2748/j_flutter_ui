@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../resources/app_theme_tokens.dart';
-import '../../../resources/dimens.dart';
+import '../../../resources/input_decorations.dart';
 import '../../../resources/styles.dart';
 
 class SimpleTextField extends StatelessWidget {
@@ -79,107 +79,20 @@ class SimpleTextField extends StatelessWidget {
       onFieldSubmitted: onFieldSubmitted,
       validator: validator,
       style: resolvedTextStyle,
-      decoration: _buildDecoration(theme),
-    );
-  }
-
-  InputDecoration _buildDecoration(ThemeData theme) {
-    final AppThemeTokens tokens = theme.appThemeTokens;
-    final InputDecoration themedDecoration = InputDecoration(
-      labelText: labelText,
-      hintText: hintText,
-      helperText: helperText,
-      errorText: errorText,
-      prefix: prefix,
-      suffix: suffix,
-      prefixIcon: prefixIcon,
-      suffixIcon: suffixIcon,
-    ).applyDefaults(theme.inputDecorationTheme);
-    final Color resolvedFillColor = fillColor ?? tokens.inputBackground;
-    final Color resolvedBorderColor = borderColor ?? tokens.inputBorderColor;
-    final Color mutedTextColor = tokens.mutedText;
-    final Color dividerColor = tokens.dividerColor;
-
-    return themedDecoration.copyWith(
-      filled: themedDecoration.filled ?? true,
-      fillColor: resolvedFillColor,
-      contentPadding:
-          themedDecoration.contentPadding ?? JInsets.horizontal16Vertical12,
-      constraints:
-          themedDecoration.constraints ??
-          const BoxConstraints(minHeight: JHeights.input),
-      border: _resolveBorder(themedDecoration.border, color: resolvedBorderColor),
-      enabledBorder: _resolveBorder(
-        themedDecoration.enabledBorder ?? themedDecoration.border,
-        color: resolvedBorderColor,
-      ),
-      focusedBorder: _resolveBorder(
-        themedDecoration.focusedBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: theme.colorScheme.primary,
-        width: JDimens.dp1_5,
-      ),
-      disabledBorder: _resolveBorder(
-        themedDecoration.disabledBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: dividerColor,
-      ),
-      errorBorder: _resolveBorder(
-        themedDecoration.errorBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: theme.colorScheme.error,
-      ),
-      focusedErrorBorder: _resolveBorder(
-        themedDecoration.focusedErrorBorder ??
-            themedDecoration.errorBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: theme.colorScheme.error,
-        width: JDimens.dp1_5,
-      ),
-      hintStyle:
-          (themedDecoration.hintStyle ??
-                  theme.textTheme.bodyMedium ??
-                  JTextStyles.body2)
-              .copyWith(color: mutedTextColor),
-      labelStyle:
-          (themedDecoration.labelStyle ??
-                  theme.textTheme.bodyMedium ??
-                  JTextStyles.body2)
-              .copyWith(color: mutedTextColor),
-      helperStyle:
-          (themedDecoration.helperStyle ??
-                  theme.textTheme.labelSmall ??
-                  JTextStyles.label)
-              .copyWith(color: mutedTextColor),
-      errorStyle:
-          (themedDecoration.errorStyle ??
-                  theme.textTheme.labelSmall ??
-                  JTextStyles.label)
-              .copyWith(color: theme.colorScheme.error),
-    );
-  }
-
-  OutlineInputBorder _resolveBorder(
-    InputBorder? base, {
-    required Color color,
-    double? width,
-  }) {
-    final OutlineInputBorder? outlineBase =
-        base is OutlineInputBorder ? base : null;
-
-    return OutlineInputBorder(
-      borderRadius:
-          outlineBase?.borderRadius ??
-          BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(
-        color: color,
-        width: width ?? outlineBase?.borderSide.width ?? JDimens.dp1,
+      decoration: JInputDecorations.textField(
+        theme,
+        tokens: theme.appThemeTokens,
+        labelText: labelText,
+        hintText: hintText,
+        helperText: helperText,
+        errorText: errorText,
+        prefix: prefix,
+        suffix: suffix,
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+        fillColor: fillColor,
+        borderColor: borderColor,
       ),
     );
   }
-
 }

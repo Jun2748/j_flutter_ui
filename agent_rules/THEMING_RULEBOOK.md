@@ -33,6 +33,11 @@
 - Canonical access:
   `final AppThemeTokens tokens = Theme.of(context).appThemeTokens;`
 
+## Shared styling helpers (consistency)
+- Prefer reusing centralized helpers over duplicating styling logic:
+  - `JInputDecorations`: shared `InputDecoration` building for inputs
+  - `JTints`: tinted surface/border recipes for status UI (badge/banner/snackbar/chip)
+
 ## Fallback Constants
 - Final fallback constants are allowed only when neither Material semantics nor `AppThemeTokens` can provide the value.
 - They are safety nets, not the primary path.
@@ -52,3 +57,4 @@
 - Parallel custom theme managers
 - App-specific theme containers inside the library
 - Duplicating all of `ColorScheme`, `TextTheme`, or Material component themes into `AppThemeTokens`
+

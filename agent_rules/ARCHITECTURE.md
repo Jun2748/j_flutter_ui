@@ -20,6 +20,9 @@ Primary goals:
   - tokens: `JDimens`, `JGaps`, `JInsets`, `JHeights`, `JIconSizes`, `JFontSizes`, `JLineHeights`
   - typography: `JTextStyles`
   - theming: `JAppTheme`, `AppThemeTokens` (`ThemeExtension`)
+  - shared styling helpers:
+    - `JInputDecorations` (shared `InputDecoration` building for inputs)
+    - `JTints` (shared tinted surface/border recipes)
 
 - `lib/src/ui/widgets/`
   - **primitives**: thin wrappers over Material semantics
@@ -57,6 +60,12 @@ All widgets should normalize values early and resolve styling predictably:
 - `AppThemeTokens` (ThemeExtension)
 - Material semantic theme (`ColorScheme`, `TextTheme`, component themes)
 - final fallback constants (rare; document why)
+
+## Shared styling helpers (avoid drift)
+If a styling recipe appears in 3+ widgets, prefer centralizing it under `resources/` and reusing it.
+
+- Use `JInputDecorations` for `SimpleTextField`/`SimpleDropdown`-like `InputDecoration` building so focus/error/disabled borders remain consistent.
+- Use `JTints` for tinted surface/border recipes in feedback/display components (badge/banner/snackbar/chip).
 
 ## When to add a new token
 Add a shared token only if:

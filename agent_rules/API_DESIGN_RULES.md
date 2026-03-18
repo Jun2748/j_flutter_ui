@@ -7,6 +7,18 @@ These rules exist to keep `j_flutter_ui` plug-and-play across many apps.
 - Prefer additive changes over breaking changes.
 - Avoid renames/moves unless part of a deliberate migration with notes.
 
+## Export policy (library boundary)
+- Consumers should import **only** `package:j_flutter_ui/j_flutter_ui.dart`.
+- Treat all exports from `lib/j_flutter_ui.dart` as **stable, semver-governed API**.
+- When adding new APIs:
+  - Prefer exporting a small number of high-signal primitives/patterns.
+  - Do not export internal helpers just because they exist under `src/`.
+- When refactoring internals:
+  - Do not rename/move/remove exported symbols without a **migration plan**.
+  - Prefer deprecate → migrate → remove, with notes in `MIGRATION_NOTES.md` (create only when needed).
+- Avoid “public-by-accident” APIs:
+  - if a file/class is intended to be internal, keep it unexported (or explicitly document why it’s exported).
+
 ## Constructor design
 - Prefer **named constructors** for clearly distinct variants (e.g. `primary/secondary/outline/text`) over boolean flags.
 - Avoid “boolean soup”. If you see 3+ booleans controlling visual variants, it’s a smell.

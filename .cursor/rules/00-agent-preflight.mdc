@@ -1,0 +1,20 @@
+---
+description: Always read agent rulebooks before edits
+---
+
+Before making **any code changes** in this repository:
+
+1) Read **all** markdown files in `agent_rules/`:
+- `agent_rules/AGENTS.md`
+- `agent_rules/THEMING_RULEBOOK.md`
+- `agent_rules/ARCHITECTURE.md`
+- `agent_rules/API_DESIGN_RULES.md`
+- `agent_rules/LOCALIZATION_RULES.md`
+- `agent_rules/REPO_AUDIT_SUMMARY.md`
+
+2) Follow those rules for:
+- theming precedence and token usage (`theme.appThemeTokens`)
+- design token consistency (`JDimens`, `JGaps`, `JInsets`)
+- localization ownership and fallback order
+- public API stability (exports from `lib/j_flutter_ui.dart`)
+

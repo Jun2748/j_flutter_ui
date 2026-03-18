@@ -1,0 +1,166 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('Localization keys in L exist in en.json', () async {
+    final String jsonString = await rootBundle.loadString(
+      'packages/j_flutter_ui/assets/localization/en.json',
+    );
+    final Map<String, dynamic> decoded =
+        jsonDecode(jsonString) as Map<String, dynamic>;
+    final Set<String> keys = decoded.keys.toSet();
+
+    final Set<String> missing = <String>{};
+    for (final String key in _lKeys) {
+      if (!keys.contains(key)) {
+        missing.add(key);
+      }
+    }
+
+    expect(
+      missing,
+      isEmpty,
+      reason: 'Missing keys in assets/localization/en.json: '
+          '${missing.toList()..sort()}',
+    );
+  });
+}
+
+const List<String> _lKeys = <String>[
+  L.commonOkay,
+  L.commonCancel,
+  L.commonConfirm,
+  L.commonWelcome,
+  L.commonSearch,
+  L.commonSave,
+  L.commonView,
+  L.commonViewAll,
+  L.commonName,
+  L.commonEmail,
+  L.commonReference,
+  L.commonHome,
+  L.commonMenu,
+  L.commonGiftCard,
+  L.commonRewards,
+  L.commonAccount,
+  L.commonNotifications,
+  L.commonDisabled,
+  L.loginTitle,
+  L.loginSubtitle,
+  L.loginPhone,
+  L.formSubmit,
+  L.formValidationRequired,
+  L.formValidationRequiredField,
+  L.formValidationInvalidEmail,
+  L.formValidationInvalidPhone,
+  L.formValidationInvalidFormat,
+  L.formValidationMinLength,
+  L.formValidationMaxLength,
+  L.stateErrorTitle,
+  L.demoHtmlLocalized,
+  L.demoCatalogTitle,
+  L.demoCatalogSearchHint,
+  L.demoCatalogAll,
+  L.demoCatalogNoResultsTitle,
+  L.demoCatalogNoResultsMessage,
+  L.demoCatalogCategoryFoundations,
+  L.demoCatalogCategoryControls,
+  L.demoCatalogCategoryDisplay,
+  L.demoCatalogCategoryScreens,
+  L.demoCatalogCategoryLayout,
+  L.demoCatalogCategoryNavigation,
+  L.demoCatalogCategoryOverlays,
+  L.demoCatalogCategoryForms,
+  L.demoCatalogThemeLight,
+  L.demoCatalogThemeDark,
+  L.demoCatalogThemeSystem,
+  L.demoTextTitle,
+  L.demoTextRegistryDescription,
+  L.demoTextScaleTitle,
+  L.demoTextColorsTitle,
+  L.demoTextTitleSample,
+  L.demoTextHeadingSample,
+  L.demoTextBodySample,
+  L.demoTextCaptionSample,
+  L.demoTextLabelSample,
+  L.demoTextPrimaryLabel,
+  L.demoTextSuccessLabel,
+  L.demoTextErrorLabel,
+  L.demoButtonTitle,
+  L.demoButtonRegistryDescription,
+  L.demoButtonVariantsTitle,
+  L.demoButtonStatesTitle,
+  L.demoButtonPrimaryLabel,
+  L.demoButtonSecondaryLabel,
+  L.demoButtonOutlineLabel,
+  L.demoButtonTextLabel,
+  L.demoButtonLoadingPrimary,
+  L.demoButtonLoadingOutline,
+  L.demoButtonDisabledLabel,
+  L.demoTextFieldTitle,
+  L.demoTextFieldRegistryDescription,
+  L.demoTextFieldBasicTitle,
+  L.demoTextFieldBasicHelper,
+  L.demoTextFieldNameHint,
+  L.demoTextFieldAffordancesTitle,
+  L.demoTextFieldPhoneHelper,
+  L.demoTextFieldReadOnlyTitle,
+  L.demoTextFieldReadOnlyHint,
+  L.demoTextFieldReadOnlyHelper,
+  L.demoTextFieldDisabledTitle,
+  L.demoTextFieldDisabledHelper,
+  L.demoTextFieldErrorTitle,
+  L.demoTextFieldEmailHint,
+  L.demoTextFieldEmailError,
+  L.demoThemeTitle,
+  L.demoThemeRegistryDescription,
+  L.demoThemeCurrentSectionTitle,
+  L.demoThemeCustomSectionTitle,
+  L.demoThemeSummarySectionTitle,
+  L.demoThemeCurrentCardTitle,
+  L.demoThemeCurrentCardDescription,
+  L.demoThemeCurrentStatus,
+  L.demoThemeCustomCardTitle,
+  L.demoThemeCustomCardDescription,
+  L.demoThemeCustomStatus,
+  L.demoThemeSummaryText,
+  L.demoThemeSummaryButton,
+  L.demoThemeSummaryField,
+  L.demoThemeTextGroupTitle,
+  L.demoThemeButtonGroupTitle,
+  L.demoThemeFieldGroupTitle,
+  L.demoThemeFieldHint,
+  L.demoThemeFieldHelper,
+  L.demoThemeFieldError,
+  L.demoAccountTitle,
+  L.demoAccountRegistryDescription,
+  L.demoAccountHeaderTitle,
+  L.demoAccountHeaderSubtitle,
+  L.demoAccountPurchasesTitle,
+  L.demoAccountOrdersTitle,
+  L.demoAccountOrdersSubtitle,
+  L.demoAccountRegisterTumblerTitle,
+  L.demoAccountPerksTitle,
+  L.demoAccountMissionsTitle,
+  L.demoAccountVouchersTitle,
+  L.demoAccountInviteTitle,
+  L.demoAccountInviteTrailing,
+  L.demoAccountHelpTitle,
+  L.demoAccountHelpSubtitle,
+  L.demoAccountHelpCentreTitle,
+  L.demoAccountFeedbackTitle,
+  L.demoAccountSettingsTitle,
+  L.demoAccountRewardsTitle,
+  L.demoAccountRewardsSubtitle,
+  L.demoAccountNavHome,
+  L.demoAccountNavMenu,
+  L.demoAccountNavGiftCard,
+  L.demoAccountNavRewards,
+  L.demoAccountNavAccount,
+];
+

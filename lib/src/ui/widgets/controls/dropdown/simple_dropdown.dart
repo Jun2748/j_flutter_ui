@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../resources/app_theme_tokens.dart';
-import '../../../resources/dimens.dart';
+import '../../../resources/input_decorations.dart';
 import '../../../resources/styles.dart';
 
 class SimpleDropdown<T> extends StatelessWidget {
@@ -46,103 +46,14 @@ class SimpleDropdown<T> extends StatelessWidget {
       style: resolvedTextStyle,
       iconEnabledColor: tokens.mutedText,
       iconDisabledColor: theme.disabledColor,
-      decoration: _buildDecoration(theme, tokens),
-    );
-  }
-
-  InputDecoration _buildDecoration(
-    ThemeData theme,
-    AppThemeTokens tokens,
-  ) {
-    final InputDecoration themedDecoration = InputDecoration(
-      labelText: labelText,
-      hintText: hintText,
-      helperText: helperText,
-      errorText: errorText,
-      enabled: enabled,
-    ).applyDefaults(theme.inputDecorationTheme);
-
-    return themedDecoration.copyWith(
-      filled: themedDecoration.filled ?? true,
-      fillColor: tokens.inputBackground,
-      contentPadding:
-          themedDecoration.contentPadding ?? JInsets.horizontal16Vertical12,
-      constraints:
-          themedDecoration.constraints ??
-          const BoxConstraints(minHeight: JHeights.input),
-      border: _resolveBorder(
-        themedDecoration.border,
-        color: tokens.inputBorderColor,
-      ),
-      enabledBorder: _resolveBorder(
-        themedDecoration.enabledBorder ?? themedDecoration.border,
-        color: tokens.inputBorderColor,
-      ),
-      focusedBorder: _resolveBorder(
-        themedDecoration.focusedBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: theme.colorScheme.primary,
-        width: JDimens.dp1_5,
-      ),
-      disabledBorder: _resolveBorder(
-        themedDecoration.disabledBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: tokens.dividerColor,
-      ),
-      errorBorder: _resolveBorder(
-        themedDecoration.errorBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: theme.colorScheme.error,
-      ),
-      focusedErrorBorder: _resolveBorder(
-        themedDecoration.focusedErrorBorder ??
-            themedDecoration.errorBorder ??
-            themedDecoration.enabledBorder ??
-            themedDecoration.border,
-        color: theme.colorScheme.error,
-        width: JDimens.dp1_5,
-      ),
-      hintStyle:
-          (themedDecoration.hintStyle ??
-                  theme.textTheme.bodyMedium ??
-                  JTextStyles.body2)
-              .copyWith(color: tokens.mutedText),
-      labelStyle:
-          (themedDecoration.labelStyle ??
-                  theme.textTheme.bodyMedium ??
-                  JTextStyles.body2)
-              .copyWith(color: tokens.mutedText),
-      helperStyle:
-          (themedDecoration.helperStyle ??
-                  theme.textTheme.labelSmall ??
-                  JTextStyles.label)
-              .copyWith(color: tokens.mutedText),
-      errorStyle:
-          (themedDecoration.errorStyle ??
-                  theme.textTheme.labelSmall ??
-                  JTextStyles.label)
-              .copyWith(color: theme.colorScheme.error),
-    );
-  }
-
-  OutlineInputBorder _resolveBorder(
-    InputBorder? base, {
-    required Color color,
-    double? width,
-  }) {
-    final OutlineInputBorder? outlineBase =
-        base is OutlineInputBorder ? base : null;
-
-    return OutlineInputBorder(
-      borderRadius:
-          outlineBase?.borderRadius ??
-          BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(
-        color: color,
-        width: width ?? outlineBase?.borderSide.width ?? JDimens.dp1,
+      decoration: JInputDecorations.dropdown(
+        theme,
+        tokens: tokens,
+        labelText: labelText,
+        hintText: hintText,
+        helperText: helperText,
+        errorText: errorText,
+        enabled: enabled,
       ),
     );
   }
