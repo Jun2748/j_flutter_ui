@@ -1,267 +1,747 @@
----
+## j_flutter_ui
 
-# 2. `README.md`
+`j_flutter_ui` is a reusable Flutter UI library (a lightweight design system) intended to be shared across multiple apps.
 
-```md
-# j_flutter_ui
-
-A reusable Flutter UI component library designed to standardize UI development across multiple applications.
-
-`j_flutter_ui` provides:
-- centralized design tokens
-- reusable UI primitives
-- composable widget patterns
-- form infrastructure
-- asset helpers
-- demo-driven documentation
-
-The goal is to behave like a lightweight design system, not just a collection of random widgets.
+It focuses on:
+- **Design tokens** (spacing, typography, sizes) so apps avoid “magic numbers”
+- **Themeable primitives** (thin wrappers over Material semantics)
+- **Composable patterns** built from primitives (menus, navigation, states, overlays)
+- **Form infrastructure** (builder + controller + validators)
+- **Asset helpers** (SVG/images/flags/illustrations)
+- **Demo-driven documentation** via the `example/` catalog app
 
 ---
 
-## Features
+## What’s included
 
-### Design tokens
-The library centralizes:
-- colors
-- spacing
-- dimensions
-- typography
-- insets
-- heights
+### Foundations (resources)
+- **Tokens**: `JGaps`, `JInsets`, `JDimens`, `JHeights`, `JIconSizes`, `JFontSizes`, `JLineHeights`, `JTextStyles`
+- **Theming**:
+  - `JAppTheme.lightTheme` / `JAppTheme.darkTheme` (ready-to-use `ThemeData`)
+  - `AppThemeTokens` (`ThemeExtension`) for library-owned semantic colors (card/input/divider/muted text, etc.)
 
-### Asset system
-The library provides:
-- icon asset constants
-- image helpers
-- flag helpers
-- illustration helpers
+### Widgets (public API)
+Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
+- **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
+- **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
+- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleDialog`, `SimpleSnackbar`
+- **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
+- **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
+- **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`
+- **Overlays**: `SimpleBottomSheet`
+- **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
+- **Typography**: `SimpleText`, `AppText`
+- **Flags & helpers**: `SimpleFlag`, `FlagUtils`, `CountryCodes`, `CurrencyCodes`
 
-### Reusable widgets
-The library includes:
-- buttons
-- text fields
-- cards
-- list items
-- chips
-- badges
-- banners
-- dialogs
-- bottom sheets
-- loading / empty / error states
-- navigation widgets
-- menu patterns
-
-### Form system
-The form layer includes:
-- `SimpleForm`
-- `SimpleFormBuilder`
-- `SimpleFormController`
-- validators
-- cross-field validators
-- backend error integration helpers
-
-### Example app
-The repository contains an example app that acts as:
-- a component catalog
-- a visual QA tool
-- a usage reference
+### Localization (library-owned copy)
+- `AppLocalizations` loads JSON translations from this package (`assets/localization/*.json`)
+- `AppLocalizationBridge` allows host apps to override any library key at runtime
+- `Intl.text(...)` is the string lookup used inside the library
 
 ---
 
-## Project Structure
+## Install
 
-Main code lives under:
+This repo is currently configured as non-published (`publish_to: none`). In an app, add it via **path** or **git**.
 
-```text
-lib/src/ui
-constants/
-resources/
-utils/
-widgets/
+### Path dependency (local development)
 
-constants
-
-Shared codes and constants.
-
-Examples:
-	•	country_codes.dart
-	•	currency_codes.dart
-
-resources
-
-Design tokens and asset helpers.
-
-Examples:
-	•	colors.dart
-	•	dimens.dart
-	•	styles.dart
-	•	theme.dart
-	•	images.dart
-	•	flags.dart
-	•	illustrations.dart
-	•	ui_icons.dart
-
-utils
-
-Reusable helper utilities.
-
-Examples:
-	•	flag_utils.dart
-
-widgets
-
-Reusable UI widgets grouped by category.
-
-Examples:
-	•	controls
-	•	display
-	•	feedback
-	•	forms
-	•	layout
-	•	navigation
-	•	overlays
-	•	states
-	•	typography
-
-⸻
-
-Installation
-
-Add the package to your Flutter app.
+```yaml
 dependencies:
   j_flutter_ui:
     path: ../j_flutter_ui
+```
 
-Usage
+### Git dependency
 
-Import the library through the public entry point only:
+```yaml
+dependencies:
+  j_flutter_ui:
+    git:
+      url: <your-repo-url>
+      ref: <tag-or-commit>
+```
 
-Design Tokens
+---
 
-Use centralized tokens instead of hardcoded styling.
-Avoid
-SizedBox(height: 13);
-EdgeInsets.all(15);
-TextStyle(fontSize: 17);
+## Import rule (important)
 
-Prefer
+Always import **only** the public entrypoint:
+
+```dart
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+```
+
+Avoid importing anything under `src/` from an app.
+
+---
+
+## Quick start
+
+### Use the built-in themes
+
+```dart
+MaterialApp(
+  theme: JAppTheme.lightTheme,
+  darkTheme: JAppTheme.darkTheme,
+  // ...
+);
+```
+
+### Customize via `AppThemeTokens` (recommended)
+
+`AppThemeTokens` is a `ThemeExtension` used as the library’s semantic override mechanism.
+
+```dart
+final base = JAppTheme.lightTheme;
+
+final theme = base.copyWith(
+  extensions: <ThemeExtension<dynamic>>[
+    ...?base.extensions.values,
+    const AppThemeTokens(
+      primary: Color(0xFF2563EB),
+      secondary: Color(0xFF06B6D4),
+      cardBackground: Color(0xFFFFFFFF),
+      cardBorderColor: Color(0xFFE5E7EB),
+      inputBackground: Color(0xFFF9FAFB),
+      inputBorderColor: Color(0xFFE5E7EB),
+      dividerColor: Color(0xFFE5E7EB),
+      mutedText: Color(0xFF6B7280),
+    ),
+  ],
+);
+```
+
+Inside widgets, tokens are read via:
+- `Theme.of(context).appThemeTokens`
+
+### Use tokens instead of magic numbers
+
+Avoid:
+
+```dart
+const SizedBox(height: 13);
+const EdgeInsets.all(15);
+const TextStyle(fontSize: 17);
+```
+
+Prefer:
+
+```dart
 JGaps.h16;
 JInsets.all16;
-JTextStyles.body;
+JTextStyles.body1;
+```
 
+---
 
-Asset Usage
+## Assets (SVG/images/flags/illustrations)
 
-Do not load SVGs directly in app code.
+This package bundles its assets under `assets/`. In your app you typically just use the helpers/constants:
 
-Preferred usage
+```dart
 Images.svg(UiIcons.search);
 Images.svg(Flags.malaysia);
 Images.svg(Illustrations.emptyState);
+```
 
-Flag usage
+Flags are **country-first**:
+
+```dart
 SimpleFlag.countryCode(CountryCodes.my);
 FlagUtils.flagByCountry(CountryCodes.my);
+```
 
-Flags are country-first. Currency mapping is only a convenience helper.
+---
 
-⸻
+## Localization setup (apps)
 
-Core Primitive Widgets
+### Add the delegate and supported locales
 
-Some of the main primitives include:
-	•	SimpleText
-	•	SimpleButton
-	•	SimpleCard
-	•	SimpleListItem
-	•	SimpleTextField
+`j_flutter_ui` currently ships `en` under `assets/localization/en.json`.
 
-Higher-level widgets should build on top of these primitives whenever possible.
+```dart
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:j_flutter_ui/j_flutter_ui.dart';
 
-⸻
+MaterialApp(
+  localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+    AppLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: AppLocalizations.supportedLocales,
+  // ...
+);
+```
 
-Forms
+### Override library strings from the host app
 
-The library includes a form system for building and controlling forms consistently.
+Use `AppLocalizationBridge.configure(...)` once at app startup to supply product/business copy (or to override any library key):
 
-Main classes
-	•	SimpleForm
-	•	SimpleFormBuilder
-	•	SimpleFormController
-	•	SimpleFormValidator
-	•	SimpleCrossFieldValidators
+```dart
+AppLocalizationBridge.configure((context, key, {args}) {
+  // Return null to fall back to the library JSON.
+  if (key == L.commonOkay) return 'OK';
+  return null;
+});
+```
 
-Example
-final controller = SimpleFormController();
-Use the controller-driven form system instead of ad-hoc field state where practical.
+The library resolves strings in this order:
+- caller override (widget parameter)
+- `AppLocalizationBridge`
+- library JSON (`assets/localization/<lang>.json`)
+- key fallback (returns the key string)
 
-⸻
+---
 
-Example App
+## Forms (overview)
 
-The example app lives under:
-example/lib
+If you’re building non-trivial forms, prefer the controller-driven form system:
+- `SimpleForm`
+- `SimpleFormBuilder`
+- `SimpleFormController`
+- `SimpleFormValidator` and `SimpleCrossFieldValidator`
 
-It contains demos for:
-	•	controls
-	•	forms
-	•	layout
-	•	navigation
-	•	states
-	•	feedback
-	•	assets
+---
 
-Use the example app to:
-	•	understand intended usage
-	•	test dark mode
-	•	validate visual consistency
-	•	review component composition
+## Example app (catalog / QA)
 
-⸻
+The demo catalog lives in `example/`. It’s the best way to:
+- discover what widgets exist and how they’re intended to be composed
+- visually QA light/dark themes
+- verify token overrides
 
-Rules for Extending the Library
+Run it like a normal Flutter app:
 
-When adding new components:
-	1.	Prefer composition over duplication
-	2.	Use design tokens instead of magic numbers
-	3.	Follow existing naming conventions
-	4.	Keep primitives thin
-	5.	Add or update demo pages
-	6.	Export new public APIs through j_flutter_ui.dart
+```bash
+cd example
+flutter run
+```
 
-⸻
+---
 
-Library Philosophy
+## Project structure (for contributors)
 
-This project is intended to grow as a reusable UI platform.
+```text
+lib/
+  j_flutter_ui.dart        # public API exports (consumer entrypoint)
+  src/ui/
+    constants/             # country/currency codes, etc.
+    localization/          # JSON localization + override bridge
+    resources/             # tokens, theme infrastructure, asset helpers
+    utils/                 # small reusable utilities
+    widgets/               # primitives + composed patterns
+example/                   # catalog app
+assets/                    # svg/png/jpg + localization json
+test/                      # regression tests (fallbacks, theming, rendering)
+```
 
-The focus is on:
-	•	composable primitives
-	•	predictable APIs
-	•	token-based styling
-	•	reusable patterns
-	•	demo-backed development
+---
 
-The library should remain:
-	•	clean
-	•	maintainable
-	•	scalable
-	•	app-agnostic
+## Contribution guidelines (high level)
 
-⸻
+- **Keep it app-agnostic**: no app routing/state/business models inside the library.
+- **Prefer composition**: patterns should reuse primitives; avoid duplicating styling logic.
+- **Theming contract**: resolve styles as widget parameter → `AppThemeTokens` → Material semantics → fallback constants.
+- **Localization-safe**: no hardcoded business copy; use keys and overrides; don’t concatenate translated fragments.
 
-Versioning
+## j_flutter_ui
 
-Semantic versioning should be used.
+`j_flutter_ui` is a reusable Flutter UI library (a lightweight design system) intended to be shared across multiple apps.
 
-General guideline:
-0.x → evolving architecture
-1.0 → stable API
+It focuses on:
+- **Design tokens** (spacing, typography, sizes) so apps avoid “magic numbers”
+- **Themeable primitives** (thin wrappers over Material semantics)
+- **Composable patterns** built from primitives (menus, navigation, states, overlays)
+- **Form infrastructure** (builder + controller + validators)
+- **Asset helpers** (SVG/images/flags/illustrations)
+- **Demo-driven documentation** via the `example/` catalog app
 
-Example roadmap:
-0.1.0 → core widgets and asset system
-0.2.0 → form system
-0.3.0 → navigation and menu patterns
-0.4.0 → scenario demos and stabilization
-1.0.0 → stable public API
+---
+
+## What’s included
+
+### Foundations (resources)
+- **Tokens**: `JGaps`, `JInsets`, `JDimens`, `JHeights`, `JIconSizes`, `JFontSizes`, `JLineHeights`, `JTextStyles`
+- **Theming**:
+  - `JAppTheme.lightTheme` / `JAppTheme.darkTheme` (ready-to-use `ThemeData`)
+  - `AppThemeTokens` (`ThemeExtension`) for library-owned semantic colors (card/input/divider/muted text, etc.)
+
+### Widgets (public API)
+Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
+- **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
+- **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
+- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleDialog`, `SimpleSnackbar`
+- **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
+- **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
+- **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`
+- **Overlays**: `SimpleBottomSheet`
+- **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
+- **Typography**: `SimpleText`, `AppText`
+- **Flags & helpers**: `SimpleFlag`, `FlagUtils`, `CountryCodes`, `CurrencyCodes`
+
+### Localization (library-owned copy)
+- `AppLocalizations` loads JSON translations from this package (`assets/localization/*.json`)
+- `AppLocalizationBridge` allows host apps to override any library key at runtime
+- `Intl.text(...)` is the string lookup used inside the library
+
+---
+
+## Install
+
+This repo is currently configured as non-published (`publish_to: none`). In an app, add it via **path** or **git**.
+
+### Path dependency (local development)
+
+```yaml
+dependencies:
+  j_flutter_ui:
+    path: ../j_flutter_ui
+```
+
+### Git dependency
+
+```yaml
+dependencies:
+  j_flutter_ui:
+    git:
+      url: <your-repo-url>
+      ref: <tag-or-commit>
+```
+
+---
+
+## Import rule (important)
+
+Always import **only** the public entrypoint:
+
+```dart
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+```
+
+Avoid importing anything under `src/` from an app.
+
+---
+
+## Quick start
+
+### Use the built-in themes
+
+```dart
+MaterialApp(
+  theme: JAppTheme.lightTheme,
+  darkTheme: JAppTheme.darkTheme,
+  // ...
+);
+```
+
+### Customize via `AppThemeTokens` (recommended)
+
+`AppThemeTokens` is a `ThemeExtension` used as the library’s semantic override mechanism.
+
+```dart
+final base = JAppTheme.lightTheme;
+
+final theme = base.copyWith(
+  extensions: <ThemeExtension<dynamic>>[
+    ...?base.extensions.values,
+    const AppThemeTokens(
+      primary: Color(0xFF2563EB),
+      secondary: Color(0xFF06B6D4),
+      cardBackground: Color(0xFFFFFFFF),
+      cardBorderColor: Color(0xFFE5E7EB),
+      inputBackground: Color(0xFFF9FAFB),
+      inputBorderColor: Color(0xFFE5E7EB),
+      dividerColor: Color(0xFFE5E7EB),
+      mutedText: Color(0xFF6B7280),
+    ),
+  ],
+);
+```
+
+Inside widgets, tokens are read via:
+- `Theme.of(context).appThemeTokens`
+
+### Use tokens instead of magic numbers
+
+Avoid:
+
+```dart
+const SizedBox(height: 13);
+const EdgeInsets.all(15);
+const TextStyle(fontSize: 17);
+```
+
+Prefer:
+
+```dart
+JGaps.h16;
+JInsets.all16;
+JTextStyles.body1;
+```
+
+---
+
+## Assets (SVG/images/flags/illustrations)
+
+This package bundles its assets under `assets/`. In your app you typically just use the helpers/constants:
+
+```dart
+Images.svg(UiIcons.search);
+Images.svg(Flags.malaysia);
+Images.svg(Illustrations.emptyState);
+```
+
+Flags are **country-first**:
+
+```dart
+SimpleFlag.countryCode(CountryCodes.my);
+FlagUtils.flagByCountry(CountryCodes.my);
+```
+
+---
+
+## Localization setup (apps)
+
+### Add the delegate and supported locales
+
+`j_flutter_ui` currently ships `en` under `assets/localization/en.json`.
+
+```dart
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+
+MaterialApp(
+  localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+    AppLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: AppLocalizations.supportedLocales,
+  // ...
+);
+```
+
+### Override library strings from the host app
+
+Use `AppLocalizationBridge.configure(...)` once at app startup to supply product/business copy (or to override any library key):
+
+```dart
+AppLocalizationBridge.configure((context, key, {args}) {
+  // Return null to fall back to the library JSON.
+  if (key == L.commonOkay) return 'OK';
+  return null;
+});
+```
+
+The library resolves strings in this order:
+- caller override (widget parameter)
+- `AppLocalizationBridge`
+- library JSON (`assets/localization/<lang>.json`)
+- key fallback (returns the key string)
+
+---
+
+## Forms (overview)
+
+If you’re building non-trivial forms, prefer the controller-driven form system:
+- `SimpleForm`
+- `SimpleFormBuilder`
+- `SimpleFormController`
+- `SimpleFormValidator` and `SimpleCrossFieldValidator`
+
+---
+
+## Example app (catalog / QA)
+
+The demo catalog lives in `example/`. It’s the best way to:
+- discover what widgets exist and how they’re intended to be composed
+- visually QA light/dark themes
+- verify token overrides
+
+Run it like a normal Flutter app:
+
+```bash
+cd example
+flutter run
+```
+
+---
+
+## Project structure (for contributors)
+
+```text
+lib/
+  j_flutter_ui.dart        # public API exports (consumer entrypoint)
+  src/ui/
+    constants/             # country/currency codes, etc.
+    localization/          # JSON localization + override bridge
+    resources/             # tokens, theme infrastructure, asset helpers
+    utils/                 # small reusable utilities
+    widgets/               # primitives + composed patterns
+example/                   # catalog app
+assets/                    # svg/png/jpg + localization json
+test/                      # regression tests (fallbacks, theming, rendering)
+```
+
+---
+
+## Contribution guidelines (high level)
+
+- **Keep it app-agnostic**: no app routing/state/business models inside the library.
+- **Prefer composition**: patterns should reuse primitives; avoid duplicating styling logic.
+- **Theming contract**: resolve styles as widget parameter → `AppThemeTokens` → Material semantics → fallback constants.
+- **Localization-safe**: no hardcoded business copy; use keys and overrides; don’t concatenate translated fragments.
+
+## j_flutter_ui
+
+`j_flutter_ui` is a reusable Flutter UI library (a lightweight design system) intended to be shared across multiple apps.
+
+It focuses on:
+- **Design tokens** (spacing, typography, sizes) so apps avoid “magic numbers”
+- **Themeable primitives** (thin wrappers over Material semantics)
+- **Composable patterns** built from primitives (menus, navigation, states, overlays)
+- **Form infrastructure** (builder + controller + validators)
+- **Asset helpers** (SVG/images/flags/illustrations)
+- **Demo-driven documentation** via the `example/` catalog app
+
+---
+
+## What’s included
+
+### Foundations (resources)
+- **Tokens**: `JGaps`, `JInsets`, `JDimens`, `JHeights`, `JIconSizes`, `JFontSizes`, `JLineHeights`, `JTextStyles`
+- **Theming**:
+  - `JAppTheme.lightTheme` / `JAppTheme.darkTheme` (ready-to-use `ThemeData`)
+  - `AppThemeTokens` (`ThemeExtension`) for library-owned semantic colors (card/input/divider/muted text, etc.)
+
+### Widgets (public API)
+Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
+- **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
+- **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
+- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleDialog`, `SimpleSnackbar`
+- **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
+- **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
+- **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`
+- **Overlays**: `SimpleBottomSheet`
+- **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
+- **Typography**: `SimpleText`, `AppText`
+- **Flags & helpers**: `SimpleFlag`, `FlagUtils`, `CountryCodes`, `CurrencyCodes`
+
+### Localization (library-owned copy)
+- `AppLocalizations` loads JSON translations from this package (`assets/localization/*.json`)
+- `AppLocalizationBridge` allows host apps to override any library key at runtime
+- `Intl.text(...)` is the string lookup used inside the library
+
+---
+
+## Install
+
+This repo is currently configured as non-published (`publish_to: none`). In an app, add it via **path** or **git**.
+
+### Path dependency (local development)
+
+```yaml
+dependencies:
+  j_flutter_ui:
+    path: ../j_flutter_ui
+```
+
+### Git dependency
+
+```yaml
+dependencies:
+  j_flutter_ui:
+    git:
+      url: <your-repo-url>
+      ref: <tag-or-commit>
+```
+
+---
+
+## Import rule (important)
+
+Always import **only** the public entrypoint:
+
+```dart
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+```
+
+Avoid importing anything under `src/` from an app.
+
+---
+
+## Quick start
+
+### Use the built-in themes
+
+```dart
+MaterialApp(
+  theme: JAppTheme.lightTheme,
+  darkTheme: JAppTheme.darkTheme,
+  // ...
+);
+```
+
+### Customize via `AppThemeTokens` (recommended)
+
+`AppThemeTokens` is a `ThemeExtension` used as the library’s semantic override mechanism.
+
+```dart
+final base = JAppTheme.lightTheme;
+
+final theme = base.copyWith(
+  extensions: <ThemeExtension<dynamic>>[
+    ...?base.extensions.values,
+    const AppThemeTokens(
+      primary: Color(0xFF2563EB),
+      secondary: Color(0xFF06B6D4),
+      cardBackground: Color(0xFFFFFFFF),
+      cardBorderColor: Color(0xFFE5E7EB),
+      inputBackground: Color(0xFFF9FAFB),
+      inputBorderColor: Color(0xFFE5E7EB),
+      dividerColor: Color(0xFFE5E7EB),
+      mutedText: Color(0xFF6B7280),
+    ),
+  ],
+);
+```
+
+Inside widgets, tokens are read via:
+- `Theme.of(context).appThemeTokens`
+
+### Use tokens instead of magic numbers
+
+Avoid:
+
+```dart
+const SizedBox(height: 13);
+const EdgeInsets.all(15);
+const TextStyle(fontSize: 17);
+```
+
+Prefer:
+
+```dart
+JGaps.h16;
+JInsets.all16;
+JTextStyles.body1;
+```
+
+---
+
+## Assets (SVG/images/flags/illustrations)
+
+This package bundles its assets under `assets/`. In your app you typically just use the helpers/constants:
+
+```dart
+Images.svg(UiIcons.search);
+Images.svg(Flags.malaysia);
+Images.svg(Illustrations.emptyState);
+```
+
+Flags are **country-first**:
+
+```dart
+SimpleFlag.countryCode(CountryCodes.my);
+FlagUtils.flagByCountry(CountryCodes.my);
+```
+
+---
+
+## Localization setup (apps)
+
+### Add the delegate and supported locales
+
+`j_flutter_ui` currently ships `en` under `assets/localization/en.json`.
+
+```dart
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:j_flutter_ui/j_flutter_ui.dart';
+
+MaterialApp(
+  localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+    AppLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: AppLocalizations.supportedLocales,
+  // ...
+);
+```
+
+### Override library strings from the host app
+
+Use `AppLocalizationBridge.configure(...)` once at app startup to supply product/business copy (or to override any library key):
+
+```dart
+AppLocalizationBridge.configure((context, key, {args}) {
+  // Return null to fall back to the library JSON.
+  if (key == L.commonOkay) return 'OK';
+  return null;
+});
+```
+
+The library resolves strings in this order:
+- caller override (widget parameter)
+- `AppLocalizationBridge`
+- library JSON (`assets/localization/<lang>.json`)
+- key fallback (returns the key string)
+
+---
+
+## Forms (overview)
+
+If you’re building non-trivial forms, prefer the controller-driven form system:
+- `SimpleForm`
+- `SimpleFormBuilder`
+- `SimpleFormController`
+- `SimpleFormValidator` and `SimpleCrossFieldValidator`
+
+---
+
+## Example app (catalog / QA)
+
+The demo catalog lives in `example/`. It’s the best way to:
+- discover what widgets exist and how they’re intended to be composed
+- visually QA light/dark themes
+- verify token overrides
+
+Run it like a normal Flutter app:
+
+```bash
+cd example
+flutter run
+```
+
+---
+
+## Project structure (for contributors)
+
+```text
+lib/
+  j_flutter_ui.dart        # public API exports (consumer entrypoint)
+  src/ui/
+    constants/             # country/currency codes, etc.
+    localization/          # JSON localization + override bridge
+    resources/             # tokens, theme infrastructure, asset helpers
+    utils/                 # small reusable utilities
+    widgets/               # primitives + composed patterns
+example/                   # catalog app
+assets/                    # svg/png/jpg + localization json
+test/                      # regression tests (fallbacks, theming, rendering)
+```
+
+---
+
+## Contribution guidelines (high level)
+
+- **Keep it app-agnostic**: no app routing/state/business models inside the library.
+- **Prefer composition**: patterns should reuse primitives; avoid duplicating styling logic.
+- **Theming contract**: resolve styles as widget parameter → `AppThemeTokens` → Material semantics → fallback constants.
+- **Localization-safe**: no hardcoded business copy; use keys and overrides; don’t concatenate translated fragments.
+ 
