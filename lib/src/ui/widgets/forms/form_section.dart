@@ -22,7 +22,8 @@ class FormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppThemeTokens tokens = AppThemeTokens.resolve(Theme.of(context));
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
     final bool hasDescription =
         description != null && description!.trim().isNotEmpty;
@@ -43,10 +44,7 @@ class FormSection extends StatelessWidget {
             if (hasDescription) JGaps.h8 else JGaps.h16,
           ],
           if (hasDescription) ...<Widget>[
-            SimpleText.caption(
-              text: description!,
-              color: tokens.mutedText,
-            ),
+            SimpleText.caption(text: description!, color: tokens.mutedText),
             JGaps.h16,
           ],
           child,

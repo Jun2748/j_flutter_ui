@@ -14,7 +14,7 @@ class SimpleLoadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool hasMessage = message != null && message!.trim().isNotEmpty;
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
 
     return Center(
       child: Padding(

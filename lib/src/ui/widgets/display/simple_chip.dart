@@ -48,7 +48,7 @@ class SimpleChip extends StatelessWidget {
   }
 
   _ChipColors _resolveColors(ThemeData theme) {
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);

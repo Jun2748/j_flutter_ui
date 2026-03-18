@@ -61,7 +61,7 @@ class SimpleDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color textPrimary = theme.colorScheme.onSurface;
     final Color textSecondary = tokens.mutedText;
     final bool hasTitle = title != null && title!.trim().isNotEmpty;

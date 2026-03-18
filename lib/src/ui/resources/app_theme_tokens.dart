@@ -21,20 +21,44 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
         : JColors.lightPalette;
 
     return AppThemeTokens(
-      primary: palette['primary']!,
-      secondary: palette['info']!,
-      cardBackground: palette['card']!,
-      cardBorderColor: palette['border']!,
-      inputBackground: palette['card']!,
-      inputBorderColor: palette['border']!,
-      dividerColor: palette['divider']!,
-      mutedText: palette['textSecondary']!,
+      primary: palette[PaletteConst.primary] ?? JColors.primaryBase,
+      secondary: palette[PaletteConst.info] ?? JColors.infoBase,
+      cardBackground: palette[PaletteConst.card] ?? JColors.white,
+      cardBorderColor: palette[PaletteConst.border] ?? JColors.neutral200,
+      inputBackground: palette[PaletteConst.card] ?? JColors.white,
+      inputBorderColor: palette[PaletteConst.border] ?? JColors.neutral200,
+      dividerColor: palette[PaletteConst.divider] ?? JColors.neutral200,
+      mutedText: palette[PaletteConst.textSecondary] ?? JColors.neutral600,
     );
   }
 
-  static AppThemeTokens resolve(ThemeData theme) {
-    return theme.extension<AppThemeTokens>() ??
-        AppThemeTokens.fallback(brightness: theme.brightness);
+  factory AppThemeTokens.resolve(ThemeData theme) {
+    final AppThemeTokens? extension = theme.extension<AppThemeTokens>();
+    if (extension != null) {
+      return extension;
+    }
+
+    return AppThemeTokens(
+      primary: theme.colorScheme.primary,
+      secondary: theme.colorScheme.secondary,
+      cardBackground:
+          theme.cardTheme.color ?? theme.colorScheme.surfaceContainerHighest,
+      cardBorderColor:
+          _shapeBorderColor(theme.cardTheme.shape) ?? theme.colorScheme.outline,
+      inputBackground:
+          theme.inputDecorationTheme.fillColor ??
+          theme.cardTheme.color ??
+          theme.colorScheme.surface,
+      inputBorderColor:
+          _inputBorderColor(theme.inputDecorationTheme.enabledBorder) ??
+          _inputBorderColor(theme.inputDecorationTheme.border) ??
+          theme.colorScheme.outline,
+      dividerColor: theme.dividerTheme.color ?? theme.dividerColor,
+      mutedText:
+          theme.textTheme.bodyMedium?.color ??
+          theme.textTheme.labelSmall?.color ??
+          theme.colorScheme.onSurfaceVariant,
+    );
   }
 
   final Color primary;
@@ -89,9 +113,26 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
       inputBorderColor:
           Color.lerp(inputBorderColor, other.inputBorderColor, t) ??
           inputBorderColor,
-      dividerColor:
-          Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
+      dividerColor: Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
       mutedText: Color.lerp(mutedText, other.mutedText, t) ?? mutedText,
     );
   }
+
+  static Color? _shapeBorderColor(ShapeBorder? shape) {
+    if (shape is OutlinedBorder && shape.side.style != BorderStyle.none) {
+      return shape.side.color;
+    }
+    return null;
+  }
+
+  static Color? _inputBorderColor(InputBorder? border) {
+    if (border == null || border.borderSide.style == BorderStyle.none) {
+      return null;
+    }
+    return border.borderSide.color;
+  }
+}
+
+extension AppThemeTokensThemeDataX on ThemeData {
+  AppThemeTokens get appThemeTokens => AppThemeTokens.resolve(this);
 }

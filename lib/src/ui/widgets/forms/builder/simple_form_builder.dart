@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../localization/intl.dart';
 import '../../../localization/l.dart';
+import '../../../resources/dimens.dart';
 import '../../controls/buttons/simple_button.dart';
 import '../../controls/dropdown/simple_dropdown.dart';
 import '../../controls/inputs/simple_checkbox.dart';
@@ -28,7 +29,7 @@ class SimpleFormBuilder extends StatefulWidget {
     this.onChanged,
     this.onSubmit,
     this.padding,
-    this.fieldSpacing = 16,
+    this.fieldSpacing = JDimens.dp16,
     this.showSubmitButton = false,
     this.submitLabel = '',
     this.clearBackendErrorsOnSubmit = true,
@@ -398,9 +399,12 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             prefix: field.prefix,
             suffix: field.suffix,
             keyboardType: field.keyboardType,
+            textInputAction: field.textInputAction,
+            autofillHints: field.autofillHints,
             obscureText: field.obscureText,
             enabled: effectiveEnabled,
             onChanged: (String text) => _updateValue(field, text),
+            onFieldSubmitted: field.onFieldSubmitted,
           ),
         );
         break;
@@ -470,7 +474,10 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
               for (int index = 0; index < (field.options?.length ?? 0); index++)
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: index == (field.options!.length - 1) ? 0 : 8,
+                    bottom:
+                        index == (field.options!.length - 1)
+                        ? JDimens.dp0
+                        : JDimens.dp8,
                   ),
                   child: SimpleRadio<dynamic>(
                     value: field.options![index],

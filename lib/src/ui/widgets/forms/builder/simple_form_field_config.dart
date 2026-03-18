@@ -18,6 +18,9 @@ class SimpleFormFieldConfig<T> {
     this.enabled = true,
     this.obscureText = false,
     this.keyboardType,
+    this.textInputAction,
+    this.autofillHints,
+    this.onFieldSubmitted,
     this.items,
     this.options,
     this.initialValue,
@@ -40,6 +43,9 @@ class SimpleFormFieldConfig<T> {
     bool enabled = true,
     bool obscureText = false,
     TextInputType? keyboardType,
+    TextInputAction? textInputAction,
+    Iterable<String>? autofillHints,
+    ValueChanged<String>? onFieldSubmitted,
     String? initialValue,
     String? Function(dynamic value)? validator,
     List<SimpleCrossFieldValidator> crossValidators =
@@ -60,6 +66,9 @@ class SimpleFormFieldConfig<T> {
           enabled: enabled,
           obscureText: obscureText,
           keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          autofillHints: autofillHints,
+          onFieldSubmitted: onFieldSubmitted,
           initialValue: initialValue,
           validator: validator,
           crossValidators: crossValidators,
@@ -270,6 +279,9 @@ class SimpleFormFieldConfig<T> {
   final bool enabled;
   final bool obscureText;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
+  final ValueChanged<String>? onFieldSubmitted;
   final List<DropdownMenuItem<T>>? items;
   final List<T>? options;
   final T? initialValue;

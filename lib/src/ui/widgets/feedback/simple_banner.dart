@@ -184,7 +184,7 @@ class SimpleBanner extends StatelessWidget {
   }
 
   _SimpleBannerColors _resolveColors(ThemeData theme) {
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);

@@ -1,133 +1,90 @@
-# j_flutter_ui Agent Rules
+# j_flutter_ui — Agent & Maintainer Rules
 
 Read this file before changing code.
 
 ## Purpose
 - `j_flutter_ui` is a reusable Flutter UI library and design system.
-- Keep it app-agnostic, production-grade, readable, maintainable, and reusable across multiple apps.
-- Do not solve library debt by changing consumer app code.
+- It must remain **app-agnostic**, **themeable**, **localization-safe**, and **stable** for multiple downstream apps.
+- Do not “fix” library issues by changing consumer app code.
 
-## Core Rules
+## Non‑negotiables
+- **Public API stability**: avoid breaking changes; avoid renames/moves of exported symbols unless explicitly planned.
+- **Focused diffs**: no drive-by refactors in the same change.
+- **No parallel theme systems**: use Flutter-native `ThemeData` + `ThemeExtension`.
+- **Null-safety discipline**: avoid `!` unless the guarantee is obvious and local.
 
-- New and modified code must follow these rules.
-- When touching legacy code, migrate it incrementally toward these rules.
-- Do not add abstraction layers unless they clearly improve maintainability.
-- If a change makes the code harder to read, it is incorrect.
-- Preserve public API stability whenever possible.
-- Do not rename or move public files/classes without strong reason.
-- Avoid unrelated refactors in the same change.
+## Repo map (mental model)
+- `lib/j_flutter_ui.dart`: the public entrypoint. Anything exported here is public API.
+- `lib/src/ui/resources/`: tokens (`JDimens`, `JInsets`, `JTextStyles`), `JAppTheme`, `AppThemeTokens`.
+- `lib/src/ui/widgets/`: primitives + patterns.
+- `lib/src/ui/localization/`: library JSON localization + app override bridge.
+- `example/`: demo catalog and QA surface. Keep it working.
+- `test/`: regression suite. Add tests for risky theming/null behavior.
 
-## Theme And Style Resolution
+## Widget layering (keep it enforceable)
+- **Primitives**: single responsibility, thin wrappers around Material semantics.
+  - Examples: `SimpleText`, `SimpleButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
+- **Patterns**: compose primitives; do not rebuild styling logic from scratch.
+  - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`.
 
+## Theming contract (what downstream apps rely on)
 Use Flutter-native theming only.
 
-- Use `ThemeData` and `ThemeExtension`.
-- Do not build wrapper-based or parallel theme systems.
-- Every visual widget must resolve values in this order:
-  `widget prop -> host theme -> library fallback`
-- Prefer semantic tokens and theme values over raw styling.
-- Do not hardcode widget colors except clearly harmless constants such as `Colors.transparent`.
-- Do not add new `JColors.getColor` usage. It is compatibility-only.
-- Keep components dark-mode safe and theme-aware.
+### Resolution order (default)
+Every visual value should resolve in this order:
+`explicit widget parameter -> AppThemeTokens (ThemeExtension) -> Material semantic theme source -> final fallback constants`
 
-## Spacing, Dimensions, And Tokens
+Rationale: downstream apps typically customize this library by providing `AppThemeTokens`. Material component themes remain valid, but **tokens are the primary semantic override mechanism** for this design system.
 
-- Use `JGaps` for fixed spacing between elements.
-- Use `JInsets` for padding.
-- Use `JDimens`, `JHeights`, `JIconSizes`, `JFontSizes`, and `JLineHeights` for shared sizes.
-- Do not use `Gap`.
-- Do not use raw `SizedBox(height/width)` or raw `EdgeInsets` when an existing shared value fits.
-- Do not use magic numbers for shared spacing, radius, height, border width, icon size, or text size.
-- Add a shared token only if it is reused, part of the system scale, or should stay consistent across widgets.
-- Keep one-off or highly specific values local.
-- Do not put colors, alpha values, durations, or one-off animation values into `JDimens`.
+### Use Material semantics when
+- The value is a standard Material semantic pairing.
+- Examples: `theme.colorScheme.error`, `theme.colorScheme.onSurface`, `theme.textTheme`, `theme.appBarTheme`, `theme.iconTheme`.
 
-## Widget Layering
+### Use `AppThemeTokens` when
+- The library owns the semantic styling (surfaces, borders, muted text, input fills).
+- Avoid duplicating all of `ColorScheme`/`TextTheme` into tokens.
 
-Use the existing layering model.
+### Allowed constants
+- `Colors.transparent` and similar “harmless constants” are fine.
+- Other hardcoded colors should be a last-resort fallback only.
 
-- Primitives stay thin: `SimpleText`, `SimpleButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
-- Patterns compose primitives: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`.
-- Do not create a new pattern widget if existing primitives already solve the problem.
-- Do not turn primitives into multi-responsibility widgets.
+### Theme safety rules
+- Do not assume `ThemeData` subfields are non-null.
+- Prefer “resolve once at the top of `build`” to keep widget code readable.
 
-## Text And Localization
+## Spacing & sizing rules
+- Use **`JGaps`** for fixed gaps.
+- Use **`JInsets`** for padding.
+- Use **`JDimens` / `JHeights` / `JIconSizes` / `JFontSizes` / `JLineHeights`** for shared scales.
+- Avoid magic numbers for shared spacing/radius/heights/border widths/icon sizes/font sizes.
+- Only add new shared tokens if reused or system-scale relevant.
 
-- `SimpleText` is the default text widget.
-- `AppText` is for library-owned text that needs localization, HTML, semantics, or auto-fit.
-- Use raw `Text` only when required by Flutter or a third-party API.
-- Resolve text style from host theme first, then library fallback.
-- Do not hide truncation defaults. If text is capped, set `maxLines` and `overflow` explicitly.
-- Do not hardcode user-facing strings in reusable widgets.
-- The host app owns app/business copy.
-- The library may own only generic reusable copy and demo copy.
-- Localization resolution should prefer:
-  `app override -> library localization -> key fallback`
-- Do not concatenate translated fragments into sentences.
+## Text & localization rules
+- `SimpleText` is the default.
+- `AppText` is for library-owned text that needs localization, HTML, semantics label, or auto-fit.
+- Use raw `Text` only when required by Flutter/third-party APIs or when you must inherit Material component text styling.
+- If truncation is possible, set `maxLines` and `overflow` explicitly.
+- **Do not hardcode app/business copy** in reusable widgets.
 
-## Assets
+### Localization resolution order
+Library-owned copy must resolve:
+`app override (AppLocalizationBridge) -> library JSON localization -> key fallback -> safe plain-string fallback`
 
-- Use centralized asset helpers and constants.
-- Do not hardcode asset paths in widgets.
-- Prefer helpers such as `Images`, `UiIcons`, `Flags`, and `SimpleFlag`.
-- Flags are country-first:
-  `countryCode -> flag`
-  `currencyCode -> countryCode -> flag`
+Never concatenate translated fragments into a sentence.
 
-## Forms
+## Forms (core infrastructure)
+- Keep separation between builder/controller/validation/utilities.
+- Preserve app-level override capability for backend errors.
+- Avoid making the form layer “too smart” (no hidden flows).
 
-The form system is core library infrastructure.
+## Review workflow (what to do before you edit)
+- Identify whether you’re touching **public API** (exported via `j_flutter_ui.dart`).
+- Check for existing primitives/patterns before adding new ones.
+- Ensure theming and tokens are resolved predictably.
+- Add/adjust tests when behavior changes (especially fallbacks and null cases).
 
-- Preserve clean separation between builder, controller, validation, and utilities.
-- Keep validation predictable.
-- Avoid overengineering form flows.
-- Maintain app-level override capability for backend errors.
-
-## Example App
-
-The example app is required.
-
-- Use it as documentation, QA, dark mode verification, and API validation.
-- When adding or materially changing reusable widgets or systems, add or update demos when useful.
-- Keep demos simple and educational.
-- Prefer showcase clarity over fancy behavior.
-
-## Export And Consumption Rules
-
-- Consumer apps should import `package:j_flutter_ui/j_flutter_ui.dart`.
-- Do not rely on deep `src/...` imports from consumer apps.
-- New public library APIs must be exported through `j_flutter_ui.dart`.
-
-## Before Adding Or Changing Code
-
-Before adding a new widget, ask:
-- Can this be built from existing primitives?
-- Is it reusable across multiple screens/apps?
-- Is it system-level or still feature-specific?
-
-Before modifying code, check:
-- Does this break the public API?
-- Does this bypass theming or shared tokens?
-- Does this duplicate an existing pattern?
-- Does this need a demo update?
-- Does this still work in dark mode?
-
-## Change Style
-
-- Keep diffs focused and compile-friendly.
-- Favor explicit naming and predictable fallback logic.
-- Normalize nullable values once near the top of `build`.
-- Avoid `!` unless the guarantee is obvious and safe.
-- Never assume theme subfields are non-null without fallback.
-
-## Addendum
-
-- Keep the existing content in this file intact unless the task explicitly asks to replace it.
-- Use [`THEMING_RULEBOOK.md`] as the short reference for the final approved theming and localization standard.
-- When deciding between styling sources, prefer:
-  `explicit widget parameter -> Material semantic theme source when correct -> AppThemeTokens -> final fallback constants`
-- Treat these labels consistently in reviews and follow-up work:
-  `fully migrated`
-  `partially migrated`
-  `acceptable fallback`
-  `intentional Material semantic usage`
+## Labels for partial migrations (use consistently in PRs)
+- `fully migrated`
+- `partially migrated`
+- `acceptable fallback`
+- `intentional Material semantic usage`

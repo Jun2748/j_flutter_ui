@@ -26,7 +26,8 @@ class SimpleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double resolvedRadius = radius ?? JDimens.dp16;
-    final AppThemeTokens tokens = AppThemeTokens.resolve(Theme.of(context));
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color resolvedBackgroundColor =
         backgroundColor ?? tokens.cardBackground;
     final Color resolvedBorderColor = borderColor ?? tokens.cardBorderColor;

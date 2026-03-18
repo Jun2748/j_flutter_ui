@@ -33,7 +33,7 @@ class SimpleEmptyState extends StatelessWidget {
         actionLabel!.trim().isNotEmpty &&
         onActionPressed != null;
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
 
     return Center(
       child: Padding(
@@ -68,7 +68,7 @@ class SimpleEmptyState extends StatelessWidget {
 
   Widget _buildIcon(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final IconData resolvedIcon = icon ?? Icons.inbox_outlined;
     final Color primary = tokens.primary;
     final Color background = Color.alphaBlend(
@@ -79,10 +79,7 @@ class SimpleEmptyState extends StatelessWidget {
     return Container(
       width: JDimens.dp64,
       height: JDimens.dp64,
-      decoration: BoxDecoration(
-        color: background,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: background, shape: BoxShape.circle),
       alignment: Alignment.center,
       child: Icon(resolvedIcon, size: JIconSizes.xl, color: primary),
     );

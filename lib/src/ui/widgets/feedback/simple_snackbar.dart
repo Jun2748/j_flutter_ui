@@ -109,7 +109,7 @@ class SimpleSnackbar {
     _SimpleSnackbarVariant variant,
   ) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);

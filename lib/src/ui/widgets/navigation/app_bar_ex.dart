@@ -41,7 +41,7 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Widget? resolvedLeading = _buildLeading(context);
     final Widget? resolvedTrailing = _buildTrailing();
     final EdgeInsetsGeometry resolvedPadding =

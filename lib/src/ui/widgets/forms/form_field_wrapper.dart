@@ -29,7 +29,7 @@ class FormFieldWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final bool hasTextLabel = label != null && label!.trim().isNotEmpty;
     final Widget? resolvedLabel =
         labelWidget ??
@@ -67,10 +67,7 @@ class FormFieldWrapper extends StatelessWidget {
           helper!,
         ] else if (hasHelperText) ...<Widget>[
           JGaps.h8,
-          SimpleText.caption(
-            text: helperText!,
-            color: tokens.mutedText,
-          ),
+          SimpleText.caption(text: helperText!, color: tokens.mutedText),
         ],
         if (hasError) ...<Widget>[
           JGaps.h8,

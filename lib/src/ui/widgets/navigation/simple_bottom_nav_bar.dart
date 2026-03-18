@@ -43,7 +43,7 @@ class SimpleBottomNavBar extends StatelessWidget {
     }
 
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final int safeIndex = currentIndex == null
         ? 0
         : currentIndex!.clamp(0, resolvedItems.length - 1);

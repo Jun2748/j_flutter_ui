@@ -172,7 +172,7 @@ class SimpleMenuTile extends StatelessWidget {
     final EdgeInsets resolvedPadding =
         padding ?? JInsets.horizontal16Vertical14;
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color dividerColor = tokens.dividerColor;
     final Color mutedTextColor = tokens.mutedText;
 

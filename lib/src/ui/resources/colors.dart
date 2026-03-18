@@ -1,5 +1,23 @@
 import 'package:flutter/material.dart';
 
+abstract final class PaletteConst {
+  const PaletteConst._();
+
+  static const String background = 'background';
+  static const String surface = 'surface';
+  static const String card = 'card';
+  static const String textPrimary = 'textPrimary';
+  static const String textSecondary = 'textSecondary';
+  static const String textDisabled = 'textDisabled';
+  static const String border = 'border';
+  static const String divider = 'divider';
+  static const String primary = 'primary';
+  static const String success = 'success';
+  static const String warning = 'warning';
+  static const String error = 'error';
+  static const String info = 'info';
+}
+
 @immutable
 class JStatusColors extends ThemeExtension<JStatusColors> {
   const JStatusColors({
@@ -82,35 +100,35 @@ abstract final class JColors {
   static const Color info = infoBase;
 
   static const Map<String, Color> lightPalette = <String, Color>{
-    'background': white,
-    'surface': neutral50,
-    'card': white,
-    'textPrimary': neutral900,
-    'textSecondary': neutral600,
-    'textDisabled': neutral400,
-    'border': neutral200,
-    'divider': neutral200,
-    'primary': primaryBase,
-    'success': successBase,
-    'warning': warningBase,
-    'error': errorBase,
-    'info': infoBase,
+    PaletteConst.background: white,
+    PaletteConst.surface: neutral50,
+    PaletteConst.card: white,
+    PaletteConst.textPrimary: neutral900,
+    PaletteConst.textSecondary: neutral600,
+    PaletteConst.textDisabled: neutral400,
+    PaletteConst.border: neutral200,
+    PaletteConst.divider: neutral200,
+    PaletteConst.primary: primaryBase,
+    PaletteConst.success: successBase,
+    PaletteConst.warning: warningBase,
+    PaletteConst.error: errorBase,
+    PaletteConst.info: infoBase,
   };
 
   static const Map<String, Color> darkPalette = <String, Color>{
-    'background': Color(0xFF0F172A),
-    'surface': Color(0xFF111827),
-    'card': Color(0xFF1E293B),
-    'textPrimary': Color(0xFFF8FAFC),
-    'textSecondary': Color(0xFFCBD5E1),
-    'textDisabled': Color(0xFF64748B),
-    'border': Color(0xFF334155),
-    'divider': Color(0xFF1F2937),
-    'primary': Color(0xFF60A5FA),
-    'success': Color(0xFF4ADE80),
-    'warning': Color(0xFFFBBF24),
-    'error': Color(0xFFF87171),
-    'info': Color(0xFF38BDF8),
+    PaletteConst.background: Color(0xFF0F172A),
+    PaletteConst.surface: Color(0xFF111827),
+    PaletteConst.card: Color(0xFF1E293B),
+    PaletteConst.textPrimary: Color(0xFFF8FAFC),
+    PaletteConst.textSecondary: Color(0xFFCBD5E1),
+    PaletteConst.textDisabled: Color(0xFF64748B),
+    PaletteConst.border: Color(0xFF334155),
+    PaletteConst.divider: Color(0xFF1F2937),
+    PaletteConst.primary: Color(0xFF60A5FA),
+    PaletteConst.success: Color(0xFF4ADE80),
+    PaletteConst.warning: Color(0xFFFBBF24),
+    PaletteConst.error: Color(0xFFF87171),
+    PaletteConst.info: Color(0xFF38BDF8),
   };
 
   static bool isDarkTheme(BuildContext context) {
@@ -127,36 +145,36 @@ abstract final class JColors {
     final String resolvedKey = isDark ? (darkKey ?? lightKey) : lightKey;
 
     switch (resolvedKey) {
-      case 'background':
+      case PaletteConst.background:
         return theme.scaffoldBackgroundColor;
-      case 'surface':
+      case PaletteConst.surface:
         return theme.colorScheme.surface;
-      case 'card':
+      case PaletteConst.card:
         return theme.cardTheme.color ?? theme.colorScheme.surface;
-      case 'textPrimary':
+      case PaletteConst.textPrimary:
         return theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface;
-      case 'textSecondary':
+      case PaletteConst.textSecondary:
         return theme.textTheme.bodyMedium?.color ??
             theme.textTheme.labelSmall?.color ??
             theme.colorScheme.onSurfaceVariant;
-      case 'textDisabled':
+      case PaletteConst.textDisabled:
         return theme.disabledColor;
-      case 'border':
+      case PaletteConst.border:
         return theme.colorScheme.outline;
-      case 'divider':
+      case PaletteConst.divider:
         return DividerTheme.of(context).color ??
             theme.colorScheme.outlineVariant;
-      case 'primary':
+      case PaletteConst.primary:
         return theme.colorScheme.primary;
-      case 'success':
+      case PaletteConst.success:
         return theme.extension<JStatusColors>()?.success ??
             _fallbackColor(isDark, resolvedKey);
-      case 'warning':
+      case PaletteConst.warning:
         return theme.extension<JStatusColors>()?.warning ??
             _fallbackColor(isDark, resolvedKey);
-      case 'error':
+      case PaletteConst.error:
         return theme.colorScheme.error;
-      case 'info':
+      case PaletteConst.info:
         return theme.extension<JStatusColors>()?.info ??
             _fallbackColor(isDark, resolvedKey);
     }

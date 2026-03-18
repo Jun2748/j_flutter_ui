@@ -35,7 +35,7 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color surface = tokens.cardBackground;
     final Color border = tokens.cardBorderColor;
 
@@ -62,7 +62,7 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
     int index,
   ) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final bool isSelected = item.value == value;
     final Color primary = tokens.primary;
     final Color onPrimary = theme.colorScheme.onPrimary;

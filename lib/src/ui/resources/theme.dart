@@ -16,24 +16,49 @@ abstract final class JAppTheme {
     final Map<String, Color> palette = brightness == Brightness.dark
         ? JColors.darkPalette
         : JColors.lightPalette;
-    final AppThemeTokens appTokens = AppThemeTokens.fallback(
+    final AppThemeTokens extensionTokens = AppThemeTokens.fallback(
       brightness: brightness,
     );
+    final AppThemeTokens appTokens = AppThemeTokens.fallback(brightness: brightness);
+
+    Color paletteColor(String key, Color fallback) =>
+        palette[key] ?? fallback;
 
     final Color primary = appTokens.primary;
-    final Color surface = palette['surface']!;
+    final Color surface = paletteColor(
+      PaletteConst.surface,
+      brightness == Brightness.dark ? const Color(0xFF111827) : JColors.neutral50,
+    );
     final Color card = appTokens.cardBackground;
     final Color inputBackground = appTokens.inputBackground;
-    final Color background = palette['background']!;
-    final Color textPrimary = palette['textPrimary']!;
+    final Color background = paletteColor(
+      PaletteConst.background,
+      brightness == Brightness.dark ? const Color(0xFF0F172A) : JColors.white,
+    );
+    final Color textPrimary = paletteColor(
+      PaletteConst.textPrimary,
+      brightness == Brightness.dark ? const Color(0xFFF8FAFC) : JColors.neutral900,
+    );
     final Color textSecondary = appTokens.mutedText;
-    final Color textDisabled = palette['textDisabled']!;
+    final Color textDisabled = paletteColor(
+      PaletteConst.textDisabled,
+      brightness == Brightness.dark ? const Color(0xFF64748B) : JColors.neutral400,
+    );
     final Color border = appTokens.cardBorderColor;
     final Color inputBorder = appTokens.inputBorderColor;
     final Color divider = appTokens.dividerColor;
-    final Color success = palette['success']!;
-    final Color warning = palette['warning']!;
-    final Color error = palette['error']!;
+    final Color success = paletteColor(
+      PaletteConst.success,
+      brightness == Brightness.dark ? const Color(0xFF4ADE80) : JColors.successBase,
+    );
+    final Color warning = paletteColor(
+      PaletteConst.warning,
+      brightness == Brightness.dark ? const Color(0xFFFBBF24) : JColors.warningBase,
+    );
+    final Color error = paletteColor(
+      PaletteConst.error,
+      brightness == Brightness.dark ? const Color(0xFFF87171) : JColors.errorBase,
+    );
     final Color info = appTokens.secondary;
 
     final ColorScheme baseColorScheme = brightness == Brightness.dark
@@ -111,7 +136,7 @@ abstract final class JAppTheme {
       disabledColor: textDisabled,
       textTheme: textTheme,
       extensions: <ThemeExtension<dynamic>>[
-        appTokens,
+        extensionTokens,
         JStatusColors(success: success, warning: warning, info: info),
       ],
       appBarTheme: AppBarTheme(

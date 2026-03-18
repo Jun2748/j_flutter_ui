@@ -21,11 +21,13 @@ class SimpleTextField extends StatelessWidget {
     this.borderColor,
     this.keyboardType,
     this.textInputAction,
+    this.autofillHints,
     this.obscureText = false,
     this.enabled = true,
     this.readOnly = false,
     this.maxLines = 1,
     this.onChanged,
+    this.onFieldSubmitted,
     this.validator,
   }) : assert(maxLines > 0, 'maxLines must be greater than 0.');
 
@@ -43,11 +45,13 @@ class SimpleTextField extends StatelessWidget {
   final Color? borderColor;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
   final bool obscureText;
   final bool enabled;
   final bool readOnly;
   final int maxLines;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onFieldSubmitted;
   final FormFieldValidator<String>? validator;
 
   @override
@@ -65,12 +69,14 @@ class SimpleTextField extends StatelessWidget {
       focusNode: focusNode,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
+      autofillHints: autofillHints,
       obscureText: obscureText,
       enabled: enabled,
       readOnly: readOnly,
       showCursor: enabled && !readOnly,
       maxLines: obscureText ? 1 : maxLines,
       onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
       validator: validator,
       style: resolvedTextStyle,
       decoration: _buildDecoration(theme),
@@ -78,7 +84,7 @@ class SimpleTextField extends StatelessWidget {
   }
 
   InputDecoration _buildDecoration(ThemeData theme) {
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final InputDecoration themedDecoration = InputDecoration(
       labelText: labelText,
       hintText: hintText,
@@ -102,15 +108,35 @@ class SimpleTextField extends StatelessWidget {
       constraints:
           themedDecoration.constraints ??
           const BoxConstraints(minHeight: JHeights.input),
-      border: _buildBorder(color: resolvedBorderColor),
-      enabledBorder: _buildBorder(color: resolvedBorderColor),
-      focusedBorder: _buildBorder(
+      border: _resolveBorder(themedDecoration.border, color: resolvedBorderColor),
+      enabledBorder: _resolveBorder(
+        themedDecoration.enabledBorder ?? themedDecoration.border,
+        color: resolvedBorderColor,
+      ),
+      focusedBorder: _resolveBorder(
+        themedDecoration.focusedBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
         color: theme.colorScheme.primary,
         width: JDimens.dp1_5,
       ),
-      disabledBorder: _buildBorder(color: dividerColor),
-      errorBorder: _buildBorder(color: theme.colorScheme.error),
-      focusedErrorBorder: _buildBorder(
+      disabledBorder: _resolveBorder(
+        themedDecoration.disabledBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
+        color: dividerColor,
+      ),
+      errorBorder: _resolveBorder(
+        themedDecoration.errorBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
+        color: theme.colorScheme.error,
+      ),
+      focusedErrorBorder: _resolveBorder(
+        themedDecoration.focusedErrorBorder ??
+            themedDecoration.errorBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
         color: theme.colorScheme.error,
         width: JDimens.dp1_5,
       ),
@@ -137,13 +163,23 @@ class SimpleTextField extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder _buildBorder({
+  OutlineInputBorder _resolveBorder(
+    InputBorder? base, {
     required Color color,
-    double width = JDimens.dp1,
+    double? width,
   }) {
+    final OutlineInputBorder? outlineBase =
+        base is OutlineInputBorder ? base : null;
+
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(color: color, width: width),
+      borderRadius:
+          outlineBase?.borderRadius ??
+          BorderRadius.circular(JDimens.dp12),
+      borderSide: BorderSide(
+        color: color,
+        width: width ?? outlineBase?.borderSide.width ?? JDimens.dp1,
+      ),
     );
   }
+
 }

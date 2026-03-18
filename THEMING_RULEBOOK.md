@@ -3,6 +3,7 @@
 ## Approved Architecture
 - Use Flutter-native `ThemeData`.
 - Use `ThemeExtension<AppThemeTokens>` for library-owned semantic tokens.
+- Read tokens via `theme.appThemeTokens` (canonical accessor).
 - Use Material theme sources for standard Material semantics.
 - Use constants such as `JColors` only as the final fallback.
 
@@ -29,6 +30,8 @@
   `inputBorderColor`
   `dividerColor`
   `mutedText`
+- Canonical access:
+  `final AppThemeTokens tokens = Theme.of(context).appThemeTokens;`
 
 ## Fallback Constants
 - Final fallback constants are allowed only when neither Material semantics nor `AppThemeTokens` can provide the value.

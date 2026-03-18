@@ -25,7 +25,7 @@ class SimpleCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final bool resolvedValue = value ?? false;
     final bool interactive = enabled && onChanged != null;
 
@@ -53,14 +53,15 @@ class SimpleCheckbox extends StatelessWidget {
         (hasTextLabel
             ? Text(
                 label!,
-                style: baseTextStyle.merge(textStyle).copyWith(
-                  color:
-                      enabled
+                style: baseTextStyle
+                    .merge(textStyle)
+                    .copyWith(
+                      color: enabled
                           ? textStyle?.color ??
-                              baseTextStyle.color ??
-                              theme.colorScheme.onSurface
+                                baseTextStyle.color ??
+                                theme.colorScheme.onSurface
                           : theme.disabledColor,
-                ),
+                    ),
               )
             : null);
 

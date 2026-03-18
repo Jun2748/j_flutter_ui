@@ -33,7 +33,7 @@ class SimpleErrorView extends StatelessWidget {
     final bool hasRetry =
         retryLabel != null && retryLabel!.trim().isNotEmpty && onRetry != null;
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
 
     return Center(
       child: Padding(
@@ -88,7 +88,10 @@ class SimpleErrorView extends StatelessWidget {
       return customTitle;
     }
 
-    final String localizedTitle = Intl.text(L.stateErrorTitle, context: context);
+    final String localizedTitle = Intl.text(
+      L.stateErrorTitle,
+      context: context,
+    );
     if (localizedTitle.isNotEmpty && localizedTitle != L.stateErrorTitle) {
       return localizedTitle;
     }

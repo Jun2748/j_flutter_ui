@@ -124,7 +124,7 @@ class SimpleBadge extends StatelessWidget {
   }
 
   _SimpleBadgeColors _resolveColors(ThemeData theme) {
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);

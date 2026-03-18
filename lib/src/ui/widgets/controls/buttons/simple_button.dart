@@ -140,7 +140,7 @@ class SimpleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final ButtonStyle themeStyle = _themeStyle(theme);
     final bool isEnabled = onPressed != null;
     final bool isInteractive = isEnabled && !loading;

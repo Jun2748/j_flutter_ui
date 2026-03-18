@@ -69,9 +69,11 @@ void main() {
     testWidgets('SimpleTextField falls back safely without AppThemeTokens', (
       WidgetTester tester,
     ) async {
+      final ThemeData theme = ThemeData.light(useMaterial3: true);
+
       await tester.pumpWidget(
         MaterialApp(
-          theme: ThemeData.light(useMaterial3: true),
+          theme: theme,
           home: const Scaffold(
             body: SimpleTextField(
               labelText: 'Email',
@@ -88,8 +90,13 @@ void main() {
       final OutlineInputBorder enabledBorder =
           decoration.enabledBorder! as OutlineInputBorder;
 
-      expect(decoration.fillColor, JColors.lightPalette['card']);
-      expect(enabledBorder.borderSide.color, JColors.lightPalette['border']);
+      expect(
+        decoration.fillColor,
+        theme.inputDecorationTheme.fillColor ??
+            theme.cardTheme.color ??
+            theme.colorScheme.surface,
+      );
+      expect(enabledBorder.borderSide.color, theme.colorScheme.outline);
     });
 
     testWidgets('AppThemeTokens partial override updates core widgets', (
@@ -232,10 +239,7 @@ void main() {
                   label: 'Notifications',
                   description: 'Stay informed',
                 ),
-                SimpleCheckbox(
-                  value: true,
-                  label: 'Accept terms',
-                ),
+                SimpleCheckbox(value: true, label: 'Accept terms'),
               ],
             ),
           ),
@@ -244,7 +248,9 @@ void main() {
 
       final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
       final Checkbox checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
-      final Text descriptionText = tester.widget<Text>(find.text('Stay informed'));
+      final Text descriptionText = tester.widget<Text>(
+        find.text('Stay informed'),
+      );
 
       expect(
         switchWidget.thumbColor?.resolve(<WidgetState>{}),
@@ -301,9 +307,8 @@ void main() {
         ),
       );
 
-      final AnimatedContainer selectedSegment = tester.widget<AnimatedContainer>(
-        find.byType(AnimatedContainer).first,
-      );
+      final AnimatedContainer selectedSegment = tester
+          .widget<AnimatedContainer>(find.byType(AnimatedContainer).first);
       final BoxDecoration segmentDecoration =
           selectedSegment.decoration! as BoxDecoration;
       final TabBar tabBar = tester.widget<TabBar>(find.byType(TabBar));
@@ -413,9 +418,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: theme,
-          home: const Scaffold(
-            appBar: AppBarEx(title: 'Profile'),
-          ),
+          home: const Scaffold(appBar: AppBarEx(title: 'Profile')),
         ),
       );
 
@@ -431,8 +434,7 @@ void main() {
           matching: find.byType(DecoratedBox),
         ),
       );
-      final BoxDecoration decoration =
-          decoratedBox.decoration as BoxDecoration;
+      final BoxDecoration decoration = decoratedBox.decoration as BoxDecoration;
 
       expect(appBarMaterial.color, const Color(0xFFFDFBF4));
       expect(decoration.border?.bottom.color, const Color(0xFFF59E0B));
@@ -533,10 +535,7 @@ class _TabsHarness extends StatelessWidget {
         Tab(text: 'One'),
         Tab(text: 'Two'),
       ],
-      children: <Widget>[
-        SizedBox.expand(),
-        SizedBox.expand(),
-      ],
+      children: <Widget>[SizedBox.expand(), SizedBox.expand()],
     );
   }
 }

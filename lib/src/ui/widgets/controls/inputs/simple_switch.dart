@@ -23,7 +23,7 @@ class SimpleSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final bool resolvedValue = value ?? false;
     final bool interactive = onChanged != null;
     final Color primary = tokens.primary;
@@ -64,7 +64,7 @@ class SimpleSwitch extends StatelessWidget {
         }
         return border;
       }),
-      trackOutlineWidth: const WidgetStatePropertyAll<double>(1.2),
+      trackOutlineWidth: const WidgetStatePropertyAll<double>(JDimens.dp1),
     );
 
     if (labelWidget == null &&
@@ -88,7 +88,7 @@ class SimpleSwitch extends StatelessWidget {
 
   Widget _buildTextContent(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color descriptionColor = tokens.mutedText;
 
     return Column(

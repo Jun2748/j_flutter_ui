@@ -29,7 +29,7 @@ class SimpleDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final List<DropdownMenuItem<T>> resolvedItems =
         items ?? List<DropdownMenuItem<T>>.empty();
     final bool hasMatchingValue = resolvedItems.any(
@@ -50,7 +50,10 @@ class SimpleDropdown<T> extends StatelessWidget {
     );
   }
 
-  InputDecoration _buildDecoration(ThemeData theme, AppThemeTokens tokens) {
+  InputDecoration _buildDecoration(
+    ThemeData theme,
+    AppThemeTokens tokens,
+  ) {
     final InputDecoration themedDecoration = InputDecoration(
       labelText: labelText,
       hintText: hintText,
@@ -67,15 +70,38 @@ class SimpleDropdown<T> extends StatelessWidget {
       constraints:
           themedDecoration.constraints ??
           const BoxConstraints(minHeight: JHeights.input),
-      border: _buildBorder(color: tokens.inputBorderColor),
-      enabledBorder: _buildBorder(color: tokens.inputBorderColor),
-      focusedBorder: _buildBorder(
+      border: _resolveBorder(
+        themedDecoration.border,
+        color: tokens.inputBorderColor,
+      ),
+      enabledBorder: _resolveBorder(
+        themedDecoration.enabledBorder ?? themedDecoration.border,
+        color: tokens.inputBorderColor,
+      ),
+      focusedBorder: _resolveBorder(
+        themedDecoration.focusedBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
         color: theme.colorScheme.primary,
         width: JDimens.dp1_5,
       ),
-      disabledBorder: _buildBorder(color: tokens.dividerColor),
-      errorBorder: _buildBorder(color: theme.colorScheme.error),
-      focusedErrorBorder: _buildBorder(
+      disabledBorder: _resolveBorder(
+        themedDecoration.disabledBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
+        color: tokens.dividerColor,
+      ),
+      errorBorder: _resolveBorder(
+        themedDecoration.errorBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
+        color: theme.colorScheme.error,
+      ),
+      focusedErrorBorder: _resolveBorder(
+        themedDecoration.focusedErrorBorder ??
+            themedDecoration.errorBorder ??
+            themedDecoration.enabledBorder ??
+            themedDecoration.border,
         color: theme.colorScheme.error,
         width: JDimens.dp1_5,
       ),
@@ -102,13 +128,22 @@ class SimpleDropdown<T> extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder _buildBorder({
+  OutlineInputBorder _resolveBorder(
+    InputBorder? base, {
     required Color color,
-    double width = JDimens.dp1,
+    double? width,
   }) {
+    final OutlineInputBorder? outlineBase =
+        base is OutlineInputBorder ? base : null;
+
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(JDimens.dp12),
-      borderSide: BorderSide(color: color, width: width),
+      borderRadius:
+          outlineBase?.borderRadius ??
+          BorderRadius.circular(JDimens.dp12),
+      borderSide: BorderSide(
+        color: color,
+        width: width ?? outlineBase?.borderSide.width ?? JDimens.dp1,
+      ),
     );
   }
 }

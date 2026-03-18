@@ -22,7 +22,7 @@ class SimpleTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color primary = tokens.primary;
     final Color textSecondary = tokens.mutedText;
     final Color divider = tokens.dividerColor;

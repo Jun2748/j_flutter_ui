@@ -21,7 +21,8 @@ class SimpleDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppThemeTokens tokens = AppThemeTokens.resolve(Theme.of(context));
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = theme.appThemeTokens;
 
     return Divider(
       height: height,

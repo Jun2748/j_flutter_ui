@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../../localization/intl.dart';
+import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
 import '../../utils/text_scale_utils.dart';
 
@@ -80,8 +81,8 @@ class AppText extends StatelessWidget {
         textAlign: textAlign,
         maxLines: maxLines,
         overflow: overflow,
-        minFontSize: minFontSize ?? 12,
-        maxFontSize: maxFontSize ?? style.fontSize ?? 16,
+        minFontSize: minFontSize ?? JFontSizes.fs12,
+        maxFontSize: maxFontSize ?? style.fontSize ?? JFontSizes.fs16,
         textScaleFactor: textScale,
       );
     }

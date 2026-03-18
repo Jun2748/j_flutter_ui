@@ -135,7 +135,7 @@ class SimpleText extends StatelessWidget {
 
   TextStyle _resolveStyle(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color primaryTextColor = theme.colorScheme.onSurface;
     final Color secondaryTextColor = tokens.mutedText;
 

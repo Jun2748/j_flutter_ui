@@ -17,7 +17,7 @@ class SimpleBottomSheet {
     EdgeInsets? padding,
   }) {
     final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = AppThemeTokens.resolve(theme);
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final Color card = tokens.cardBackground;
     final Color border = tokens.cardBorderColor;
     final Color handleColor = tokens.dividerColor;
