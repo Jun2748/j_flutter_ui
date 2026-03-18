@@ -24,7 +24,7 @@ It focuses on:
 Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
 - **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
 - **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
-- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleDialog`, `SimpleSnackbar`
+- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleAlertDialog`, `SimpleSnackbar`
 - **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
 - **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
 - **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`
@@ -273,7 +273,7 @@ It focuses on:
 Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
 - **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
 - **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
-- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleDialog`, `SimpleSnackbar`
+- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleAlertDialog`, `SimpleSnackbar`
 - **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
 - **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
 - **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`
@@ -522,7 +522,7 @@ It focuses on:
 Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
 - **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
 - **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
-- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleDialog`, `SimpleSnackbar`
+- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleAlertDialog`, `SimpleSnackbar`
 - **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
 - **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
 - **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`

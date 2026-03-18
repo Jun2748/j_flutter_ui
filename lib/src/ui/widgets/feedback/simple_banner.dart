@@ -189,7 +189,7 @@ class SimpleBanner extends StatelessWidget {
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);
-    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color textPrimary = tokens.onCardResolved(theme);
     final Color textSecondary = tokens.mutedText;
     final Color cardBackground = tokens.cardBackground;
     final Color cardBorderColor = tokens.cardBorderColor;

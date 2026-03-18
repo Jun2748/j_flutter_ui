@@ -44,6 +44,12 @@ Rationale: downstream apps typically customize this library by providing `AppThe
 - The library owns the semantic styling (surfaces, borders, muted text, input fills).
 - Avoid duplicating all of `ColorScheme`/`TextTheme` into tokens.
 
+### Foreground/content colors for token-owned surfaces
+If a widget uses a token-owned background (e.g. `tokens.cardBackground`, `tokens.primary`), prefer a paired token foreground:
+- `tokens.onCardResolved(theme)` for card-like surfaces
+- `tokens.onPrimaryResolved(theme)` for primary action surfaces
+Rationale: downstream apps often override token backgrounds; relying on Material `onSurface`/`onPrimary` can break contrast.
+
 ### Allowed constants
 - `Colors.transparent` and similar “harmless constants” are fine.
 - Other hardcoded colors should be a last-resort fallback only.

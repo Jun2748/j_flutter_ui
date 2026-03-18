@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide SimpleDialog;
+import 'package:flutter/material.dart';
 
 import '../../localization/intl.dart';
 import '../../localization/l.dart';
@@ -7,8 +7,8 @@ import '../../resources/dimens.dart';
 import '../controls/buttons/simple_button.dart';
 import '../typography/simple_text.dart';
 
-class SimpleDialog extends StatelessWidget {
-  const SimpleDialog({
+class SimpleAlertDialog extends StatelessWidget {
+  const SimpleAlertDialog({
     super.key,
     this.title,
     this.message,
@@ -44,7 +44,7 @@ class SimpleDialog extends StatelessWidget {
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (BuildContext dialogContext) {
-        return SimpleDialog(
+        return SimpleAlertDialog(
           title: title,
           message: message,
           content: content,
@@ -62,7 +62,7 @@ class SimpleDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
-    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color textPrimary = tokens.onCardResolved(theme);
     final Color textSecondary = tokens.mutedText;
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
     final Widget? resolvedContent = _buildContent(context, textSecondary);
@@ -143,3 +143,4 @@ class SimpleDialog extends StatelessWidget {
     return 'Okay';
   }
 }
+

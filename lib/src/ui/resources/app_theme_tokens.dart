@@ -6,10 +6,14 @@ import 'colors.dart';
 class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
   const AppThemeTokens({
     required this.primary,
+    this.onPrimary,
     required this.secondary,
+    this.onSecondary,
     required this.cardBackground,
+    this.onCard,
     required this.cardBorderColor,
     required this.inputBackground,
+    this.onInput,
     required this.inputBorderColor,
     required this.dividerColor,
     required this.mutedText,
@@ -22,10 +26,14 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
 
     return AppThemeTokens(
       primary: palette[PaletteConst.primary] ?? JColors.primaryBase,
+      onPrimary: brightness == Brightness.dark ? JColors.black : JColors.white,
       secondary: palette[PaletteConst.info] ?? JColors.infoBase,
+      onSecondary: null,
       cardBackground: palette[PaletteConst.card] ?? JColors.white,
+      onCard: null,
       cardBorderColor: palette[PaletteConst.border] ?? JColors.neutral200,
       inputBackground: palette[PaletteConst.card] ?? JColors.white,
+      onInput: null,
       inputBorderColor: palette[PaletteConst.border] ?? JColors.neutral200,
       dividerColor: palette[PaletteConst.divider] ?? JColors.neutral200,
       mutedText: palette[PaletteConst.textSecondary] ?? JColors.neutral600,
@@ -40,15 +48,19 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
 
     return AppThemeTokens(
       primary: theme.colorScheme.primary,
+      onPrimary: theme.colorScheme.onPrimary,
       secondary: theme.colorScheme.secondary,
+      onSecondary: theme.colorScheme.onSecondary,
       cardBackground:
           theme.cardTheme.color ?? theme.colorScheme.surfaceContainerHighest,
+      onCard: theme.colorScheme.onSurface,
       cardBorderColor:
           _shapeBorderColor(theme.cardTheme.shape) ?? theme.colorScheme.outline,
       inputBackground:
           theme.inputDecorationTheme.fillColor ??
           theme.cardTheme.color ??
           theme.colorScheme.surface,
+      onInput: theme.colorScheme.onSurface,
       inputBorderColor:
           _inputBorderColor(theme.inputDecorationTheme.enabledBorder) ??
           _inputBorderColor(theme.inputDecorationTheme.border) ??
@@ -62,31 +74,64 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
   }
 
   final Color primary;
+  final Color? onPrimary;
   final Color secondary;
+  final Color? onSecondary;
   final Color cardBackground;
+  final Color? onCard;
   final Color cardBorderColor;
   final Color inputBackground;
+  final Color? onInput;
   final Color inputBorderColor;
   final Color dividerColor;
   final Color mutedText;
 
+  Color onPrimaryResolved(ThemeData theme) {
+    return onPrimary ?? _onColorForBackground(primary);
+  }
+
+  Color onSecondaryResolved(ThemeData theme) {
+    return onSecondary ?? _onColorForBackground(secondary);
+  }
+
+  Color onCardResolved(ThemeData theme) {
+    return onCard ?? theme.colorScheme.onSurface;
+  }
+
+  Color onInputResolved(ThemeData theme) {
+    return onInput ?? theme.colorScheme.onSurface;
+  }
+
+  Color _onColorForBackground(Color background) {
+    final Brightness b = ThemeData.estimateBrightnessForColor(background);
+    return b == Brightness.dark ? Colors.white : Colors.black;
+  }
+
   @override
   AppThemeTokens copyWith({
     Color? primary,
+    Color? onPrimary,
     Color? secondary,
+    Color? onSecondary,
     Color? cardBackground,
+    Color? onCard,
     Color? cardBorderColor,
     Color? inputBackground,
+    Color? onInput,
     Color? inputBorderColor,
     Color? dividerColor,
     Color? mutedText,
   }) {
     return AppThemeTokens(
       primary: primary ?? this.primary,
+      onPrimary: onPrimary ?? this.onPrimary,
       secondary: secondary ?? this.secondary,
+      onSecondary: onSecondary ?? this.onSecondary,
       cardBackground: cardBackground ?? this.cardBackground,
+      onCard: onCard ?? this.onCard,
       cardBorderColor: cardBorderColor ?? this.cardBorderColor,
       inputBackground: inputBackground ?? this.inputBackground,
+      onInput: onInput ?? this.onInput,
       inputBorderColor: inputBorderColor ?? this.inputBorderColor,
       dividerColor: dividerColor ?? this.dividerColor,
       mutedText: mutedText ?? this.mutedText,
@@ -101,15 +146,19 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
 
     return AppThemeTokens(
       primary: Color.lerp(primary, other.primary, t) ?? primary,
+      onPrimary: Color.lerp(onPrimary, other.onPrimary, t) ?? onPrimary,
       secondary: Color.lerp(secondary, other.secondary, t) ?? secondary,
+      onSecondary: Color.lerp(onSecondary, other.onSecondary, t) ?? onSecondary,
       cardBackground:
           Color.lerp(cardBackground, other.cardBackground, t) ?? cardBackground,
+      onCard: Color.lerp(onCard, other.onCard, t) ?? onCard,
       cardBorderColor:
           Color.lerp(cardBorderColor, other.cardBorderColor, t) ??
           cardBorderColor,
       inputBackground:
           Color.lerp(inputBackground, other.inputBackground, t) ??
           inputBackground,
+      onInput: Color.lerp(onInput, other.onInput, t) ?? onInput,
       inputBorderColor:
           Color.lerp(inputBorderColor, other.inputBorderColor, t) ??
           inputBorderColor,

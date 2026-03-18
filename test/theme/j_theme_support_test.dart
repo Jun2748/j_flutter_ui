@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide SimpleDialog;
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:j_flutter_ui/j_flutter_ui.dart';
 
@@ -319,7 +319,7 @@ void main() {
       expect(tabBar.dividerColor, const Color(0xFFF59E0B));
     });
 
-    testWidgets('SimpleDialog uses tokens and localized default confirm text', (
+    testWidgets('SimpleAlertDialog uses tokens and localized default confirm text', (
       WidgetTester tester,
     ) async {
       const AppThemeTokens tokens = AppThemeTokens(
@@ -338,7 +338,7 @@ void main() {
         MaterialApp(
           theme: theme,
           home: const Scaffold(
-            body: SimpleDialog(
+            body: SimpleAlertDialog(
               title: 'Delete item',
               message: 'This action cannot be undone.',
             ),

@@ -9,6 +9,7 @@ class SimpleTextField extends StatelessWidget {
     super.key,
     this.controller,
     this.focusNode,
+    this.initialValue,
     this.labelText,
     this.hintText,
     this.helperText,
@@ -29,10 +30,15 @@ class SimpleTextField extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmitted,
     this.validator,
-  }) : assert(maxLines > 0, 'maxLines must be greater than 0.');
+  }) : assert(maxLines > 0, 'maxLines must be greater than 0.'),
+       assert(
+         controller == null || initialValue == null,
+         'Either provide a controller or an initialValue, not both.',
+       );
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final String? initialValue;
   final String? labelText;
   final String? hintText;
   final String? helperText;
@@ -66,6 +72,7 @@ class SimpleTextField extends StatelessWidget {
 
     return TextFormField(
       controller: controller,
+      initialValue: controller == null ? initialValue : null,
       focusNode: focusNode,
       keyboardType: keyboardType,
       textInputAction: textInputAction,

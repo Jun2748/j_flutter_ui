@@ -7,6 +7,12 @@ These rules exist to keep `j_flutter_ui` plug-and-play across many apps.
 - Prefer additive changes over breaking changes.
 - Avoid renames/moves unless part of a deliberate migration with notes.
 
+## Naming (avoid Flutter SDK collisions)
+- Do **not** export symbols whose names collide with common Flutter SDK/Material types.
+  - Example: Material already exports `SimpleDialog`, so `j_flutter_ui` must not export a type with that name.
+- Prefer names that reflect the underlying Material primitive:
+  - Example: a wrapper around `AlertDialog` should be named like `SimpleAlertDialog` (not `SimpleDialog`).
+
 ## Export policy (library boundary)
 - Consumers should import **only** `package:j_flutter_ui/j_flutter_ui.dart`.
 - Treat all exports from `lib/j_flutter_ui.dart` as **stable, semver-governed API**.

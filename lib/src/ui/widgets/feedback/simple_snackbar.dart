@@ -114,16 +114,16 @@ class SimpleSnackbar {
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);
-    final Color textPrimary = theme.colorScheme.onSurface;
     final Color cardBackground = tokens.cardBackground;
     final Color cardBorderColor = tokens.cardBorderColor;
+    final Color foregroundOnCard = tokens.onCardResolved(theme);
 
     switch (variant) {
       case _SimpleSnackbarVariant.info:
         final Color info = statusColors.info;
         return _SimpleSnackbarColors(
           background: JTints.surface(cardBackground, info, alpha: 22),
-          foreground: textPrimary,
+          foreground: foregroundOnCard,
           border: JTints.border(cardBorderColor, info, alpha: 48),
           actionColor: info,
         );
@@ -131,7 +131,7 @@ class SimpleSnackbar {
         final Color success = statusColors.success;
         return _SimpleSnackbarColors(
           background: JTints.surface(cardBackground, success, alpha: 22),
-          foreground: textPrimary,
+          foreground: foregroundOnCard,
           border: JTints.border(cardBorderColor, success, alpha: 48),
           actionColor: success,
         );
@@ -139,7 +139,7 @@ class SimpleSnackbar {
         final Color warning = statusColors.warning;
         return _SimpleSnackbarColors(
           background: JTints.surface(cardBackground, warning, alpha: 22),
-          foreground: textPrimary,
+          foreground: foregroundOnCard,
           border: JTints.border(cardBorderColor, warning, alpha: 48),
           actionColor: warning,
         );
@@ -147,7 +147,7 @@ class SimpleSnackbar {
         final Color error = theme.colorScheme.error;
         return _SimpleSnackbarColors(
           background: JTints.surface(cardBackground, error, alpha: 20),
-          foreground: textPrimary,
+          foreground: foregroundOnCard,
           border: JTints.border(cardBorderColor, error, alpha: 48),
           actionColor: error,
         );

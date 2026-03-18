@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide SimpleDialog;
+import 'package:flutter/material.dart';
 import 'package:j_flutter_ui/j_flutter_ui.dart';
 
 class DialogDemo extends StatelessWidget {
@@ -17,7 +17,7 @@ class DialogDemo extends StatelessWidget {
           SimpleButton.primary(
             label: 'Show Confirm Dialog',
             onPressed: () {
-              SimpleDialog.show<void>(
+              SimpleAlertDialog.show<void>(
                 context,
                 title: 'Delete item',
                 message: 'Are you sure you want to delete this item?',
@@ -30,7 +30,7 @@ class DialogDemo extends StatelessWidget {
           SimpleButton.secondary(
             label: 'Show Custom Content Dialog',
             onPressed: () {
-              SimpleDialog.show<void>(
+              SimpleAlertDialog.show<void>(
                 context,
                 title: 'Session details',
                 cancelText: 'Close',

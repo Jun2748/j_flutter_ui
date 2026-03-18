@@ -302,7 +302,7 @@ class SimpleButton extends StatelessWidget {
     } else {
       switch (_variant) {
         case _SimpleButtonVariant.primary:
-          fallbackColor = theme.colorScheme.onPrimary;
+          fallbackColor = tokens.onPrimaryResolved(theme);
         case _SimpleButtonVariant.secondary:
           fallbackColor = tokens.secondary;
         case _SimpleButtonVariant.outline:

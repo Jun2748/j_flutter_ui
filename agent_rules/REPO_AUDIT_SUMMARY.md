@@ -45,6 +45,10 @@ The repo already has the right *shape* for a shared UI library (tokens, primitiv
 - **Token consistency**:
   - `SimpleFormBuilder.fieldSpacing` default now uses `JDimens.dp16`
   - radio option spacing uses `JDimens` (no raw `8`)
+- **Downstream ergonomics (Phase 1 follow-ups)**:
+  - renamed dialog API to avoid Flutter Material naming collisions (`SimpleAlertDialog`)
+  - added `SimpleTextField.initialValue` to avoid requiring a controller for preset values
+  - extended `AppThemeTokens` with optional paired `on*` foregrounds and resolved helpers for token-owned surfaces
 - **Typography consistency**:
   - `AppText` auto-fit defaults now use `JFontSizes` tokens
 - **Minor visual consistency**:

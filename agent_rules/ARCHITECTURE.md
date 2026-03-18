@@ -47,6 +47,7 @@ Primary goals:
 ### Token resolution
 Use `AppThemeTokens.resolve(theme)` (via `theme.appThemeTokens`) to read:
 - `primary`, `secondary`
+- paired foregrounds: `onPrimary`, `onSecondary`, `onCard`, `onInput` (or the resolved helpers)
 - surfaces: `cardBackground`, `inputBackground`
 - borders/dividers: `cardBorderColor`, `inputBorderColor`, `dividerColor`
 - text: `mutedText`
@@ -60,6 +61,11 @@ All widgets should normalize values early and resolve styling predictably:
 - `AppThemeTokens` (ThemeExtension)
 - Material semantic theme (`ColorScheme`, `TextTheme`, component themes)
 - final fallback constants (rare; document why)
+
+### Foreground/content colors for token-owned surfaces
+If a widget sets a background using `AppThemeTokens` (e.g. `tokens.cardBackground`, `tokens.primary`), prefer the **paired resolved foreground** from tokens:
+- `tokens.onCardResolved(theme)` for card-like surfaces (dialogs, sheets, snackbars, banners)
+- `tokens.onPrimaryResolved(theme)` for primary actions/buttons
 
 ## Shared styling helpers (avoid drift)
 If a styling recipe appears in 3+ widgets, prefer centralizing it under `resources/` and reusing it.

@@ -25,13 +25,22 @@
 - The library owns the semantic styling.
 - Current token examples:
   `cardBackground`
+  `onCardResolved(theme)` (foreground for `cardBackground`)
   `cardBorderColor`
   `inputBackground`
+  `onInputResolved(theme)` (foreground for `inputBackground`)
   `inputBorderColor`
   `dividerColor`
   `mutedText`
 - Canonical access:
   `final AppThemeTokens tokens = Theme.of(context).appThemeTokens;`
+
+## Foreground/content color rule (paired semantics)
+- If a widget uses a **token-owned surface/background** (e.g. `tokens.cardBackground`, `tokens.primary`), do not assume Material `on*` colors will remain correct after token overrides.
+- Prefer the paired resolved foreground from tokens:
+  - `tokens.onCardResolved(theme)` for card/sheet/dialog/snackbar surfaces
+  - `tokens.onPrimaryResolved(theme)` for primary button backgrounds
+  - `tokens.onSecondaryResolved(theme)` for secondary semantic backgrounds (when used)
 
 ## Shared styling helpers (consistency)
 - Prefer reusing centralized helpers over duplicating styling logic:

@@ -23,7 +23,7 @@ export 'src/ui/widgets/display/simple_menu_section.dart';
 export 'src/ui/widgets/display/simple_menu_tile.dart';
 export 'src/ui/widgets/feedback/simple_badge.dart';
 export 'src/ui/widgets/feedback/simple_banner.dart';
-export 'src/ui/widgets/feedback/simple_dialog.dart';
+export 'src/ui/widgets/feedback/simple_alert_dialog.dart';
 export 'src/ui/widgets/feedback/simple_snackbar.dart';
 export 'src/ui/widgets/flags/simple_flag.dart';
 export 'src/ui/widgets/forms/builder/simple_form_builder.dart';
