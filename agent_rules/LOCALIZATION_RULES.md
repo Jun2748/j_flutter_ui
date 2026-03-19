@@ -21,6 +21,7 @@ When the library provides default copy, resolve in this order:
 ## API usage
 - Use `Intl.text(key, context: context, args: ...)` when a `BuildContext` is available.
 - Context-less calls to `Intl.text(key)` are allowed for utilities (e.g., validators) but should accept that the first call may return the key until the fallback localization loads.
+- Validation/message helpers should accept an optional `BuildContext` and pass it through when called from widgets/builders so `AppLocalizationBridge` can override default validation copy.
 
 ## Keys and JSON
 - Keys should be registered in `lib/src/ui/localization/l.dart` (class `L`).
@@ -36,5 +37,5 @@ When the library provides default copy, resolve in this order:
 Add/keep tests for:
 - placeholder interpolation correctness
 - safe fallback behavior when localization is missing
+- host app override bridge behavior for widgets/utilities that have default copy
 - widgets with default copy (dialogs, states, validation messages)
-

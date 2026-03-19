@@ -36,6 +36,7 @@ When you expose styling knobs:
 - expose the *semantic* knob (e.g., `backgroundColor`) not 10 micro-parameters
 - ensure the widget still reads the host theme/tokens when the knob is null
 - do not create a second, parallel theming system via custom classes
+- for text inputs, prefer `prefixIcon` / `suffixIcon` for icons, flags, or interactive controls; reserve `prefix` / `suffix` for inline affix content
 
 ## Text parameters
 - Prefer accepting `Widget` slots for complex content (`title`, `subtitle`, `leading`, `trailing`) in pattern widgets.
@@ -46,8 +47,8 @@ When you expose styling knobs:
 ## Behavioral parameters
 - For async actions, make loading state explicit (`loading`) and ensure interaction is disabled consistently.
 - Avoid implicit side-effects (don’t auto-navigate, don’t read global singletons).
+- If multiple reset paths exist, keep their semantics explicit and intentionally different (for example blank-form reset vs restore-initial-values).
 
 ## Extensibility
 - Prefer composition slots (`header`, `footer`, `content`) over subclassing.
 - Do not couple widgets to app routing, app state management, or app domain models.
-

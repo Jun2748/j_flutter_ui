@@ -58,14 +58,20 @@ Downstream apps typically override via:
 ## Widget resolution rules
 All widgets should normalize values early and resolve styling predictably:
 - `explicit widget parameter`
+- Material semantic theme (`ColorScheme`, `TextTheme`, component themes) when semantically correct
 - `AppThemeTokens` (ThemeExtension)
-- Material semantic theme (`ColorScheme`, `TextTheme`, component themes)
 - final fallback constants (rare; document why)
 
 ### Foreground/content colors for token-owned surfaces
 If a widget sets a background using `AppThemeTokens` (e.g. `tokens.cardBackground`, `tokens.primary`), prefer the **paired resolved foreground** from tokens:
 - `tokens.onCardResolved(theme)` for card-like surfaces (dialogs, sheets, snackbars, banners)
 - `tokens.onPrimaryResolved(theme)` for primary actions/buttons
+- This rule also applies to token-primary feedback and selection controls.
+
+## Form reset semantics
+- `SimpleFormBuilderState.reset()` is the builder-level blank-form reset. It clears configured field values to `null`, syncs text controllers to empty strings, and clears errors.
+- `SimpleFormController.resetToInitialValues()` restores original controller values.
+- `SimpleFormController.reset()` remains the controller-only clear path.
 
 ## Shared styling helpers (avoid drift)
 If a styling recipe appears in 3+ widgets, prefer centralizing it under `resources/` and reusing it.
@@ -79,4 +85,3 @@ Add a shared token only if:
 - part of the system scale that must remain consistent
 
 Otherwise keep the value local, but prefer `JDimens` over raw numbers.
-

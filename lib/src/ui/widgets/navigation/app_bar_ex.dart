@@ -54,12 +54,21 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
         (title != null
             ? Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis)
             : null);
-    final TextStyle resolvedTitleStyle =
+    final Color? themeForegroundColor = theme.appBarTheme.foregroundColor;
+    final TextStyle baseTitleStyle =
         theme.appBarTheme.titleTextStyle ??
         theme.textTheme.titleLarge ??
         const TextStyle();
-    final IconThemeData resolvedIconTheme =
+    final TextStyle resolvedTitleStyle =
+        baseTitleStyle.color != null || themeForegroundColor == null
+        ? baseTitleStyle
+        : baseTitleStyle.copyWith(color: themeForegroundColor);
+    final IconThemeData baseIconTheme =
         theme.appBarTheme.iconTheme ?? theme.iconTheme;
+    final IconThemeData resolvedIconTheme =
+        baseIconTheme.color != null || themeForegroundColor == null
+        ? baseIconTheme
+        : baseIconTheme.copyWith(color: themeForegroundColor);
     final Widget toolbar = SizedBox(
       height: height,
       child: Padding(
@@ -75,7 +84,10 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
     );
 
     return Material(
-      color: backgroundColor ?? tokens.cardBackground,
+      color:
+          backgroundColor ??
+          theme.appBarTheme.backgroundColor ??
+          tokens.cardBackground,
       elevation: elevation,
       surfaceTintColor: Colors.transparent,
       shadowColor: elevation == 0 ? Colors.transparent : null,

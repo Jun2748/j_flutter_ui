@@ -40,7 +40,7 @@ class SimpleSwitch extends StatelessWidget {
           return disabled;
         }
         if (states.contains(WidgetState.selected)) {
-          return theme.colorScheme.onPrimary;
+          return tokens.onPrimaryResolved(theme);
         }
         return thumbOff;
       }),

@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 import 'simple_regex_patterns.dart';
 import 'simple_validation_messages.dart';
 
@@ -6,8 +8,9 @@ typedef SimpleValidator = String? Function(dynamic value);
 class SimpleFormValidator {
   SimpleFormValidator._();
 
-  static SimpleValidator required({String? message}) {
-    final String resolvedMessage = message ?? SimpleValidationMessages.required;
+  static SimpleValidator required({BuildContext? context, String? message}) {
+    final String resolvedMessage =
+        message ?? SimpleValidationMessages.requiredText(context: context);
 
     return (dynamic value) {
       if (value == null) {
@@ -22,16 +25,19 @@ class SimpleFormValidator {
     };
   }
 
-  static SimpleValidator email({String? message}) {
+  static SimpleValidator email({BuildContext? context, String? message}) {
     return pattern(
       SimpleRegexPatterns.email,
-      message: message ?? SimpleValidationMessages.invalidEmail,
+      context: context,
+      message:
+          message ??
+          SimpleValidationMessages.invalidEmailText(context: context),
     );
   }
 
-  static SimpleValidator phone({String? message}) {
+  static SimpleValidator phone({BuildContext? context, String? message}) {
     final String resolvedMessage =
-        message ?? SimpleValidationMessages.invalidPhone;
+        message ?? SimpleValidationMessages.invalidPhoneText(context: context);
 
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
@@ -58,10 +64,11 @@ class SimpleFormValidator {
 
   static SimpleValidator pattern(
     RegExp regex, {
+    BuildContext? context,
     String? message,
   }) {
     final String resolvedMessage =
-        message ?? SimpleValidationMessages.invalidFormat;
+        message ?? SimpleValidationMessages.invalidFormatText(context: context);
 
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
@@ -73,9 +80,13 @@ class SimpleFormValidator {
     };
   }
 
-  static SimpleValidator minLength(int length, {String? message}) {
+  static SimpleValidator minLength(
+    int length, {
+    BuildContext? context,
+    String? message,
+  }) {
     final String resolvedMessage =
-        message ?? SimpleValidationMessages.minLength(length);
+        message ?? SimpleValidationMessages.minLength(length, context: context);
 
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);
@@ -91,9 +102,13 @@ class SimpleFormValidator {
     };
   }
 
-  static SimpleValidator maxLength(int length, {String? message}) {
+  static SimpleValidator maxLength(
+    int length, {
+    BuildContext? context,
+    String? message,
+  }) {
     final String resolvedMessage =
-        message ?? SimpleValidationMessages.maxLength(length);
+        message ?? SimpleValidationMessages.maxLength(length, context: context);
 
     return (dynamic value) {
       final String? normalizedValue = _normalizeValue(value);

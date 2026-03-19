@@ -25,23 +25,48 @@ class SimpleSearchField extends StatefulWidget {
 }
 
 class _SimpleSearchFieldState extends State<SimpleSearchField> {
-  late final TextEditingController _controller =
-      widget.controller ?? TextEditingController();
+  TextEditingController? _ownedController;
 
-  bool get _ownsController => widget.controller == null;
+  TextEditingController get _controller {
+    return widget.controller ?? _ensureOwnedController();
+  }
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_handleTextChanged);
+    _attachController(_controller);
+  }
+
+  @override
+  void didUpdateWidget(SimpleSearchField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller == widget.controller) {
+      return;
+    }
+
+    final TextEditingController oldController =
+        oldWidget.controller ?? _ensureOwnedController();
+    _detachController(oldController);
+
+    if (oldWidget.controller == null && widget.controller != null) {
+      _ownedController?.dispose();
+      _ownedController = null;
+    }
+
+    if (widget.controller == null && oldWidget.controller != null) {
+      _ownedController = TextEditingController(
+        text: oldWidget.controller?.text ?? '',
+      );
+    }
+
+    _attachController(_controller);
+    setState(() {});
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_handleTextChanged);
-    if (_ownsController) {
-      _controller.dispose();
-    }
+    _detachController(_controller);
+    _ownedController?.dispose();
     super.dispose();
   }
 
@@ -72,17 +97,25 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
     setState(() {});
   }
 
+  void _attachController(TextEditingController controller) {
+    controller.addListener(_handleTextChanged);
+  }
+
+  void _detachController(TextEditingController controller) {
+    controller.removeListener(_handleTextChanged);
+  }
+
+  TextEditingController _ensureOwnedController() {
+    return _ownedController ??= TextEditingController();
+  }
+
   String _resolvedHintText(BuildContext context) {
     final String? customHint = widget.hintText?.trim();
     if (customHint != null && customHint.isNotEmpty) {
       return customHint;
     }
 
-    return _localizedText(
-      L.commonSearch,
-      context: context,
-      fallback: 'Search',
-    );
+    return _localizedText(L.commonSearch, context: context, fallback: 'Search');
   }
 
   String _localizedText(

@@ -319,47 +319,48 @@ void main() {
       expect(tabBar.dividerColor, const Color(0xFFF59E0B));
     });
 
-    testWidgets('SimpleAlertDialog uses tokens and localized default confirm text', (
-      WidgetTester tester,
-    ) async {
-      const AppThemeTokens tokens = AppThemeTokens(
-        primary: Color(0xFF0F766E),
-        secondary: Color(0xFF7C3AED),
-        cardBackground: Color(0xFFFDFBF4),
-        cardBorderColor: Color(0xFFD97706),
-        inputBackground: Color(0xFFECFEFF),
-        inputBorderColor: Color(0xFF0891B2),
-        dividerColor: Color(0xFFF59E0B),
-        mutedText: Color(0xFF92400E),
-      );
-      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+    testWidgets(
+      'SimpleAlertDialog uses tokens and localized default confirm text',
+      (WidgetTester tester) async {
+        const AppThemeTokens tokens = AppThemeTokens(
+          primary: Color(0xFF0F766E),
+          secondary: Color(0xFF7C3AED),
+          cardBackground: Color(0xFFFDFBF4),
+          cardBorderColor: Color(0xFFD97706),
+          inputBackground: Color(0xFFECFEFF),
+          inputBorderColor: Color(0xFF0891B2),
+          dividerColor: Color(0xFFF59E0B),
+          mutedText: Color(0xFF92400E),
+        );
+        final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: theme,
-          home: const Scaffold(
-            body: SimpleAlertDialog(
-              title: 'Delete item',
-              message: 'This action cannot be undone.',
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: const Scaffold(
+              body: SimpleAlertDialog(
+                title: 'Delete item',
+                message: 'This action cannot be undone.',
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final AlertDialog dialog = tester.widget<AlertDialog>(
-        find.byType(AlertDialog),
-      );
-      final RoundedRectangleBorder shape =
-          dialog.shape! as RoundedRectangleBorder;
-      final Text messageText = tester.widget<Text>(
-        find.text('This action cannot be undone.'),
-      );
+        final AlertDialog dialog = tester.widget<AlertDialog>(
+          find.byType(AlertDialog),
+        );
+        final RoundedRectangleBorder shape =
+            dialog.shape! as RoundedRectangleBorder;
+        final Text messageText = tester.widget<Text>(
+          find.text('This action cannot be undone.'),
+        );
 
-      expect(dialog.backgroundColor, const Color(0xFFFDFBF4));
-      expect(shape.side.color, const Color(0xFFD97706));
-      expect(messageText.style?.color, const Color(0xFF92400E));
-      expect(find.text('Okay'), findsOneWidget);
-    });
+        expect(dialog.backgroundColor, const Color(0xFFFDFBF4));
+        expect(shape.side.color, const Color(0xFFD97706));
+        expect(messageText.style?.color, const Color(0xFF92400E));
+        expect(find.text('Okay'), findsOneWidget);
+      },
+    );
 
     testWidgets('AppThemeTokens update shared muted text and divider', (
       WidgetTester tester,
@@ -400,7 +401,7 @@ void main() {
       expect(divider.color, const Color(0xFFF59E0B));
     });
 
-    testWidgets('AppBarEx uses AppThemeTokens surface styling', (
+    testWidgets('AppBarEx falls back to AppThemeTokens surface styling', (
       WidgetTester tester,
     ) async {
       const AppThemeTokens tokens = AppThemeTokens(
@@ -413,7 +414,12 @@ void main() {
         dividerColor: Color(0xFFF59E0B),
         mutedText: Color(0xFF92400E),
       );
-      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+      final ThemeData theme = _withTokens(
+        JAppTheme.lightTheme.copyWith(
+          appBarTheme: const AppBarTheme(backgroundColor: null),
+        ),
+        tokens,
+      );
 
       await tester.pumpWidget(
         MaterialApp(
@@ -439,6 +445,61 @@ void main() {
       expect(appBarMaterial.color, const Color(0xFFFDFBF4));
       expect(decoration.border?.bottom.color, const Color(0xFFF59E0B));
     });
+
+    testWidgets(
+      'AppBarEx respects AppBarTheme background and foreground colors',
+      (WidgetTester tester) async {
+        const Color backgroundColor = Color(0xFF123456);
+        const Color foregroundColor = Color(0xFFF8FAFC);
+        final ThemeData theme = JAppTheme.lightTheme.copyWith(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: backgroundColor,
+            foregroundColor: foregroundColor,
+            titleTextStyle: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+            iconTheme: IconThemeData(size: JIconSizes.lg),
+          ),
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: const Scaffold(
+              appBar: AppBarEx(title: 'Profile', leading: Icon(Icons.menu)),
+            ),
+          ),
+        );
+
+        final Material appBarMaterial = tester.widget<Material>(
+          find.descendant(
+            of: find.byType(AppBarEx),
+            matching: find.byType(Material),
+          ),
+        );
+        final Finder titleText = find.descendant(
+          of: find.byType(AppBarEx),
+          matching: find.byWidgetPredicate(
+            (Widget widget) =>
+                widget is RichText &&
+                widget.text.toPlainText() == 'Profile' &&
+                widget.text.style?.color == foregroundColor,
+          ),
+        );
+        final Finder foregroundIconTheme = find.descendant(
+          of: find.byType(AppBarEx),
+          matching: find.byWidgetPredicate(
+            (Widget widget) =>
+                widget is IconTheme && widget.data.color == foregroundColor,
+          ),
+        );
+
+        expect(appBarMaterial.color, backgroundColor);
+        expect(titleText, findsOneWidget);
+        expect(foregroundIconTheme, findsWidgets);
+      },
+    );
 
     testWidgets(
       'AppThemeTokens full override updates feedback and navigation',

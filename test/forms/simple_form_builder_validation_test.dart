@@ -154,5 +154,55 @@ void main() {
       expect(find.text('Please enter a valid email address'), findsNothing);
       expect(find.text('Passwords do not match'), findsNothing);
     });
+
+    testWidgets('built-in validation messages honor AppLocalizationBridge', (
+      WidgetTester tester,
+    ) async {
+      final SimpleFormController controller = SimpleFormController();
+      addTearDown(AppLocalizationBridge.clear);
+      AppLocalizationBridge.configure((
+        BuildContext context,
+        String key, {
+        Map<String, String>? args,
+      }) {
+        switch (key) {
+          case L.formValidationRequiredField:
+            return '${args?['field']} must be filled';
+          case L.formValidationMinLength:
+            return 'Need ${args?['length']} chars';
+        }
+        return null;
+      });
+
+      await pumpTestApp(
+        tester,
+        Builder(
+          builder: (BuildContext context) {
+            return SimpleFormBuilder(
+              controller: controller,
+              fields: <SimpleFormFieldConfig<dynamic>>[
+                SimpleFormFieldConfig.text(
+                  name: 'username',
+                  label: 'Username',
+                  required: true,
+                  validator: SimpleFormValidator.minLength(5, context: context),
+                ),
+              ],
+            );
+          },
+        ),
+      );
+
+      expect(controller.validate(), isFalse);
+      await tester.pump();
+      expect(find.text('Username must be filled'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextFormField), 'abc');
+      await tester.pump();
+
+      expect(controller.validate(), isFalse);
+      await tester.pump();
+      expect(find.text('Need 5 chars'), findsOneWidget);
+    });
   });
 }

@@ -99,17 +99,11 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   ),
                   hintText: 'Enter your phone number',
                   helperText: 'Optional field using reusable phone validation.',
-                  prefix: const Padding(
-                    padding: JInsets.horizontal4,
-                    child: HStack(
-                      gap: JDimens.dp8,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        SimpleFlag.countryCode(
-                          _selectedPhoneCountryCode,
-                          size: JIconSizes.md,
-                        ),
-                      ],
+                  prefixIcon: const Padding(
+                    padding: JInsets.horizontal16,
+                    child: SimpleFlag.countryCode(
+                      _selectedPhoneCountryCode,
+                      size: JIconSizes.md,
                     ),
                   ),
                   keyboardType: TextInputType.phone,
@@ -265,8 +259,8 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   hintText: '123456789',
                   helperText:
                       'Prefix is useful for country codes or inline context.',
-                  prefix: Padding(
-                    padding: JInsets.horizontal12,
+                  prefixIcon: Padding(
+                    padding: JInsets.horizontal12Vertical16,
                     child: SimpleText.body(text: '+60'),
                   ),
                   keyboardType: TextInputType.phone,
@@ -277,7 +271,7 @@ class _FormBuilderDemoState extends State<FormBuilderDemo> {
                   helperText:
                       'Suffix can host visibility toggles or status actions.',
                   obscureText: true,
-                  suffix: IconButton(
+                  suffixIcon: IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.visibility_off_outlined),
                   ),

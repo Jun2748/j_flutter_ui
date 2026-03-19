@@ -141,7 +141,7 @@ class SimpleBadge extends StatelessWidget {
           border: cardBorderColor,
         );
       case _SimpleBadgeVariant.primary:
-        final Color primary = theme.colorScheme.primary;
+        final Color primary = tokens.primary;
         return _SimpleBadgeColors(
           background: JTints.surface(cardBackground, primary, alpha: 22),
           foreground: primary,

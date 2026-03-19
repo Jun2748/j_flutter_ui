@@ -41,7 +41,7 @@ class SimpleCheckbox extends StatelessWidget {
         }
         return Colors.transparent;
       }),
-      checkColor: theme.colorScheme.onPrimary,
+      checkColor: tokens.onPrimaryResolved(theme),
       side: BorderSide(color: tokens.inputBorderColor),
     );
 

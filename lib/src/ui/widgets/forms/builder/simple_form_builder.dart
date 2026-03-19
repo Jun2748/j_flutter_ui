@@ -330,17 +330,21 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   }
 
   void reset() {
+    final List<String> fieldNames = widget.fields
+        .map((SimpleFormFieldConfig<dynamic> field) => field.name)
+        .toList();
+
     _applyState(() {
       _errors.clear();
       _fieldErrors.clear();
       for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
-        final dynamic resetValue = _resolveResetValue(field.type);
-        _values[field.name] = resetValue;
-        _syncControllerValue(field.name, resetValue);
+        _values[field.name] = null;
+        _syncControllerValue(field.name, null);
       }
     });
 
-    _syncControllerFromBuilder();
+    // `reset()` intentionally clears the form to a blank/null state.
+    _syncControllerFromBuilder(fieldNames: fieldNames);
     _syncControllerErrorsFromBuilder(clearAll: true);
     widget.onChanged?.call(Map<String, dynamic>.from(_values));
   }
@@ -398,6 +402,8 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             errorText: errorText,
             prefix: field.prefix,
             suffix: field.suffix,
+            prefixIcon: field.prefixIcon,
+            suffixIcon: field.suffixIcon,
             keyboardType: field.keyboardType,
             textInputAction: field.textInputAction,
             autofillHints: field.autofillHints,
@@ -474,8 +480,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
               for (int index = 0; index < (field.options?.length ?? 0); index++)
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom:
-                        index == (field.options!.length - 1)
+                    bottom: index == (field.options!.length - 1)
                         ? JDimens.dp0
                         : JDimens.dp8,
                   ),
@@ -603,7 +608,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
     }
   }
 
-  dynamic _resolveResetValue(SimpleFormFieldType type) {
+  /// Default value for a field type when the external controller
+  /// does not provide one (e.g. text → '', checkbox → false).
+  dynamic _defaultValueForType(SimpleFormFieldType type) {
     switch (type) {
       case SimpleFormFieldType.text:
       case SimpleFormFieldType.search:
@@ -704,7 +711,12 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       }
 
       final String currentTextValue = controller.text;
-      if (_values[field.name] == currentTextValue) {
+      final dynamic currentValue = _values[field.name];
+      if (currentValue == null && currentTextValue.isEmpty) {
+        continue;
+      }
+
+      if (currentValue == currentTextValue) {
         continue;
       }
 
@@ -831,9 +843,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
   String _requiredMessage(SimpleFormFieldConfig<dynamic> field) {
     final String label = (field.label ?? field.name).trim();
     if (label.isEmpty) {
-      return SimpleValidationMessages.required;
+      return SimpleValidationMessages.requiredText(context: context);
     }
-    return SimpleValidationMessages.requiredField(label);
+    return SimpleValidationMessages.requiredField(label, context: context);
   }
 
   String _resolveSubmitLabel() {
@@ -908,7 +920,7 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
       for (final SimpleFormFieldConfig<dynamic> field in widget.fields) {
         final dynamic controllerValue = controllerValues.containsKey(field.name)
             ? controllerValues[field.name]
-            : _resolveResetValue(field.type);
+            : _defaultValueForType(field.type);
         if (_values[field.name] == controllerValue) {
           continue;
         }

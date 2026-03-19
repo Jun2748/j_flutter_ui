@@ -20,6 +20,7 @@
   `theme.textTheme`
   `theme.appBarTheme`
   `theme.iconTheme`
+- `AppBarEx` defaults should read `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
 
 ## Use AppThemeTokens When
 - The library owns the semantic styling.
@@ -41,6 +42,11 @@
   - `tokens.onCardResolved(theme)` for card/sheet/dialog/snackbar surfaces
   - `tokens.onPrimaryResolved(theme)` for primary button backgrounds
   - `tokens.onSecondaryResolved(theme)` for secondary semantic backgrounds (when used)
+- This applies to token-primary controls too (for example badges, segmented controls, selected switches, and selected checkboxes).
+
+## Input affordance guidance
+- Prefer `prefixIcon` / `suffixIcon` for icons, flags, or interactive affordances inside inputs.
+- Reserve `prefix` / `suffix` for simple inline affix content only.
 
 ## Shared styling helpers (consistency)
 - Prefer reusing centralized helpers over duplicating styling logic:
@@ -66,4 +72,3 @@
 - Parallel custom theme managers
 - App-specific theme containers inside the library
 - Duplicating all of `ColorScheme`, `TextTheme`, or Material component themes into `AppThemeTokens`
-

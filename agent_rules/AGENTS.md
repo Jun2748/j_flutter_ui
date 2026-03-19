@@ -32,13 +32,14 @@ Use Flutter-native theming only.
 
 ### Resolution order (default)
 Every visual value should resolve in this order:
-`explicit widget parameter -> AppThemeTokens (ThemeExtension) -> Material semantic theme source -> final fallback constants`
+`explicit widget parameter -> Material semantic theme source when semantically correct -> AppThemeTokens (ThemeExtension) -> final fallback constants`
 
-Rationale: downstream apps typically customize this library by providing `AppThemeTokens`. Material component themes remain valid, but **tokens are the primary semantic override mechanism** for this design system.
+Rationale: downstream apps often customize library-owned styling via `AppThemeTokens`, while standard Material surfaces/components should still respect their matching Material theme APIs (for example `AppBarTheme` for app bars).
 
 ### Use Material semantics when
 - The value is a standard Material semantic pairing.
 - Examples: `theme.colorScheme.error`, `theme.colorScheme.onSurface`, `theme.textTheme`, `theme.appBarTheme`, `theme.iconTheme`.
+- `AppBarEx` should prefer `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
 
 ### Use `AppThemeTokens` when
 - The library owns the semantic styling (surfaces, borders, muted text, input fills).
@@ -77,11 +78,14 @@ Library-owned copy must resolve:
 `app override (AppLocalizationBridge) -> library JSON localization -> key fallback -> safe plain-string fallback`
 
 Never concatenate translated fragments into a sentence.
+- When a `BuildContext` is available, pass it into localization-backed validation/message helpers so the app override bridge participates.
 
 ## Forms (core infrastructure)
 - Keep separation between builder/controller/validation/utilities.
 - Preserve app-level override capability for backend errors.
 - Avoid making the form layer “too smart” (no hidden flows).
+- `SimpleFormBuilderState.reset()` is the blank-form reset: it clears configured field values to `null` and clears errors.
+- `SimpleFormController.resetToInitialValues()` remains the restore-initial-values path.
 
 ## Review workflow (what to do before you edit)
 - Identify whether you’re touching **public API** (exported via `j_flutter_ui.dart`).
@@ -94,4 +98,3 @@ Never concatenate translated fragments into a sentence.
 - `partially migrated`
 - `acceptable fallback`
 - `intentional Material semantic usage`
-
