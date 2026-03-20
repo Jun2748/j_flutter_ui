@@ -25,7 +25,10 @@ Read this file before changing code.
 - **Primitives**: single responsibility, thin wrappers around Material semantics.
   - Examples: `SimpleText`, `SimpleButton`, `SimpleIconButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
 - **Patterns**: compose primitives; do not rebuild styling logic from scratch.
-  - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`.
+  - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`.
+
+## Active indicator pattern (navigation)
+`SimpleVerticalRail` provides color-change only (active: `colorScheme.onSurface`, inactive: `tokens.mutedText`). It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
 
 ## Theming contract (what downstream apps rely on)
 Use Flutter-native theming only.

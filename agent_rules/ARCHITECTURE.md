@@ -28,6 +28,8 @@ Primary goals:
   - **primitives**: thin wrappers over Material semantics
   - **patterns**: compositions of primitives (avoid re-implementing styling logic)
   - compact icon-action affordances belong in primitives; app-specific counters, badges, and commerce flows belong in app-layer composition
+  - navigation patterns: `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
+    - `SimpleVerticalRail` — compact left-edge icon-label rail. Provides color-change active state only. App-local animated overlays (dots, bars) are `Stack` composition on top, not part of the widget.
 
 - `lib/src/ui/localization/`
   - library JSON localization (`assets/localization/*.json`)

@@ -47,6 +47,7 @@ export 'src/ui/widgets/layout/v_stack.dart';
 export 'src/ui/widgets/navigation/app_bar_ex.dart';
 export 'src/ui/widgets/navigation/simple_bottom_nav_bar.dart';
 export 'src/ui/widgets/navigation/simple_tabs.dart';
+export 'src/ui/widgets/navigation/simple_vertical_rail.dart';
 export 'src/ui/widgets/overlays/simple_bottom_sheet.dart';
 export 'src/ui/widgets/states/simple_empty_state.dart';
 export 'src/ui/widgets/states/simple_error_view.dart';

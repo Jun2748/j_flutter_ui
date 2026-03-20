@@ -27,7 +27,7 @@ Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The publi
 - **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleAlertDialog`, `SimpleSnackbar`
 - **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
 - **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
-- **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`
+- **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
 - **Overlays**: `SimpleBottomSheet`
 - **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
 - **Typography**: `SimpleText`, `AppText`
@@ -193,6 +193,54 @@ The library resolves strings in this order:
 - `AppLocalizationBridge`
 - library JSON (`assets/localization/<lang>.json`)
 - key fallback (returns the key string)
+
+---
+
+## Vertical Rail
+
+`SimpleVerticalRail` is a compact scrollable left-edge navigation rail: icon + label items stacked vertically, with active/inactive color driven by tokens. Common in food ordering, marketplace, and catalog apps (think Grab, Chagee).
+
+```dart
+SimpleVerticalRail(
+  items: const <SimpleVerticalRailItem>[
+    SimpleVerticalRailItem(icon: Icons.local_cafe_outlined, label: 'Milk Tea'),
+    SimpleVerticalRailItem(icon: Icons.shopping_bag_outlined, label: 'Bundles'),
+    SimpleVerticalRailItem(icon: Icons.redeem_outlined, label: 'Merch'),
+  ],
+  selectedIndex: _selectedIndex,
+  onSelected: (int i) => setState(() => _selectedIndex = i),
+)
+```
+
+**Sizing variants** — defaults are compact (76dp items, `lg` icons, `label` style). Pass overrides for a larger rail:
+
+```dart
+SimpleVerticalRail(
+  items: ...,
+  selectedIndex: _selectedIndex,
+  onSelected: ...,
+  itemHeight: 104,
+  iconSize: JIconSizes.xl,
+  labelStyle: JTextStyles.body1,
+)
+```
+
+**Active indicator** — the widget provides color-change only (active: `colorScheme.onSurface`, inactive: `tokens.mutedText`). App-specific overlays (animated dots, accent bars) are intentionally kept in app-layer composition. Example using a `Stack`:
+
+```dart
+Stack(
+  clipBehavior: Clip.none,
+  children: [
+    SimpleVerticalRail(items: ..., selectedIndex: ..., onSelected: ...),
+    // App-local animated dot on the rail/content border line
+    AnimatedPositioned(
+      right: -5,
+      top: selectedIndex * 76.0 + (76.0 / 2 - 5),
+      child: /* dot widget */,
+    ),
+  ],
+)
+```
 
 ---
 
