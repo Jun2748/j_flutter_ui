@@ -1,7 +1,7 @@
 name: j_flutter_ui
 description: "This UI library is designed to provide reusable shared widgets."
 publish_to: 'none'
-version: 0.1.0+1
+version: 2.0.0
 
 environment:
   sdk: ^3.11.1
@@ -27,3 +27,5 @@ flutter:
     - assets/images/jpg/
     - assets/images/svg/
     - assets/localization/
+
+license: MIT

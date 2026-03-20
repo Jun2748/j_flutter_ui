@@ -1,50 +1,84 @@
-## j_flutter_ui
+# j_flutter_ui
 
-`j_flutter_ui` is a reusable Flutter UI library (a lightweight design system) intended to be shared across multiple apps.
-
-It focuses on:
-- **Design tokens** (spacing, typography, sizes) so apps avoid "magic numbers"
-- **Themeable primitives** (thin wrappers over Material semantics)
-- **Composable patterns** built from primitives (menus, navigation, states, overlays)
-- **Form infrastructure** (builder + controller + validators)
-- **Asset helpers** (SVG/images/flags/illustrations)
-- **Demo-driven documentation** via the `example/` catalog app
-
----
+## Hero
+j_flutter_ui is a reusable Flutter UI library and design system for building consistent production mobile apps.
+- Gives teams a shared visual foundation for forms, navigation, overlays, status screens, and everyday layout pieces.
+- Keeps branding flexible with theme-ready colors, spacing, typography, and light/dark support.
+- Helps apps stay consistent without rebuilding the same interface patterns over and over.
+- Includes localization-ready copy flows and safe fallbacks for multi-app environments.
+Built for Flutter teams shipping multiple apps and for clients who want to see production-grade system design, not one-off screens.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## What's included
 
-### Foundations (resources)
-- **Tokens**: `JGaps`, `JInsets`, `JDimens`, `JHeights`, `JIconSizes`, `JFontSizes`, `JLineHeights`, `JTextStyles`
-- **Theming**:
-  - `JAppTheme.lightTheme` / `JAppTheme.darkTheme` (ready-to-use `ThemeData`)
-  - `AppThemeTokens` (`ThemeExtension`) for library-owned semantic colors (card/input/divider/muted text, etc.)
+**Controls**
+- `SimpleButton` — button family with primary, secondary, outline, and text variants.
+- `SimpleIconButton` — compact icon action button for toolbars, cards, and list rows.
+- `SimpleDropdown` — dropdown field that follows the library input styling and validation patterns.
+- `SimpleCheckbox` — checkbox control with optional inline label content.
+- `SimpleRadio` — radio option control for mutually exclusive choices.
+- `SimpleSearchField` — search input with standard and quiet variants.
+- `SimpleSwitch` — theme-aware on/off switch for preferences and settings.
+- `SimpleTextField` — text field wrapper with labels, helpers, errors, and icon slots.
+- `SimpleChipBar` — horizontally scrollable chip selector for quick filters and categories.
+- `SimpleSegmentedControl` — segmented selector for a small set of mutually exclusive options.
 
-### Widgets (public API)
-Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The public entrypoint exports:
-- **Controls**: `SimpleButton`, `SimpleDropdown`, `SimpleTextField`, `SimpleSwitch`, `SimpleCheckbox`, etc.
-- **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
-- **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleAlertDialog`, `SimpleSnackbar`
-- **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
-- **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`, `SimpleGrid`
-- **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
-- **Overlays**: `SimpleBottomSheet`, `SimpleFloatingBanner`
-- **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
-- **Typography**: `SimpleText`, `AppText`
-- **Flags & helpers**: `SimpleFlag`, `FlagUtils`, `CountryCodes`, `CurrencyCodes`
+**Display**
+- `SimpleCard` — reusable card surface for grouped content and summary blocks.
+- `SimpleChip` — small pill surface for labels, states, and lightweight tagging.
+- `SimpleDivider` — separator line that respects the active theme.
+- `SimpleListItem` — compact row layout for leading, title, subtitle, and trailing content.
+- `SimpleMenuPage` — menu-style screen wrapper for account and settings pages.
+- `SimpleMenuSection` — grouped menu block with optional section header content.
+- `SimpleMenuTile` — tappable menu row for settings, account, and support flows.
+- `SimpleFlag` — country flag widget rendered from bundled SVG assets.
 
-### Localization (library-owned copy)
-- `AppLocalizations` loads JSON translations from this package (`assets/localization/*.json`)
-- `AppLocalizationBridge` allows host apps to override any library key at runtime
-- `Intl.text(...)` is the string lookup used inside the library
+**Feedback**
+- `SimpleAlertDialog` — alert dialog wrapper with theme-aware defaults.
+- `SimpleBadge` — small badge for counts, states, and highlighted labels.
+- `SimpleBanner` — inline feedback banner for notices, warnings, and guidance.
+- `SimpleSnackbar` — snackbar helper for short confirmation and error messages.
 
----
+**Forms**
+- `SimpleForm` — form shell with optional keyboard-dismiss behavior.
+- `SimpleFormBuilder` — config-driven form builder with validation and submit handling.
+- `FormFieldWrapper` — consistent label, helper, and error wrapper around a field.
+- `FormSection` — titled grouping widget for related form inputs.
 
-## Install
+Supporting form API:
+`SimpleFormController`, `SimpleFormFieldConfig`, `SimpleFormFieldType`, `SimpleFormStateSnapshot`, `SimpleFormValidator`, `SimpleCrossFieldValidator`, `SimpleValidationMessages`, `SimpleRegexPatterns`, and `SimpleFormUtil` support controller-driven flows and validation logic.
 
-This repo is currently configured as non-published (`publish_to: none`). In an app, add it via **path** or **git**.
+**Layout**
+- `AppScaffold` — app page scaffold wrapper for standard screen composition.
+- `HStack` — horizontal stack helper with built-in gap handling.
+- `Section` — titled content section with optional header action.
+- `SimpleGrid` — responsive grid for cards, tiles, and catalog layouts.
+- `VStack` — vertical stack helper with built-in gap handling.
 
-### Path dependency (local development)
+**Navigation**
+- `AppBarEx` — app bar wrapper with optional title widget, actions, and safe defaults.
+- `SimpleBottomNavBar` — bottom navigation bar with token-driven colors and active icon highlight support.
+- `SimpleTabs` — tab bar wrapper that respects Material tab theming.
+- `SimpleVerticalRail` — compact vertical category rail for catalog, ordering, and marketplace screens.
+
+**Overlays**
+- `SimpleBottomSheet` — modal bottom sheet helper with optional built-in title and message.
+- `SimpleFloatingBanner` — centered overlay surface for promos, announcements, and media-led messages.
+
+**States**
+- `SimpleEmptyState` — empty-state block with title, message, and optional action.
+- `SimpleErrorView` — error-state block with retry support.
+- `SimpleLoadingView` — loading state with spinner and optional message.
+
+**Typography**
+- `AppText` — advanced text helper for localization, HTML rendering, semantics, and auto-fit.
+- `SimpleText` — everyday text primitive mapped to the library typography scale.
+
+## Install and setup
+
+This package is currently consumed through a local path or Git reference rather than pub.dev.
+
+### Path dependency (local dev)
 
 ```yaml
 dependencies:
@@ -52,113 +86,52 @@ dependencies:
     path: ../j_flutter_ui
 ```
 
-### Git dependency
+### Git dependency (production)
 
 ```yaml
 dependencies:
   j_flutter_ui:
     git:
-      url: <your-repo-url>
-      ref: <tag-or-commit>
+      url: https://github.com/your-org/j_flutter_ui.git
+      ref: main
 ```
 
----
-
-## Import rule (important)
-
-Always import **only** the public entrypoint:
+### Import rule: one import only
 
 ```dart
 import 'package:j_flutter_ui/j_flutter_ui.dart';
 ```
 
-Avoid importing anything under `src/` from an app.
-
----
-
-## Quick start
-
-### Use the built-in themes
+### Theme setup
 
 ```dart
 MaterialApp(
   theme: JAppTheme.lightTheme,
   darkTheme: JAppTheme.darkTheme,
-  // ...
+  home: const MyHomePage(),
 );
 ```
 
-### Customize via `AppThemeTokens` (recommended)
-
-`AppThemeTokens` is a `ThemeExtension` used as the library's semantic override mechanism.
+### Token customization
 
 ```dart
 final base = JAppTheme.lightTheme;
 
 final theme = base.copyWith(
   extensions: <ThemeExtension<dynamic>>[
-    ...?base.extensions.values,
-    const AppThemeTokens(
-      primary: Color(0xFF2563EB),
-      secondary: Color(0xFF06B6D4),
-      cardBackground: Color(0xFFFFFFFF),
-      cardBorderColor: Color(0xFFE5E7EB),
-      inputBackground: Color(0xFFF9FAFB),
-      inputBorderColor: Color(0xFFE5E7EB),
-      dividerColor: Color(0xFFE5E7EB),
-      mutedText: Color(0xFF6B7280),
+    ...base.extensions.values.where((extension) => extension is! AppThemeTokens),
+    base.appThemeTokens.copyWith(
+      primary: const Color(0xFF0F766E),
+      secondary: const Color(0xFF7C3AED),
+      cardBackground: const Color(0xFFFFFFFF),
+      inputBackground: const Color(0xFFF8FAFC),
+      mutedText: const Color(0xFF64748B),
     ),
   ],
 );
 ```
 
-Inside widgets, tokens are read via:
-- `Theme.of(context).appThemeTokens`
-
-### Use tokens instead of magic numbers
-
-Avoid:
-
-```dart
-const SizedBox(height: 13);
-const EdgeInsets.all(15);
-const TextStyle(fontSize: 17);
-```
-
-Prefer:
-
-```dart
-JGaps.h16;
-JInsets.all16;
-JTextStyles.body1;
-```
-
----
-
-## Assets (SVG/images/flags/illustrations)
-
-This package bundles its assets under `assets/`. In your app you typically just use the helpers/constants:
-
-```dart
-Images.svg(UiIcons.search);
-Images.svg(Flags.malaysia);
-Images.svg(Illustrations.emptyState);
-```
-
-Flags are **country-first**:
-
-```dart
-SimpleFlag.countryCode(CountryCodes.my);
-FlagUtils.flagByCountry(CountryCodes.my);
-```
-
----
-
-## Localization setup (apps)
-
-### Add the delegate and supported locales
-
-`j_flutter_ui` currently ships `en` under `assets/localization/en.json`.
+### Localization delegate setup
 
 ```dart
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -172,254 +145,174 @@ MaterialApp(
     GlobalCupertinoLocalizations.delegate,
   ],
   supportedLocales: AppLocalizations.supportedLocales,
-  // ...
+  home: const MyHomePage(),
 );
 ```
 
-### Override library strings from the host app
+## Key widgets with examples
 
-Use `AppLocalizationBridge.configure(...)` once at app startup to supply product/business copy (or to override any library key):
-
-```dart
-AppLocalizationBridge.configure((context, key, {args}) {
-  // Return null to fall back to the library JSON.
-  if (key == L.commonOkay) return 'OK';
-  return null;
-});
-```
-
-The library resolves strings in this order:
-- caller override (widget parameter)
-- `AppLocalizationBridge`
-- library JSON (`assets/localization/<lang>.json`)
-- key fallback (returns the key string)
-
----
-
-## Vertical Rail
-
-`SimpleVerticalRail` is a compact scrollable left-edge navigation rail: icon + label items stacked vertically, with active/inactive colors driven by tokens by default (and overrideable). It also supports an optional selected-state background highlight. Common in food ordering, marketplace, and catalog apps (think Grab, Chagee).
+Use `SimpleVerticalRail` when you need a compact left-edge category navigator for catalog, ordering, or marketplace screens.
 
 ```dart
-SimpleVerticalRail(
-  items: const <SimpleVerticalRailItem>[
-    SimpleVerticalRailItem(icon: Icons.local_cafe_outlined, label: 'Milk Tea'),
-    SimpleVerticalRailItem(icon: Icons.shopping_bag_outlined, label: 'Bundles'),
-    SimpleVerticalRailItem(icon: Icons.redeem_outlined, label: 'Merch'),
-  ],
-  selectedIndex: _selectedIndex,
-  onSelected: (int i) => setState(() => _selectedIndex = i),
-)
-```
+class RailExample extends StatefulWidget {
+  const RailExample({super.key});
+  @override State<RailExample> createState() => _RailExampleState();
+}
 
-**Sizing variants** — defaults are compact (76dp items, `lg` icons, `label` style). Pass overrides for a larger rail:
-
-```dart
-SimpleVerticalRail(
-  items: ...,
-  selectedIndex: _selectedIndex,
-  onSelected: ...,
-  itemHeight: 104,
-  iconSize: JIconSizes.xl,
-  labelStyle: JTextStyles.body1,
-)
-```
-
-**Selected state styling** — by default the widget keeps the original color-only active treatment (defaults: active `colorScheme.onSurface`, inactive `tokens.mutedText`). You can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`, and add a built-in highlight via `selectedItemBackgroundColor`:
-
-```dart
-SimpleVerticalRail(
-  items: ...,
-  selectedIndex: _selectedIndex,
-  onSelected: ...,
-  selectedItemBackgroundColor: theme.colorScheme.primaryContainer,
-  selectedItemColor: theme.colorScheme.onPrimaryContainer,
-)
-```
-
-**Position indicators** — the widget still does not include built-in dot/bar position indicators. App-specific animated indicators remain app-layer composition.
-
----
-
-## Bottom Nav Bar
-
-`SimpleBottomNavBar` is a lightweight bottom navigation wrapper around Material semantics, with token-driven defaults for surface and active/inactive foreground colors.
-
-```dart
-SimpleBottomNavBar(
-  currentIndex: _currentIndex,
-  onTap: (int index) => setState(() => _currentIndex = index),
-  activeIconBackgroundColor: theme.colorScheme.primaryContainer,
-  items: const <SimpleBottomNavItem>[
-    SimpleBottomNavItem(
-      icon: Icons.home_outlined,
-      activeIcon: Icons.home,
-      label: 'Home',
+class _RailExampleState extends State<RailExample> {
+  int selectedIndex = 0;
+  @override Widget build(BuildContext context) => SizedBox(
+    width: 96,
+    child: SimpleVerticalRail(
+      selectedIndex: selectedIndex,
+      onSelected: (index) => setState(() => selectedIndex = index),
+      items: const <SimpleVerticalRailItem>[
+        SimpleVerticalRailItem(icon: Icons.local_cafe_outlined, label: 'Tea'),
+        SimpleVerticalRailItem(icon: Icons.cookie_outlined, label: 'Snacks'),
+        SimpleVerticalRailItem(icon: Icons.card_giftcard_outlined, label: 'Gifts'),
+      ],
     ),
-    SimpleBottomNavItem(
-      icon: Icons.explore_outlined,
-      activeIcon: Icons.explore,
-      label: 'Explore',
-    ),
-    SimpleBottomNavItem(
-      icon: Icons.person_outline,
-      activeIcon: Icons.person,
-      label: 'Profile',
-    ),
-  ],
-)
+  );
+}
 ```
 
-Use `activeIconBackgroundColor` when you need the common “icon in circle” active treatment without replacing the library item rendering.
-
-Default styling resolves in this order:
-- explicit widget parameter
-- `BottomNavigationBarThemeData`
-- `AppThemeTokens`
-- final safe fallback constants
-
-`SimpleTabs` follows the same pattern for `TabBarThemeData` before token fallback.
-
----
-
-## Material Theme Overrides
-
-For thin wrappers around standard Material controls, the library now prefers the matching Material component theme before falling back to `AppThemeTokens`.
-
-Current examples:
-- `SimpleBottomNavBar` -> `BottomNavigationBarThemeData`
-- `SimpleTabs` -> `TabBarThemeData`
-- `SimpleCheckbox` -> `CheckboxThemeData`
-- `SimpleSwitch` -> `SwitchThemeData`
-- `SimpleAlertDialog` -> `DialogThemeData`
-- `SimpleBottomSheet` -> `BottomSheetThemeData`
-- `SimpleLoadingView` -> `ProgressIndicatorThemeData`
-
-This keeps library widgets aligned with host-app component theming while preserving token fallbacks for library-owned semantics.
-
----
-
-## Forms (overview)
-
-If you're building non-trivial forms, prefer the controller-driven form system:
-- `SimpleForm`
-- `SimpleFormBuilder`
-- `SimpleFormController`
-- `SimpleFormValidator` and `SimpleCrossFieldValidator`
-
----
-
-## Search Field
-
-`SimpleSearchField` keeps the standard search-input behavior by default and also provides a first-class quiet pill variant for soft-background search bars.
+Use `SimpleBottomNavBar` when a screen needs a standard bottom navigation experience with an optional active icon circle.
 
 ```dart
-SimpleSearchField(
-  variant: SimpleSearchFieldVariant.quiet,
-  hintText: 'Search menu items',
-  onChanged: (value) => setState(() => _query = value),
-)
+class BottomNavExample extends StatefulWidget {
+  const BottomNavExample({super.key});
+  @override State<BottomNavExample> createState() => _BottomNavExampleState();
+}
+
+class _BottomNavExampleState extends State<BottomNavExample> {
+  int currentIndex = 0;
+  @override Widget build(BuildContext context) => SimpleBottomNavBar(
+    currentIndex: currentIndex,
+    activeIconBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
+    onTap: (index) => setState(() => currentIndex = index),
+    items: const <SimpleBottomNavItem>[
+      SimpleBottomNavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
+      SimpleBottomNavItem(icon: Icons.search_outlined, activeIcon: Icons.search, label: 'Browse'),
+      SimpleBottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Account'),
+    ],
+  );
+}
 ```
 
-Quiet variant styling resolves in this order:
-- explicit `fillColor` / `borderColor`
-- Material search semantics via `ThemeData.searchBarTheme`
-- `AppThemeTokens`
-- final safe fallback constants
-
-Use it for common app-agnostic search bars without route-scoped input theme overrides.
-
----
-
-## Floating Banner Overlay
-
-`SimpleFloatingBanner` is a reusable centered overlay surface for promos, announcements, onboarding callouts, or image-led notices. It supports a dimmed backdrop, optional close button, safe-area-aware centering, and composition via `media` and `child`.
+Use the quiet `SimpleSearchField` when you want a softer search bar that blends into cards, filters, or catalog headers.
 
 ```dart
-showSimpleFloatingBanner<void>(
-  context,
-  media: Image.asset('assets/promo.png', fit: BoxFit.cover),
-  child: Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: const <Widget>[
-      SimpleText.heading(text: 'Seasonal update'),
-      JGaps.h8,
-      SimpleText.body(
-        text: 'Use this surface for generic promotional or announcement content.',
-        maxLines: 4,
+class QuietSearchExample extends StatelessWidget {
+  const QuietSearchExample({super.key});
+  @override Widget build(BuildContext context) => const Padding(
+    padding: JInsets.screenPadding,
+    child: SimpleSearchField(
+      variant: SimpleSearchFieldVariant.quiet,
+      hintText: 'Search products',
+    ),
+  );
+}
+```
+
+Use `showSimpleFloatingBanner` for generic promotional, onboarding, or announcement overlays that need both media and custom content.
+
+```dart
+class FloatingBannerExample extends StatelessWidget {
+  const FloatingBannerExample({super.key});
+  @override Widget build(BuildContext context) => Center(
+    child: SimpleButton.primary(
+      label: 'Open banner',
+      onPressed: () => showSimpleFloatingBanner<void>(
+        context,
+        media: const AspectRatio(
+          aspectRatio: 16 / 9,
+          child: ColoredBox(color: Color(0xFFE0F2FE), child: Center(child: Icon(Icons.campaign_outlined, size: 56))),
+        ),
+        child: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[SimpleText.heading(text: 'Seasonal update'), JGaps.h8, SimpleText.body(text: 'Use this surface for promotions, onboarding, or app-wide notices.', maxLines: 4)],
+        ),
+      ),
+    ),
+  );
+}
+```
+
+Use `SimpleFormBuilder` when you want a small form without hand-wiring every field, label, helper, and submit button.
+
+```dart
+class ProfileFormExample extends StatelessWidget {
+  const ProfileFormExample({super.key});
+  @override Widget build(BuildContext context) => SimpleFormBuilder(
+    showSubmitButton: true,
+    submitLabel: 'Save profile',
+    onSubmit: (values) async => debugPrint(values.toString()),
+    fields: <SimpleFormFieldConfig<dynamic>>[
+      SimpleFormFieldConfig.text(name: 'name', label: 'Name'),
+      SimpleFormFieldConfig.text(
+        name: 'email',
+        label: 'Email',
+        keyboardType: TextInputType.emailAddress,
       ),
     ],
-  ),
+  );
+}
+```
+
+## Theming and tokens
+
+The library is designed so local, deliberate choices win first and shared branding fills the gaps underneath. In practice, a widget uses an explicit parameter when you pass one, then checks the matching Material theme, then reads your library tokens, and only falls back to safe defaults when nothing else is configured. That makes it easy to brand once at the app level without fighting per-widget overrides.
+
+Use the theme extension to customize shared library colors, then read them inside widgets with the canonical accessor `Theme.of(context).appThemeTokens`.
+
+```dart
+final base = JAppTheme.lightTheme;
+
+final theme = base.copyWith(
+  extensions: <ThemeExtension<dynamic>>[
+    ...base.extensions.values.where((extension) => extension is! AppThemeTokens),
+    base.appThemeTokens.copyWith(
+      primary: const Color(0xFF0F766E),
+      cardBackground: const Color(0xFFFFFFFF),
+      cardBorderColor: const Color(0xFFE2E8F0),
+      inputBorderColor: const Color(0xFFCBD5E1),
+      mutedText: const Color(0xFF64748B),
+    ),
+  ],
 );
 ```
 
-The overlay is intentionally generic:
-- use `media` for image-heavy banners
-- use `child` for custom composed content
-- use `showCloseButton` and `barrierDismissible` to control dismissal
-- use `maxWidth`, `widthFactor`, `padding`, and `borderRadius` for layout tuning
-
-Default styling resolves in this order:
-- explicit widget parameter
-- Material dialog semantics (`DialogTheme`, `IconButtonTheme`, `ColorScheme` where appropriate)
-- `AppThemeTokens`
-- final safe fallback constants
-
-This is a reusable overlay primitive, not a campaign-specific popup template.
-
----
-
-## Example app (catalog / QA)
-
-The demo catalog lives in `example/`. It's the best way to:
-- discover what widgets exist and how they're intended to be composed
-- visually QA light/dark themes
-- verify token overrides
-
-Run it like a normal Flutter app:
-
-```bash
-cd example
-flutter run
-```
-
-## Validation screens (downstream consumer)
-
-`playground_flutter_app` (a sibling repo) is the real-world pressure test for this library. The following screens have been built and confirmed which library primitives they stress:
-
-| Screen | Key primitives exercised | Known gaps surfaced |
+| Token | Type | Purpose |
 |---|---|---|
-| ZUS Menu V2 (`zus_menu_page_v2.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles.priceLarge`, `AppThemeTokens` | `SimpleGrid`, `SimpleVerticalRail.selectedItemBackgroundColor`, `SimpleBottomNavBar.activeIconBackgroundColor`, `SimpleCard.flush` |
-| ZUS Menu (`zus_menu_page.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles`, `AppThemeTokens` | same as above |
-| Tea Pickup V2 (`tea_pickup_v2_page.dart`) | `SimpleVerticalRail`, `SimpleBottomNavBar`, `SimpleIconButton.filled`, `JTextStyles.priceLarge`, `JInsets.onlyEnd*`, `SimpleBadge`, `JTints` | — |
-| Tea Pickup Menu (`tea_pickup_menu_page.dart`) | `SimpleMenuSection`, `SimpleListItem`, `SimpleCard`, `SimpleVerticalRail` | — |
+| `primary` | `Color` | Primary action and emphasis color used by the library. |
+| `onPrimary` | `Color?` | Preferred foreground for `primary` surfaces. |
+| `secondary` | `Color` | Secondary semantic action color. |
+| `onSecondary` | `Color?` | Preferred foreground for `secondary` surfaces. |
+| `cardBackground` | `Color` | Card, sheet, and dialog surface color. |
+| `onCard` | `Color?` | Preferred foreground for `cardBackground` surfaces. |
+| `cardBorderColor` | `Color` | Border color for card-like surfaces. |
+| `inputBackground` | `Color` | Fill color for text inputs and similar controls. |
+| `onInput` | `Color?` | Preferred foreground for `inputBackground` surfaces. |
+| `inputBorderColor` | `Color` | Border color for text inputs and related controls. |
+| `dividerColor` | `Color` | Divider and separator color across components. |
+| `mutedText` | `Color` | Secondary, supporting, and low-emphasis text color. |
 
-See `playground_flutter_app/AGENTS.md` for updated downstream composition guidance and `j_flutter_ui/agent_rules/AGENTS.md` for the stable library rulebook.
-
----
-
-## Project structure (for contributors)
+## Project structure
 
 ```text
 lib/
-  j_flutter_ui.dart        # public API exports (consumer entrypoint)
+  j_flutter_ui.dart        # public API exports
   src/ui/
-    constants/             # country/currency codes, etc.
-    localization/          # JSON localization + override bridge
-    resources/             # tokens, theme infrastructure, asset helpers
-    utils/                 # small reusable utilities
-    widgets/               # primitives + composed patterns
-example/                   # catalog app
-assets/                    # svg/png/jpg + localization json
-test/                      # regression tests (fallbacks, theming, rendering)
+    constants/             # country and currency constants
+    localization/          # package localization and host override bridge
+    resources/             # tokens, themes, styles, and bundled asset helpers
+    utils/                 # small reusable utility helpers
+    widgets/               # reusable UI primitives and composed patterns
+example/                   # demo app for visual QA and usage reference
+assets/                    # bundled images, flags, illustrations, and localization JSON
+test/                      # regression tests for theming, behavior, and rendering
 ```
 
----
-
-## Contribution guidelines (high level)
-
-- **Keep it app-agnostic**: no app routing/state/business models inside the library.
-- **Prefer composition**: patterns should reuse primitives; avoid duplicating styling logic.
-- **Theming contract**: resolve styles as widget parameter → Material semantics/component theme when appropriate → `AppThemeTokens` → fallback constants.
-- **Localization-safe**: no hardcoded business copy; use keys and overrides; don't concatenate translated fragments.
+## Built with j_flutter_ui
+> Demo screens and production apps coming soon.
