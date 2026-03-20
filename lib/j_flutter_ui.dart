@@ -7,6 +7,7 @@ export 'src/ui/localization/intl.dart';
 export 'src/ui/localization/l.dart';
 export 'src/ui/resources/index.dart';
 export 'src/ui/widgets/controls/buttons/simple_button.dart';
+export 'src/ui/widgets/controls/buttons/simple_icon_button.dart';
 export 'src/ui/widgets/controls/dropdown/simple_dropdown.dart';
 export 'src/ui/widgets/controls/inputs/simple_checkbox.dart';
 export 'src/ui/widgets/controls/inputs/simple_radio.dart';

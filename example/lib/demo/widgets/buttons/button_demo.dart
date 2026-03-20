@@ -72,6 +72,36 @@ class ButtonDemo extends StatelessWidget {
               ],
             ),
           ),
+          JGaps.h24,
+          Section(
+            title: 'Compact icon actions',
+            child: Wrap(
+              spacing: JDimens.dp12,
+              runSpacing: JDimens.dp12,
+              children: <Widget>[
+                SimpleIconButton.filled(
+                  icon: Icons.add,
+                  tooltip: 'Add item',
+                  onPressed: () {},
+                ),
+                SimpleIconButton.outline(
+                  icon: Icons.remove,
+                  tooltip: 'Remove item',
+                  onPressed: () {},
+                ),
+                SimpleIconButton.filled(
+                  icon: Icons.shopping_cart_outlined,
+                  tooltip: 'Add to cart',
+                  onPressed: () {},
+                ),
+                const SimpleIconButton.outline(
+                  icon: Icons.favorite_border,
+                  tooltip: 'Disabled quick action',
+                  onPressed: null,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

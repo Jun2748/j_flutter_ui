@@ -27,6 +27,7 @@ Primary goals:
 - `lib/src/ui/widgets/`
   - **primitives**: thin wrappers over Material semantics
   - **patterns**: compositions of primitives (avoid re-implementing styling logic)
+  - compact icon-action affordances belong in primitives; app-specific counters, badges, and commerce flows belong in app-layer composition
 
 - `lib/src/ui/localization/`
   - library JSON localization (`assets/localization/*.json`)
@@ -61,6 +62,7 @@ All widgets should normalize values early and resolve styling predictably:
 - Material semantic theme (`ColorScheme`, `TextTheme`, component themes) when semantically correct
 - `AppThemeTokens` (ThemeExtension)
 - final fallback constants (rare; document why)
+- For icon-first compact action primitives, `IconButtonTheme` is the primary Material component theme source before token fallback.
 
 ### Foreground/content colors for token-owned surfaces
 If a widget sets a background using `AppThemeTokens` (e.g. `tokens.cardBackground`, `tokens.primary`), prefer the **paired resolved foreground** from tokens:

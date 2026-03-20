@@ -20,7 +20,9 @@
   `theme.textTheme`
   `theme.appBarTheme`
   `theme.iconTheme`
+  `theme.iconButtonTheme.style`
 - `AppBarEx` defaults should read `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
+- Compact icon-action primitives should read `theme.iconButtonTheme.style` before token fallback.
 
 ## Use AppThemeTokens When
 - The library owns the semantic styling.
@@ -35,6 +37,7 @@
   `mutedText`
 - Canonical access:
   `final AppThemeTokens tokens = Theme.of(context).appThemeTokens;`
+- Compact primary icon-action surfaces should fall back to `tokens.primary` and `tokens.onPrimaryResolved(theme)` when `IconButtonTheme` does not provide colors.
 
 ## Foreground/content color rule (paired semantics)
 - If a widget uses a **token-owned surface/background** (e.g. `tokens.cardBackground`, `tokens.primary`), do not assume Material `on*` colors will remain correct after token overrides.

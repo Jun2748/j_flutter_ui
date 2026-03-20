@@ -52,3 +52,4 @@ When you expose styling knobs:
 ## Extensibility
 - Prefer composition slots (`header`, `footer`, `content`) over subclassing.
 - Do not couple widgets to app routing, app state management, or app domain models.
+- Keep compact icon-action primitives domain-agnostic: the library may provide the press target, but counts, price logic, inventory rules, and add/remove flows stay in app-layer composition.

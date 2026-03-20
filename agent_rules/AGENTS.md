@@ -23,7 +23,7 @@ Read this file before changing code.
 
 ## Widget layering (keep it enforceable)
 - **Primitives**: single responsibility, thin wrappers around Material semantics.
-  - Examples: `SimpleText`, `SimpleButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
+  - Examples: `SimpleText`, `SimpleButton`, `SimpleIconButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
 - **Patterns**: compose primitives; do not rebuild styling logic from scratch.
   - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`.
 
@@ -39,6 +39,7 @@ Rationale: downstream apps often customize library-owned styling via `AppThemeTo
 ### Use Material semantics when
 - The value is a standard Material semantic pairing.
 - Examples: `theme.colorScheme.error`, `theme.colorScheme.onSurface`, `theme.textTheme`, `theme.appBarTheme`, `theme.iconTheme`.
+- For compact icon-action primitives, prefer `theme.iconButtonTheme.style` before token fallback.
 - `AppBarEx` should prefer `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
 
 ### Use `AppThemeTokens` when
