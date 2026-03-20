@@ -6,7 +6,7 @@ import '../../resources/dimens.dart';
 import '../../resources/tinted_surface.dart';
 import '../typography/simple_text.dart';
 
-enum _SimpleBadgeVariant { neutral, primary, success, warning, error }
+enum _SimpleBadgeVariant { neutral, primary, success, warning, error, filled }
 
 class SimpleBadge extends StatelessWidget {
   const SimpleBadge._({
@@ -15,7 +15,11 @@ class SimpleBadge extends StatelessWidget {
     required _SimpleBadgeVariant variant,
     this.icon,
     this.padding,
-  }) : _variant = variant;
+    Color? filledColor,
+    Color? filledForeground,
+  }) : _variant = variant,
+       _filledColor = filledColor,
+       _filledForeground = filledForeground;
 
   const SimpleBadge.neutral({
     Key? key,
@@ -82,10 +86,41 @@ class SimpleBadge extends StatelessWidget {
          padding: padding,
        );
 
+  /// Solid-fill badge for strong emphasis: discount tags, count indicators, and
+  /// any context where the tinted badge variants are visually insufficient.
+  ///
+  /// [color] is the solid background — typically a theme-resolved color such as
+  /// [ColorScheme.error] for discount/alert contexts or [ColorScheme.primary]
+  /// for count indicators.
+  ///
+  /// [foregroundColor] defaults to a luminance-computed white or black so
+  /// contrast is maintained automatically when [color] is theme-derived.
+  /// Pass an explicit value to override (e.g. [ColorScheme.onError]).
+  const SimpleBadge.filled({
+    Key? key,
+    required String label,
+    required Color color,
+    Color? foregroundColor,
+    IconData? icon,
+    EdgeInsets? padding,
+  }) : this._(
+         key: key,
+         label: label,
+         variant: _SimpleBadgeVariant.filled,
+         filledColor: color,
+         filledForeground: foregroundColor,
+         icon: icon,
+         padding: padding,
+       );
+
   final String label;
   final IconData? icon;
   final EdgeInsets? padding;
   final _SimpleBadgeVariant _variant;
+
+  // Only used by the filled variant.
+  final Color? _filledColor;
+  final Color? _filledForeground;
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +203,24 @@ class SimpleBadge extends StatelessWidget {
           foreground: error,
           border: JTints.border(cardBorderColor, error, alpha: 56),
         );
+      case _SimpleBadgeVariant.filled:
+        final Color bg = _filledColor ?? theme.colorScheme.onSurface;
+        return _SimpleBadgeColors(
+          background: bg,
+          foreground: _filledForeground ?? _computedForeground(bg),
+          // Solid fill needs no additional border.
+          border: Colors.transparent,
+        );
     }
+  }
+
+  /// Luminance-based foreground default for filled badges: dark background →
+  /// white, light background → black. Matches the contrast logic used by
+  /// [AppThemeTokens._onColorForBackground].
+  static Color _computedForeground(Color background) {
+    return ThemeData.estimateBrightnessForColor(background) == Brightness.dark
+        ? Colors.white
+        : Colors.black;
   }
 }
 

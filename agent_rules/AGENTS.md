@@ -97,8 +97,10 @@ Never concatenate translated fragments into a sentence.
 
 ## Reusable gaps now covered
 - `SimpleVerticalRail` includes `selectedItemBackgroundColor` for reusable selected-state background highlights without app-layer overlays.
+- `SimpleVerticalRail` items support `badgeLabel` for per-item status/count/tag badges rendered as icon-corner overlays. App-layer manual offset math is no longer required. Note: this is distinct from position indicators (dots, bars) which remain app-layer `Stack` composition.
 - `SimpleBottomNavBar` includes `activeIconBackgroundColor` for reusable active icon circle treatments without custom item rendering.
 - `SimpleSearchField` includes a first-class `quiet` variant for soft-background / pill-like search bars. Keep it semantic and app-agnostic; do not turn it into a branded search template.
+- `SimpleBadge.filled` provides a solid-fill badge for strong emphasis (discount tags, count indicators). Takes a `color` parameter with luminance-computed foreground fallback. Complements the existing tinted variants (primary, error, etc.).
 - `SimpleFloatingBanner` is the reusable centered promo/announcement overlay primitive. Keep it composition-first (`media`, `child`) and avoid baking in campaign-specific text, badges, prices, or brand layouts.
 
 ## Review workflow (what to do before you edit)
@@ -121,6 +123,8 @@ Previously confirmed validation gaps are now implemented in the library:
 - `SimpleGrid` now provides a fixed n-column layout helper for catalog/product grids.
 - `SimpleVerticalRail` supports `selectedItemColor` / `unselectedItemColor` so active-color customization no longer needs theme workarounds.
 - `SimpleVerticalRail` supports `selectedItemBackgroundColor` so reusable selected-state highlights no longer need app-layer overlays.
+- `SimpleVerticalRail` supports `badgeLabel` on `SimpleVerticalRailItem` so per-item badges no longer need app-layer offset computation.
+- `SimpleBadge.filled` provides a solid-fill variant (color + foreground) for discount tags, counts, and strong-emphasis labels.
 - `SimpleBottomNavBar` supports `activeIconBackgroundColor` so reusable active icon circle treatments no longer need custom wrappers.
 - `SimpleCard.flush` provides an edge-to-edge / full-bleed variant (no external margin, no corner radius) for hero banners.
 - `SimpleSearchField` provides a `quiet` pill-like variant so common search bars do not need route-scoped input theme overrides.

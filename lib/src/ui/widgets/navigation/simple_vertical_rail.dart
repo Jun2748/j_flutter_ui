@@ -3,12 +3,25 @@ import 'package:flutter/material.dart';
 import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
+import '../typography/simple_text.dart';
 
 class SimpleVerticalRailItem {
-  const SimpleVerticalRailItem({required this.icon, required this.label});
+  const SimpleVerticalRailItem({
+    required this.icon,
+    required this.label,
+    this.badgeLabel,
+  });
 
   final IconData icon;
   final String label;
+
+  /// Optional short text rendered as a solid badge overlaid on the item's icon
+  /// (top-end corner). Suitable for counts ("3"), short status markers ("SOE"),
+  /// or promotional tags ("1.7B+").
+  ///
+  /// Replaces the previous approach of computing badge positions manually in
+  /// app-layer [Stack] overlays from [itemHeight] offsets.
+  final String? badgeLabel;
 }
 
 class SimpleVerticalRail extends StatelessWidget {
@@ -97,6 +110,28 @@ class SimpleVerticalRail extends StatelessWidget {
               ? (selectedItemColor ?? theme.colorScheme.onSurface)
               : (unselectedItemColor ?? tokens.mutedText);
 
+          // Wrap icon in a Stack when a badge label is present so the badge
+          // is composited inside the item's own tap region — no manual offset
+          // math is needed in the app layer.
+          Widget iconWidget = Icon(
+            item.icon,
+            size: resolvedIconSize,
+            color: itemColor,
+          );
+          if (item.badgeLabel != null) {
+            iconWidget = Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                iconWidget,
+                PositionedDirectional(
+                  top: -JDimens.dp4,
+                  end: -JDimens.dp8,
+                  child: _RailItemBadge(label: item.badgeLabel!),
+                ),
+              ],
+            );
+          }
+
           return Material(
             color: Colors.transparent,
             child: InkWell(
@@ -118,11 +153,7 @@ class SimpleVerticalRail extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          item.icon,
-                          size: resolvedIconSize,
-                          color: itemColor,
-                        ),
+                        iconWidget,
                         const SizedBox(height: JDimens.dp4),
                         Text(
                           item.label,
@@ -144,6 +175,46 @@ class SimpleVerticalRail extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Private: compact icon-corner badge for rail items.
+//
+// Theming: background = tokens.primary; foreground = tokens.onPrimaryResolved
+// so that downstream apps which override the primary token get consistent
+// badge contrast automatically.
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _RailItemBadge extends StatelessWidget {
+  const _RailItemBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = theme.appThemeTokens;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: tokens.primary,
+        borderRadius: BorderRadius.circular(JDimens.dp24),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: JDimens.dp4,
+          vertical: JDimens.dp2,
+        ),
+        child: SimpleText.label(
+          text: label,
+          color: tokens.onPrimaryResolved(theme),
+          weight: FontWeight.w700,
+          maxLines: 1,
+          style: const TextStyle(height: 1.0),
+        ),
       ),
     );
   }
