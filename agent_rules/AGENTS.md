@@ -28,7 +28,7 @@ Read this file before changing code.
   - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`.
 
 ## Active indicator pattern (navigation)
-`SimpleVerticalRail` provides color-change only (active: `colorScheme.onSurface`, inactive: `tokens.mutedText`). It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
+`SimpleVerticalRail` provides color-change only. Defaults are active: `colorScheme.onSurface`, inactive: `tokens.mutedText`, but you can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
 
 ## Theming contract (what downstream apps rely on)
 Use Flutter-native theming only.
@@ -103,41 +103,12 @@ Never concatenate translated fragments into a sentence.
 - `acceptable fallback`
 - `intentional Material semantic usage`
 
-## Known gaps (confirmed by validation screen builds)
+## Resolved gaps (validated)
 
-These are real reusable primitives/behaviors missing from the library. They have been confirmed by two or more validation screens that had to work around them. Fix them here when prioritized — do **not** let the workarounds drift into a permanent app-layer pattern.
+Previously confirmed validation gaps are now implemented in the library:
 
-### `SimpleGrid` — missing 2-column (and n-column) layout primitive
-**Confirmed by:** `zus_menu_page.dart`, `zus_menu_page_v2.dart`
-Both screens hand-roll `Row` pairs inside `VStack` to produce a 2-column product grid. The pattern is identical in both files and will appear in any future product/catalog screen.
+- `SimpleGrid` now provides a fixed n-column layout helper for catalog/product grids.
+- `SimpleVerticalRail` supports `selectedItemColor` / `unselectedItemColor` so active-color customization no longer needs theme workarounds.
+- `SimpleCard.flush` provides an edge-to-edge / full-bleed variant (no external margin, no corner radius) for hero banners.
 
-Proposed API:
-```dart
-SimpleGrid({
-  required int columnCount,
-  required double gap,
-  required List<Widget> children,
-})
-```
-
-Classification: **real reusable gap**.
-
----
-
-### `SimpleVerticalRail` — no `selectedItemColor` parameter
-**Confirmed by:** `zus_menu_page.dart`, `zus_menu_page_v2.dart`, `tea_pickup_v2_page.dart`
-All three screens work around the missing parameter by wrapping the rail in a `Theme` that mutates `colorScheme.onSurface` to the desired active color. This is a repeated, non-obvious workaround.
-
-Proposed fix: add `selectedItemColor` and `unselectedItemColor` optional parameters to `SimpleVerticalRail`, resolving to current defaults if not set.
-
-Classification: **real reusable gap**.
-
----
-
-### `SimpleCard` — no flush / edge-to-edge variant
-**Confirmed by:** `zus_menu_page.dart`, `zus_menu_page_v2.dart`
-`SimpleCard`'s default `margin: JInsets.all16` and `radius: 16dp` prevent use as a full-bleed hero banner surface. Both screens fall back to raw `DecoratedBox` to achieve flush-to-edge treatment.
-
-Proposed fix: support `margin: EdgeInsets.zero` without layout side-effects, or add a `.banner` / `.flush` named constructor that removes margin and radius.
-
-Classification: **real reusable gap**.
+If a new downstream gap is reintroduced, add it back here as a fresh “Known gaps” entry.

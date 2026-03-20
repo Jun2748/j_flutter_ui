@@ -15,6 +15,22 @@ class SimpleCard extends StatelessWidget {
     this.onTap,
   });
 
+  /// Edge-to-edge / full-bleed card variant.
+  ///
+  /// Removes the external margin and corner radius so the card sits flush
+  /// against its container (e.g. hero banners, section headers).
+  /// Content padding defaults to [JInsets.all16]; pass [EdgeInsets.zero] to
+  /// remove it entirely.
+  const SimpleCard.flush({
+    super.key,
+    required this.child,
+    this.padding = JInsets.all16,
+    this.backgroundColor,
+    this.borderColor,
+    this.onTap,
+  })  : margin = EdgeInsets.zero,
+        radius = 0;
+
   final Widget? child;
   final EdgeInsets padding;
   final EdgeInsets margin;

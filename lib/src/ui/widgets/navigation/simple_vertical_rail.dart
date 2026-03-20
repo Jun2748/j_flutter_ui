@@ -26,6 +26,8 @@ class SimpleVerticalRail extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.showEndBorder = true,
+    this.selectedItemColor,
+    this.unselectedItemColor,
   });
 
   final List<SimpleVerticalRailItem> items;
@@ -51,6 +53,14 @@ class SimpleVerticalRail extends StatelessWidget {
   /// Whether to draw a 1dp end border separating the rail from content.
   /// Defaults to true.
   final bool showEndBorder;
+
+  /// Color for the selected/active item (icon + label).
+  /// Defaults to [ColorScheme.onSurface].
+  final Color? selectedItemColor;
+
+  /// Color for unselected/inactive items (icon + label).
+  /// Defaults to [AppThemeTokens.mutedText].
+  final Color? unselectedItemColor;
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +91,9 @@ class SimpleVerticalRail extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final SimpleVerticalRailItem item = items[index];
           final bool isActive = index == selectedIndex;
-          final Color itemColor =
-              isActive ? theme.colorScheme.onSurface : tokens.mutedText;
+          final Color itemColor = isActive
+              ? (selectedItemColor ?? theme.colorScheme.onSurface)
+              : (unselectedItemColor ?? tokens.mutedText);
 
           return Material(
             color: Colors.transparent,

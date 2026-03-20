@@ -43,6 +43,7 @@ export 'src/ui/widgets/forms/validation/simple_validation_messages.dart';
 export 'src/ui/widgets/layout/app_scaffold.dart';
 export 'src/ui/widgets/layout/h_stack.dart';
 export 'src/ui/widgets/layout/section.dart';
+export 'src/ui/widgets/layout/simple_grid.dart';
 export 'src/ui/widgets/layout/v_stack.dart';
 export 'src/ui/widgets/navigation/app_bar_ex.dart';
 export 'src/ui/widgets/navigation/simple_bottom_nav_bar.dart';

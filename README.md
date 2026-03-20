@@ -26,7 +26,7 @@ Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The publi
 - **Display**: `SimpleCard`, `SimpleChip`, `SimpleDivider`, `SimpleListItem`, menus (`SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`)
 - **Feedback**: `SimpleBanner`, `SimpleBadge`, `SimpleAlertDialog`, `SimpleSnackbar`
 - **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
-- **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`
+- **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`, `SimpleGrid`
 - **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
 - **Overlays**: `SimpleBottomSheet`
 - **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
@@ -198,7 +198,7 @@ The library resolves strings in this order:
 
 ## Vertical Rail
 
-`SimpleVerticalRail` is a compact scrollable left-edge navigation rail: icon + label items stacked vertically, with active/inactive color driven by tokens. Common in food ordering, marketplace, and catalog apps (think Grab, Chagee).
+`SimpleVerticalRail` is a compact scrollable left-edge navigation rail: icon + label items stacked vertically, with active/inactive colors driven by tokens by default (and overrideable). Common in food ordering, marketplace, and catalog apps (think Grab, Chagee).
 
 ```dart
 SimpleVerticalRail(
@@ -225,7 +225,7 @@ SimpleVerticalRail(
 )
 ```
 
-**Active indicator** — the widget provides color-change only (active: `colorScheme.onSurface`, inactive: `tokens.mutedText`). App-specific overlays (animated dots, accent bars) are intentionally kept in app-layer composition. Example using a `Stack`:
+**Active indicator** — the widget provides color-change only (defaults: active `colorScheme.onSurface`, inactive `tokens.mutedText`). You can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. App-specific overlays (animated dots, accent bars) are intentionally kept in app-layer composition. Example using a `Stack`:
 
 ```dart
 Stack(
@@ -274,12 +274,12 @@ flutter run
 
 | Screen | Key primitives exercised | Known gaps surfaced |
 |---|---|---|
-| ZUS Menu V2 (`zus_menu_page_v2.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles.priceLarge`, `AppThemeTokens` | `SimpleGrid` (missing), `SimpleVerticalRail` selectedItemColor (missing), `SimpleCard` edge-to-edge (missing) |
+| ZUS Menu V2 (`zus_menu_page_v2.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles.priceLarge`, `AppThemeTokens` | `SimpleGrid`, `SimpleVerticalRail` selectedItemColor, `SimpleCard.flush` |
 | ZUS Menu (`zus_menu_page.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles`, `AppThemeTokens` | same as above |
-| Tea Pickup V2 (`tea_pickup_v2_page.dart`) | `SimpleVerticalRail`, `SimpleBottomNavBar`, `SimpleIconButton.filled`, `JTextStyles.priceLarge`, `JInsets.onlyEnd*`, `SimpleBadge`, `JTints` | `SimpleVerticalRail` selectedItemColor |
+| Tea Pickup V2 (`tea_pickup_v2_page.dart`) | `SimpleVerticalRail`, `SimpleBottomNavBar`, `SimpleIconButton.filled`, `JTextStyles.priceLarge`, `JInsets.onlyEnd*`, `SimpleBadge`, `JTints` | — |
 | Tea Pickup Menu (`tea_pickup_menu_page.dart`) | `SimpleMenuSection`, `SimpleListItem`, `SimpleCard`, `SimpleVerticalRail` | — |
 
-See `playground_flutter_app/AGENTS.md` for confirmed workarounds and `j_flutter_ui/agent_rules/AGENTS.md` for the full gap backlog.
+See `playground_flutter_app/AGENTS.md` for updated downstream composition guidance and `j_flutter_ui/agent_rules/AGENTS.md` for the stable library rulebook.
 
 ---
 
