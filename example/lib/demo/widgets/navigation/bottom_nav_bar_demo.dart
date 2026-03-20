@@ -17,19 +17,34 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return AppScaffold(
       appBar: AppBarEx(title: widget.title),
       bottomNavigationBar: SimpleBottomNavBar(
         currentIndex: _currentIndex,
+        activeIconBackgroundColor: theme.colorScheme.primaryContainer,
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
           });
         },
         items: const <SimpleBottomNavItem>[
-          SimpleBottomNavItem(icon: Icons.home_outlined, label: 'Home'),
-          SimpleBottomNavItem(icon: Icons.explore_outlined, label: 'Explore'),
-          SimpleBottomNavItem(icon: Icons.person_outline, label: 'Profile'),
+          SimpleBottomNavItem(
+            icon: Icons.home_outlined,
+            activeIcon: Icons.home,
+            label: 'Home',
+          ),
+          SimpleBottomNavItem(
+            icon: Icons.explore_outlined,
+            activeIcon: Icons.explore,
+            label: 'Explore',
+          ),
+          SimpleBottomNavItem(
+            icon: Icons.person_outline,
+            activeIcon: Icons.person,
+            label: 'Profile',
+          ),
         ],
       ),
       body: Center(
@@ -45,7 +60,7 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
                 JGaps.h12,
                 const SimpleText.body(
                   text:
-                      'Tap the bottom navigation items to verify state updates.',
+                      'Tap the items to verify the active icon background treatment and state updates.',
                   align: TextAlign.center,
                 ),
               ],

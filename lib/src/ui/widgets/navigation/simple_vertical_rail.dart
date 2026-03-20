@@ -5,10 +5,7 @@ import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
 
 class SimpleVerticalRailItem {
-  const SimpleVerticalRailItem({
-    required this.icon,
-    required this.label,
-  });
+  const SimpleVerticalRailItem({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
@@ -28,6 +25,7 @@ class SimpleVerticalRail extends StatelessWidget {
     this.showEndBorder = true,
     this.selectedItemColor,
     this.unselectedItemColor,
+    this.selectedItemBackgroundColor,
   });
 
   final List<SimpleVerticalRailItem> items;
@@ -62,6 +60,10 @@ class SimpleVerticalRail extends StatelessWidget {
   /// Defaults to [AppThemeTokens.mutedText].
   final Color? unselectedItemColor;
 
+  /// Optional background color for the selected/active item highlight.
+  /// Defaults to null for no selected background.
+  final Color? selectedItemBackgroundColor;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -72,16 +74,16 @@ class SimpleVerticalRail extends StatelessWidget {
     final Color resolvedBorder = borderColor ?? tokens.dividerColor;
     final double resolvedIconSize = iconSize ?? JIconSizes.lg;
     final TextStyle resolvedLabelBase = labelStyle ?? JTextStyles.label;
+    final BorderRadius selectedItemBorderRadius = BorderRadius.circular(
+      JDimens.dp12,
+    );
 
     return DecoratedBox(
       decoration: BoxDecoration(
         color: resolvedBackground,
         border: showEndBorder
             ? BorderDirectional(
-                end: BorderSide(
-                  color: resolvedBorder,
-                  width: JDimens.dp1,
-                ),
+                end: BorderSide(color: resolvedBorder, width: JDimens.dp1),
               )
             : null,
       ),
@@ -99,34 +101,43 @@ class SimpleVerticalRail extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () => onSelected(index),
+              borderRadius: selectedItemBackgroundColor == null
+                  ? null
+                  : selectedItemBorderRadius,
               child: SizedBox(
                 height: itemHeight,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: JDimens.dp8,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        item.icon,
-                        size: resolvedIconSize,
-                        color: itemColor,
-                      ),
-                      const SizedBox(height: JDimens.dp4),
-                      Text(
-                        item.label,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: resolvedLabelBase.copyWith(
+                  padding: const EdgeInsets.symmetric(horizontal: JDimens.dp8),
+                  child: Ink(
+                    decoration: isActive && selectedItemBackgroundColor != null
+                        ? BoxDecoration(
+                            color: selectedItemBackgroundColor,
+                            borderRadius: selectedItemBorderRadius,
+                          )
+                        : null,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          item.icon,
+                          size: resolvedIconSize,
                           color: itemColor,
-                          fontWeight: isActive
-                              ? FontWeight.w600
-                              : FontWeight.w400,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: JDimens.dp4),
+                        Text(
+                          item.label,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: resolvedLabelBase.copyWith(
+                            color: itemColor,
+                            fontWeight: isActive
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

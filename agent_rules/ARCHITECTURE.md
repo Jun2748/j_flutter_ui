@@ -31,7 +31,8 @@ Primary goals:
   - overlay patterns: `SimpleBottomSheet`, `SimpleFloatingBanner`
     - `SimpleFloatingBanner` — centered floating promo/announcement surface over a dimmed backdrop. Keep it generic and composition-first; image/media and content belong in slots, while brand campaign structure stays in the app layer.
   - navigation patterns: `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
-    - `SimpleVerticalRail` — compact left-edge icon-label rail. Provides color-change active state only. App-local animated overlays (dots, bars) are `Stack` composition on top, not part of the widget.
+    - `SimpleVerticalRail` — compact left-edge icon-label rail. Supports color-change active state plus an optional selected background highlight. App-local animated overlays (dots, bars) are `Stack` composition on top, not part of the widget.
+    - `SimpleBottomNavBar` — bottom navigation wrapper with standard active-color treatment and an optional active icon background. Keep it a semantic navigation pattern, not a custom item renderer.
 
 - `lib/src/ui/localization/`
   - library JSON localization (`assets/localization/*.json`)

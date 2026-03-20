@@ -13,30 +13,24 @@ class VerticalRailDemo extends StatefulWidget {
 class _VerticalRailDemoState extends State<VerticalRailDemo> {
   static const List<SimpleVerticalRailItem> _compactItems =
       <SimpleVerticalRailItem>[
-    SimpleVerticalRailItem(icon: Icons.home_outlined, label: 'Home'),
-    SimpleVerticalRailItem(icon: Icons.explore_outlined, label: 'Explore'),
-    SimpleVerticalRailItem(icon: Icons.receipt_long_outlined, label: 'Orders'),
-    SimpleVerticalRailItem(icon: Icons.person_outline_rounded, label: 'Me'),
-  ];
+        SimpleVerticalRailItem(icon: Icons.home_outlined, label: 'Home'),
+        SimpleVerticalRailItem(icon: Icons.explore_outlined, label: 'Explore'),
+        SimpleVerticalRailItem(
+          icon: Icons.receipt_long_outlined,
+          label: 'Orders',
+        ),
+        SimpleVerticalRailItem(icon: Icons.person_outline_rounded, label: 'Me'),
+      ];
 
-  static const List<SimpleVerticalRailItem> _largeItems =
-      <SimpleVerticalRailItem>[
-    SimpleVerticalRailItem(
-      icon: Icons.local_cafe_outlined,
-      label: 'Milk Tea',
-    ),
-    SimpleVerticalRailItem(
-      icon: Icons.shopping_bag_outlined,
-      label: 'Bundles',
-    ),
+  static const List<SimpleVerticalRailItem>
+  _largeItems = <SimpleVerticalRailItem>[
+    SimpleVerticalRailItem(icon: Icons.local_cafe_outlined, label: 'Milk Tea'),
+    SimpleVerticalRailItem(icon: Icons.shopping_bag_outlined, label: 'Bundles'),
     SimpleVerticalRailItem(
       icon: Icons.local_florist_outlined,
       label: 'Seasonal',
     ),
-    SimpleVerticalRailItem(
-      icon: Icons.redeem_outlined,
-      label: 'Merch',
-    ),
+    SimpleVerticalRailItem(icon: Icons.redeem_outlined, label: 'Merch'),
   ];
 
   int _compactIndex = 0;
@@ -44,6 +38,8 @@ class _VerticalRailDemoState extends State<VerticalRailDemo> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return AppScaffold(
       appBar: AppBarEx(title: widget.title),
       body: SingleChildScrollView(
@@ -78,6 +74,34 @@ class _VerticalRailDemoState extends State<VerticalRailDemo> {
               ),
             ),
             _RailSection(
+              label: 'Compact — selected item background highlight',
+              child: SizedBox(
+                height: 320,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 76,
+                      child: SimpleVerticalRail(
+                        items: _compactItems,
+                        selectedIndex: _compactIndex,
+                        onSelected: (int i) =>
+                            setState(() => _compactIndex = i),
+                        selectedItemBackgroundColor:
+                            theme.colorScheme.primaryContainer,
+                        selectedItemColor: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    Expanded(
+                      child: _ContentArea(
+                        label: _compactItems[_compactIndex].label,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            _RailSection(
               label:
                   'Large variant — itemHeight: 104, xl icons, body1 label style',
               child: SizedBox(
@@ -90,11 +114,14 @@ class _VerticalRailDemoState extends State<VerticalRailDemo> {
                       child: SimpleVerticalRail(
                         items: _largeItems,
                         selectedIndex: _largeIndex,
-                        onSelected: (int i) =>
-                            setState(() => _largeIndex = i),
+                        onSelected: (int i) => setState(() => _largeIndex = i),
                         itemHeight: 104,
                         iconSize: JIconSizes.xl,
                         labelStyle: JTextStyles.body1,
+                        selectedItemBackgroundColor:
+                            theme.colorScheme.secondaryContainer,
+                        selectedItemColor:
+                            theme.colorScheme.onSecondaryContainer,
                       ),
                     ),
                     Expanded(

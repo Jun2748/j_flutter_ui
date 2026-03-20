@@ -26,6 +26,7 @@ class SimpleBottomNavBar extends StatelessWidget {
     required this.items,
     this.backgroundColor,
     this.borderColor,
+    this.activeIconBackgroundColor,
   });
 
   final int? currentIndex;
@@ -33,6 +34,10 @@ class SimpleBottomNavBar extends StatelessWidget {
   final List<SimpleBottomNavItem>? items;
   final Color? backgroundColor;
   final Color? borderColor;
+
+  /// Optional circular background color for the selected/active icon.
+  /// Defaults to null for the standard active icon treatment.
+  final Color? activeIconBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +72,7 @@ class SimpleBottomNavBar extends StatelessWidget {
                 gap: JDimens.dp8,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(item.activeIcon ?? item.icon ?? Icons.circle_outlined),
+                  _buildActiveNavIcon(item) ?? _buildInactiveNavIcon(item),
                   SimpleText.label(text: item.label ?? ''),
                 ],
               ),
@@ -103,16 +108,40 @@ class SimpleBottomNavBar extends StatelessWidget {
           items: resolvedItems
               .map(
                 (SimpleBottomNavItem item) => BottomNavigationBarItem(
-                  icon: Icon(item.icon ?? Icons.circle_outlined),
-                  activeIcon: item.activeIcon == null
-                      ? null
-                      : Icon(item.activeIcon),
+                  icon: _buildInactiveNavIcon(item),
+                  activeIcon: _buildActiveNavIcon(item),
                   label: item.label ?? '',
                 ),
               )
               .toList(),
         ),
       ),
+    );
+  }
+
+  Widget _buildInactiveNavIcon(SimpleBottomNavItem item) {
+    return Icon(item.icon ?? Icons.circle_outlined);
+  }
+
+  Widget? _buildActiveNavIcon(SimpleBottomNavItem item) {
+    if (activeIconBackgroundColor == null && item.activeIcon == null) {
+      return null;
+    }
+
+    final Widget icon = Icon(
+      item.activeIcon ?? item.icon ?? Icons.circle_outlined,
+    );
+
+    if (activeIconBackgroundColor == null) {
+      return icon;
+    }
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: activeIconBackgroundColor,
+        shape: BoxShape.circle,
+      ),
+      child: Padding(padding: JInsets.all8, child: icon),
     );
   }
 }

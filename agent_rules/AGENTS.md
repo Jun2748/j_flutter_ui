@@ -28,7 +28,9 @@ Read this file before changing code.
   - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`, `SimpleFloatingBanner`.
 
 ## Active indicator pattern (navigation)
-`SimpleVerticalRail` provides color-change only. Defaults are active: `colorScheme.onSurface`, inactive: `tokens.mutedText`, but you can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
+`SimpleVerticalRail` defaults to color-change active state and now also supports an optional selected background via `selectedItemBackgroundColor`. Defaults are active: `colorScheme.onSurface`, inactive: `tokens.mutedText`, but you can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
+
+`SimpleBottomNavBar` supports the standard active-color treatment and an optional active icon circle treatment via `activeIconBackgroundColor`. Do not expand it into a custom item-renderer API for app-specific navigation chrome.
 
 ## Theming contract (what downstream apps rely on)
 Use Flutter-native theming only.
@@ -92,6 +94,8 @@ Never concatenate translated fragments into a sentence.
 - `SimpleFormController.resetToInitialValues()` remains the restore-initial-values path.
 
 ## Reusable gaps now covered
+- `SimpleVerticalRail` includes `selectedItemBackgroundColor` for reusable selected-state background highlights without app-layer overlays.
+- `SimpleBottomNavBar` includes `activeIconBackgroundColor` for reusable active icon circle treatments without custom item rendering.
 - `SimpleSearchField` includes a first-class `quiet` variant for soft-background / pill-like search bars. Keep it semantic and app-agnostic; do not turn it into a branded search template.
 - `SimpleFloatingBanner` is the reusable centered promo/announcement overlay primitive. Keep it composition-first (`media`, `child`) and avoid baking in campaign-specific text, badges, prices, or brand layouts.
 
@@ -113,6 +117,8 @@ Previously confirmed validation gaps are now implemented in the library:
 
 - `SimpleGrid` now provides a fixed n-column layout helper for catalog/product grids.
 - `SimpleVerticalRail` supports `selectedItemColor` / `unselectedItemColor` so active-color customization no longer needs theme workarounds.
+- `SimpleVerticalRail` supports `selectedItemBackgroundColor` so reusable selected-state highlights no longer need app-layer overlays.
+- `SimpleBottomNavBar` supports `activeIconBackgroundColor` so reusable active icon circle treatments no longer need custom wrappers.
 - `SimpleCard.flush` provides an edge-to-edge / full-bleed variant (no external margin, no corner radius) for hero banners.
 - `SimpleSearchField` provides a `quiet` pill-like variant so common search bars do not need route-scoped input theme overrides.
 - `SimpleFloatingBanner` provides a reusable centered promo/announcement overlay with dimmed backdrop, optional close affordance, and custom content/media composition.

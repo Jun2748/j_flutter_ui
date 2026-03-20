@@ -198,7 +198,7 @@ The library resolves strings in this order:
 
 ## Vertical Rail
 
-`SimpleVerticalRail` is a compact scrollable left-edge navigation rail: icon + label items stacked vertically, with active/inactive colors driven by tokens by default (and overrideable). Common in food ordering, marketplace, and catalog apps (think Grab, Chagee).
+`SimpleVerticalRail` is a compact scrollable left-edge navigation rail: icon + label items stacked vertically, with active/inactive colors driven by tokens by default (and overrideable). It also supports an optional selected-state background highlight. Common in food ordering, marketplace, and catalog apps (think Grab, Chagee).
 
 ```dart
 SimpleVerticalRail(
@@ -225,22 +225,52 @@ SimpleVerticalRail(
 )
 ```
 
-**Active indicator** — the widget provides color-change only (defaults: active `colorScheme.onSurface`, inactive `tokens.mutedText`). You can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. App-specific overlays (animated dots, accent bars) are intentionally kept in app-layer composition. Example using a `Stack`:
+**Selected state styling** — by default the widget keeps the original color-only active treatment (defaults: active `colorScheme.onSurface`, inactive `tokens.mutedText`). You can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`, and add a built-in highlight via `selectedItemBackgroundColor`:
 
 ```dart
-Stack(
-  clipBehavior: Clip.none,
-  children: [
-    SimpleVerticalRail(items: ..., selectedIndex: ..., onSelected: ...),
-    // App-local animated dot on the rail/content border line
-    AnimatedPositioned(
-      right: -5,
-      top: selectedIndex * 76.0 + (76.0 / 2 - 5),
-      child: /* dot widget */,
+SimpleVerticalRail(
+  items: ...,
+  selectedIndex: _selectedIndex,
+  onSelected: ...,
+  selectedItemBackgroundColor: theme.colorScheme.primaryContainer,
+  selectedItemColor: theme.colorScheme.onPrimaryContainer,
+)
+```
+
+**Position indicators** — the widget still does not include built-in dot/bar position indicators. App-specific animated indicators remain app-layer composition.
+
+---
+
+## Bottom Nav Bar
+
+`SimpleBottomNavBar` is a lightweight bottom navigation wrapper around Material semantics, with token-driven defaults for surface and active/inactive foreground colors.
+
+```dart
+SimpleBottomNavBar(
+  currentIndex: _currentIndex,
+  onTap: (int index) => setState(() => _currentIndex = index),
+  activeIconBackgroundColor: theme.colorScheme.primaryContainer,
+  items: const <SimpleBottomNavItem>[
+    SimpleBottomNavItem(
+      icon: Icons.home_outlined,
+      activeIcon: Icons.home,
+      label: 'Home',
+    ),
+    SimpleBottomNavItem(
+      icon: Icons.explore_outlined,
+      activeIcon: Icons.explore,
+      label: 'Explore',
+    ),
+    SimpleBottomNavItem(
+      icon: Icons.person_outline,
+      activeIcon: Icons.person,
+      label: 'Profile',
     ),
   ],
 )
 ```
+
+Use `activeIconBackgroundColor` when you need the common “icon in circle” active treatment without replacing the library item rendering.
 
 ---
 
@@ -335,7 +365,7 @@ flutter run
 
 | Screen | Key primitives exercised | Known gaps surfaced |
 |---|---|---|
-| ZUS Menu V2 (`zus_menu_page_v2.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles.priceLarge`, `AppThemeTokens` | `SimpleGrid`, `SimpleVerticalRail` selectedItemColor, `SimpleCard.flush` |
+| ZUS Menu V2 (`zus_menu_page_v2.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles.priceLarge`, `AppThemeTokens` | `SimpleGrid`, `SimpleVerticalRail.selectedItemBackgroundColor`, `SimpleBottomNavBar.activeIconBackgroundColor`, `SimpleCard.flush` |
 | ZUS Menu (`zus_menu_page.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles`, `AppThemeTokens` | same as above |
 | Tea Pickup V2 (`tea_pickup_v2_page.dart`) | `SimpleVerticalRail`, `SimpleBottomNavBar`, `SimpleIconButton.filled`, `JTextStyles.priceLarge`, `JInsets.onlyEnd*`, `SimpleBadge`, `JTints` | — |
 | Tea Pickup Menu (`tea_pickup_menu_page.dart`) | `SimpleMenuSection`, `SimpleListItem`, `SimpleCard`, `SimpleVerticalRail` | — |
