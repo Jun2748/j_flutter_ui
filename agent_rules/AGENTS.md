@@ -129,5 +129,6 @@ Previously confirmed validation gaps are now implemented in the library:
 - `SimpleCard.flush` provides an edge-to-edge / full-bleed variant (no external margin, no corner radius) for hero banners.
 - `SimpleSearchField` provides a `quiet` pill-like variant so common search bars do not need route-scoped input theme overrides.
 - `SimpleFloatingBanner` provides a reusable centered promo/announcement overlay with dimmed backdrop, optional close affordance, and custom content/media composition.
+- `SimpleChipBar` provides a reusable horizontal single-select chip bar for filters, categories, and segmented-style choices without app-layer scrolling or chip-theme glue code.
 
 If a new downstream gap is reintroduced, add it back here as a fresh “Known gaps” entry.

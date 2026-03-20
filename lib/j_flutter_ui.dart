@@ -14,6 +14,7 @@ export 'src/ui/widgets/controls/inputs/simple_radio.dart';
 export 'src/ui/widgets/controls/inputs/simple_search_field.dart';
 export 'src/ui/widgets/controls/inputs/simple_switch.dart';
 export 'src/ui/widgets/controls/inputs/simple_text_field.dart';
+export 'src/ui/widgets/controls/segmented/simple_chip_bar.dart';
 export 'src/ui/widgets/controls/segmented/simple_segmented_control.dart';
 export 'src/ui/widgets/display/simple_card.dart';
 export 'src/ui/widgets/display/simple_chip.dart';

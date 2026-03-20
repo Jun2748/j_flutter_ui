@@ -2,6 +2,7 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 
 import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
+import '../widgets/controls/chip_bar_demo.dart';
 import '../widgets/controls/segmented_control_demo.dart';
 import '../widgets/foundations/theme_demo.dart';
 import '../widgets/images_display/flag_demo.dart';
@@ -125,6 +126,13 @@ class DemoRegistry {
       category: DemoCategory.controls,
       description: 'Dropdown selection with current value display.',
       builder: (_) => const DropdownDemo(),
+    ),
+    DemoItem(
+      title: const ChipBarDemo().title,
+      category: DemoCategory.controls,
+      description:
+          'Horizontal single-select chip bar for category and filter choices.',
+      builder: (_) => const ChipBarDemo(),
     ),
     DemoItem(
       title: const SegmentedControlDemo().title,
