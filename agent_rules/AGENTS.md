@@ -102,3 +102,42 @@ Never concatenate translated fragments into a sentence.
 - `partially migrated`
 - `acceptable fallback`
 - `intentional Material semantic usage`
+
+## Known gaps (confirmed by validation screen builds)
+
+These are real reusable primitives/behaviors missing from the library. They have been confirmed by two or more validation screens that had to work around them. Fix them here when prioritized — do **not** let the workarounds drift into a permanent app-layer pattern.
+
+### `SimpleGrid` — missing 2-column (and n-column) layout primitive
+**Confirmed by:** `zus_menu_page.dart`, `zus_menu_page_v2.dart`
+Both screens hand-roll `Row` pairs inside `VStack` to produce a 2-column product grid. The pattern is identical in both files and will appear in any future product/catalog screen.
+
+Proposed API:
+```dart
+SimpleGrid({
+  required int columnCount,
+  required double gap,
+  required List<Widget> children,
+})
+```
+
+Classification: **real reusable gap**.
+
+---
+
+### `SimpleVerticalRail` — no `selectedItemColor` parameter
+**Confirmed by:** `zus_menu_page.dart`, `zus_menu_page_v2.dart`, `tea_pickup_v2_page.dart`
+All three screens work around the missing parameter by wrapping the rail in a `Theme` that mutates `colorScheme.onSurface` to the desired active color. This is a repeated, non-obvious workaround.
+
+Proposed fix: add `selectedItemColor` and `unselectedItemColor` optional parameters to `SimpleVerticalRail`, resolving to current defaults if not set.
+
+Classification: **real reusable gap**.
+
+---
+
+### `SimpleCard` — no flush / edge-to-edge variant
+**Confirmed by:** `zus_menu_page.dart`, `zus_menu_page_v2.dart`
+`SimpleCard`'s default `margin: JInsets.all16` and `radius: 16dp` prevent use as a full-bleed hero banner surface. Both screens fall back to raw `DecoratedBox` to achieve flush-to-edge treatment.
+
+Proposed fix: support `margin: EdgeInsets.zero` without layout side-effects, or add a `.banner` / `.flush` named constructor that removes margin and radius.
+
+Classification: **real reusable gap**.

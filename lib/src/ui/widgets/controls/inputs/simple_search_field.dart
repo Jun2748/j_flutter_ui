@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../localization/intl.dart';
 import '../../../localization/l.dart';
+import '../../../resources/app_theme_tokens.dart';
+import '../../../resources/dimens.dart';
 import 'simple_text_field.dart';
+
+enum SimpleSearchFieldVariant { standard, quiet }
 
 class SimpleSearchField extends StatefulWidget {
   const SimpleSearchField({
@@ -10,6 +14,9 @@ class SimpleSearchField extends StatefulWidget {
     this.controller,
     this.focusNode,
     this.hintText,
+    this.variant = SimpleSearchFieldVariant.standard,
+    this.fillColor,
+    this.borderColor,
     this.onChanged,
     this.enabled = true,
   });
@@ -17,6 +24,9 @@ class SimpleSearchField extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final String? hintText;
+  final SimpleSearchFieldVariant variant;
+  final Color? fillColor;
+  final Color? borderColor;
   final ValueChanged<String>? onChanged;
   final bool enabled;
 
@@ -72,12 +82,23 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleTextField(
+    final ThemeData theme = Theme.of(context);
+    final Color? resolvedFillColor =
+        widget.variant == SimpleSearchFieldVariant.quiet
+        ? _resolvedQuietFillColor(theme)
+        : widget.fillColor;
+    final Color? resolvedBorderColor =
+        widget.variant == SimpleSearchFieldVariant.quiet
+        ? _resolvedQuietBorderColor(theme)
+        : widget.borderColor;
+    final Widget field = SimpleTextField(
       controller: _controller,
       focusNode: widget.focusNode,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
       hintText: _resolvedHintText(context),
+      fillColor: resolvedFillColor,
+      borderColor: resolvedBorderColor,
       prefixIcon: const Icon(Icons.search),
       suffixIcon: _controller.text.isEmpty
           ? null
@@ -90,6 +111,17 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
                   : null,
               icon: const Icon(Icons.close),
             ),
+    );
+
+    if (widget.variant != SimpleSearchFieldVariant.quiet) {
+      return field;
+    }
+
+    return Theme(
+      data: theme.copyWith(
+        inputDecorationTheme: _quietInputDecorationTheme(context, theme),
+      ),
+      child: field,
     );
   }
 
@@ -107,6 +139,132 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
 
   TextEditingController _ensureOwnedController() {
     return _ownedController ??= TextEditingController();
+  }
+
+  InputDecorationThemeData _quietInputDecorationTheme(
+    BuildContext context,
+    ThemeData theme,
+  ) {
+    final AppThemeTokens tokens = theme.appThemeTokens;
+    final SearchBarThemeData searchBarTheme = theme.searchBarTheme;
+    final Set<WidgetState> states = _searchBarStates();
+    final BorderRadius quietBorderRadius = _resolvedQuietBorderRadius(
+      context,
+      searchBarTheme.shape?.resolve(states),
+    );
+    final BorderSide enabledSide =
+        searchBarTheme.side?.resolve(states) ??
+        BorderSide(color: Colors.transparent, width: JDimens.dp1);
+
+    return theme.inputDecorationTheme.copyWith(
+      filled: true,
+      fillColor:
+          searchBarTheme.backgroundColor?.resolve(states) ??
+          theme.inputDecorationTheme.fillColor ??
+          tokens.inputBackground,
+      border: _quietBorder(
+        theme.inputDecorationTheme.border,
+        borderRadius: quietBorderRadius,
+        side: enabledSide,
+      ),
+      enabledBorder: _quietBorder(
+        theme.inputDecorationTheme.enabledBorder ??
+            theme.inputDecorationTheme.border,
+        borderRadius: quietBorderRadius,
+        side: enabledSide,
+      ),
+      focusedBorder: _quietBorder(
+        theme.inputDecorationTheme.focusedBorder ??
+            theme.inputDecorationTheme.enabledBorder ??
+            theme.inputDecorationTheme.border,
+        borderRadius: quietBorderRadius,
+        side: BorderSide(
+          color: theme.colorScheme.primary,
+          width: JDimens.dp1_5,
+        ),
+      ),
+      disabledBorder: _quietBorder(
+        theme.inputDecorationTheme.disabledBorder ??
+            theme.inputDecorationTheme.enabledBorder ??
+            theme.inputDecorationTheme.border,
+        borderRadius: quietBorderRadius,
+        side: BorderSide(color: tokens.dividerColor, width: JDimens.dp1),
+      ),
+      errorBorder: _quietBorder(
+        theme.inputDecorationTheme.errorBorder ??
+            theme.inputDecorationTheme.enabledBorder ??
+            theme.inputDecorationTheme.border,
+        borderRadius: quietBorderRadius,
+        side: BorderSide(color: theme.colorScheme.error, width: JDimens.dp1),
+      ),
+      focusedErrorBorder: _quietBorder(
+        theme.inputDecorationTheme.focusedErrorBorder ??
+            theme.inputDecorationTheme.errorBorder ??
+            theme.inputDecorationTheme.enabledBorder ??
+            theme.inputDecorationTheme.border,
+        borderRadius: quietBorderRadius,
+        side: BorderSide(color: theme.colorScheme.error, width: JDimens.dp1_5),
+      ),
+    );
+  }
+
+  Color _resolvedQuietFillColor(ThemeData theme) {
+    final SearchBarThemeData searchBarTheme = theme.searchBarTheme;
+    return widget.fillColor ??
+        searchBarTheme.backgroundColor?.resolve(_searchBarStates()) ??
+        theme.appThemeTokens.inputBackground;
+  }
+
+  Color _resolvedQuietBorderColor(ThemeData theme) {
+    final SearchBarThemeData searchBarTheme = theme.searchBarTheme;
+    return widget.borderColor ??
+        searchBarTheme.side?.resolve(_searchBarStates())?.color ??
+        Colors.transparent;
+  }
+
+  Set<WidgetState> _searchBarStates() {
+    return <WidgetState>{if (!widget.enabled) WidgetState.disabled};
+  }
+
+  BorderRadius _resolvedQuietBorderRadius(
+    BuildContext context,
+    OutlinedBorder? searchBarShape,
+  ) {
+    if (searchBarShape is StadiumBorder) {
+      return BorderRadius.circular(JHeights.input / 2);
+    }
+
+    if (searchBarShape is RoundedRectangleBorder) {
+      return searchBarShape.borderRadius.resolve(Directionality.of(context));
+    }
+
+    if (searchBarShape is ContinuousRectangleBorder) {
+      return searchBarShape.borderRadius.resolve(Directionality.of(context));
+    }
+
+    return BorderRadius.circular(JHeights.input / 2);
+  }
+
+  OutlineInputBorder _quietBorder(
+    InputBorder? base, {
+    required BorderRadius borderRadius,
+    required BorderSide side,
+  }) {
+    final OutlineInputBorder? outlineBase = base is OutlineInputBorder
+        ? base
+        : null;
+
+    return OutlineInputBorder(
+      borderRadius: borderRadius,
+      borderSide:
+          outlineBase?.borderSide.copyWith(
+            color: side.color,
+            width: side.width,
+            style: side.style,
+          ) ??
+          side,
+      gapPadding: outlineBase?.gapPadding ?? JDimens.dp4,
+    );
   }
 
   String _resolvedHintText(BuildContext context) {

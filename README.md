@@ -268,6 +268,19 @@ cd example
 flutter run
 ```
 
+## Validation screens (downstream consumer)
+
+`playground_flutter_app` (a sibling repo) is the real-world pressure test for this library. The following screens have been built and confirmed which library primitives they stress:
+
+| Screen | Key primitives exercised | Known gaps surfaced |
+|---|---|---|
+| ZUS Menu V2 (`zus_menu_page_v2.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles.priceLarge`, `AppThemeTokens` | `SimpleGrid` (missing), `SimpleVerticalRail` selectedItemColor (missing), `SimpleCard` edge-to-edge (missing) |
+| ZUS Menu (`zus_menu_page.dart`) | `SimpleVerticalRail`, `SimpleSearchField`, `SimpleBottomNavBar`, `VStack`, `JTextStyles`, `AppThemeTokens` | same as above |
+| Tea Pickup V2 (`tea_pickup_v2_page.dart`) | `SimpleVerticalRail`, `SimpleBottomNavBar`, `SimpleIconButton.filled`, `JTextStyles.priceLarge`, `JInsets.onlyEnd*`, `SimpleBadge`, `JTints` | `SimpleVerticalRail` selectedItemColor |
+| Tea Pickup Menu (`tea_pickup_menu_page.dart`) | `SimpleMenuSection`, `SimpleListItem`, `SimpleCard`, `SimpleVerticalRail` | — |
+
+See `playground_flutter_app/AGENTS.md` for confirmed workarounds and `j_flutter_ui/agent_rules/AGENTS.md` for the full gap backlog.
+
 ---
 
 ## Project structure (for contributors)

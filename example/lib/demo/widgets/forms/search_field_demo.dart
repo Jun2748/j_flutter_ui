@@ -11,7 +11,8 @@ class SearchFieldDemo extends StatefulWidget {
 }
 
 class _SearchFieldDemoState extends State<SearchFieldDemo> {
-  String _query = '';
+  String _standardQuery = '';
+  String _quietQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +21,23 @@ class _SearchFieldDemoState extends State<SearchFieldDemo> {
       body: ListView(
         padding: JInsets.screenPadding,
         children: <Widget>[
+          const SimpleText.label(text: 'Standard'),
+          JGaps.h8,
           SimpleSearchField(
             onChanged: (String value) {
               setState(() {
-                _query = value;
+                _standardQuery = value;
+              });
+            },
+          ),
+          JGaps.h16,
+          const SimpleText.label(text: 'Quiet / pill'),
+          JGaps.h8,
+          SimpleSearchField(
+            variant: SimpleSearchFieldVariant.quiet,
+            onChanged: (String value) {
+              setState(() {
+                _quietQuery = value;
               });
             },
           ),
@@ -35,7 +49,15 @@ class _SearchFieldDemoState extends State<SearchFieldDemo> {
                 const SimpleText.label(text: 'Current query'),
                 JGaps.h8,
                 SimpleText.body(
-                  text: _query.isEmpty ? 'Nothing entered yet.' : _query,
+                  text: _standardQuery.isEmpty
+                      ? 'Standard: nothing entered yet.'
+                      : 'Standard: $_standardQuery',
+                ),
+                JGaps.h8,
+                SimpleText.body(
+                  text: _quietQuery.isEmpty
+                      ? 'Quiet: nothing entered yet.'
+                      : 'Quiet: $_quietQuery',
                 ),
               ],
             ),

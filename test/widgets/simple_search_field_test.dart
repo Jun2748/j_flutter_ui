@@ -55,7 +55,127 @@ void main() {
 
       expect(find.byIcon(Icons.close), findsNothing);
     });
+
+    testWidgets(
+      'quiet variant uses search bar theme styling with pill borders',
+      (WidgetTester tester) async {
+        const Color searchBarFill = Color(0xFFE0F2FE);
+        const Color searchBarBorder = Color(0xFF0EA5E9);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: JAppTheme.lightTheme.copyWith(
+              searchBarTheme: SearchBarThemeData(
+                backgroundColor: const WidgetStatePropertyAll<Color>(
+                  searchBarFill,
+                ),
+                side: const WidgetStatePropertyAll<BorderSide>(
+                  BorderSide(color: searchBarBorder),
+                ),
+                shape: WidgetStatePropertyAll<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(JDimens.dp20),
+                  ),
+                ),
+              ),
+            ),
+            home: const Scaffold(
+              body: SimpleSearchField(variant: SimpleSearchFieldVariant.quiet),
+            ),
+          ),
+        );
+
+        final InputDecoration decoration = tester
+            .widget<InputDecorator>(find.byType(InputDecorator))
+            .decoration;
+        final OutlineInputBorder enabledBorder =
+            decoration.enabledBorder! as OutlineInputBorder;
+
+        expect(decoration.fillColor, searchBarFill);
+        expect(enabledBorder.borderSide.color, searchBarBorder);
+        expect(enabledBorder.borderRadius, BorderRadius.circular(JDimens.dp20));
+      },
+    );
+
+    testWidgets(
+      'quiet variant falls back to tokens and respects explicit colors',
+      (WidgetTester tester) async {
+        const AppThemeTokens tokens = AppThemeTokens(
+          primary: Color(0xFF2563EB),
+          secondary: Color(0xFF0891B2),
+          cardBackground: Color(0xFFFFFFFF),
+          cardBorderColor: Color(0xFFD1D5DB),
+          inputBackground: Color(0xFFF1F5F9),
+          inputBorderColor: Color(0xFFCBD5E1),
+          dividerColor: Color(0xFFE2E8F0),
+          mutedText: Color(0xFF64748B),
+        );
+        const Color explicitFill = Color(0xFFDCFCE7);
+        const Color explicitBorder = Color(0xFF16A34A);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: _withTokens(
+              JAppTheme.lightTheme.copyWith(
+                inputDecorationTheme: const InputDecorationTheme(),
+              ),
+              tokens,
+            ),
+            home: const Scaffold(
+              body: Column(
+                children: <Widget>[
+                  SimpleSearchField(variant: SimpleSearchFieldVariant.quiet),
+                  SimpleSearchField(
+                    variant: SimpleSearchFieldVariant.quiet,
+                    fillColor: explicitFill,
+                    borderColor: explicitBorder,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        final List<InputDecorator> fields = tester
+            .widgetList<InputDecorator>(find.byType(InputDecorator))
+            .toList();
+        final InputDecoration tokenDecoration = fields.first.decoration;
+        final InputDecoration explicitDecoration = fields.last.decoration;
+
+        expect(tokenDecoration.fillColor, tokens.inputBackground);
+        expect(
+          (tokenDecoration.enabledBorder! as OutlineInputBorder)
+              .borderSide
+              .color,
+          Colors.transparent,
+        );
+        expect(explicitDecoration.fillColor, explicitFill);
+        expect(
+          (explicitDecoration.enabledBorder! as OutlineInputBorder)
+              .borderSide
+              .color,
+          explicitBorder,
+        );
+        expect(
+          (explicitDecoration.enabledBorder! as OutlineInputBorder)
+              .borderRadius,
+          BorderRadius.circular(JHeights.input / 2),
+        );
+      },
+    );
   });
+}
+
+ThemeData _withTokens(ThemeData base, AppThemeTokens tokens) {
+  final List<ThemeExtension<dynamic>> extensions =
+      base.extensions.values
+          .where(
+            (ThemeExtension<dynamic> extension) => extension is! AppThemeTokens,
+          )
+          .toList()
+        ..add(tokens);
+
+  return base.copyWith(extensions: extensions);
 }
 
 class _SearchFieldHarness extends StatefulWidget {
