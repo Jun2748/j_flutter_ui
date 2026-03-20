@@ -66,7 +66,7 @@ class SimpleSegmentedControl<T> extends StatelessWidget {
     final bool isSelected = item.value == value;
     final Color primary = tokens.primary;
     final Color onPrimary = tokens.onPrimaryResolved(theme);
-    final Color textPrimary = theme.colorScheme.onSurface;
+    final Color textPrimary = tokens.onCardResolved(theme);
     final Color textSecondary = tokens.mutedText;
 
     Widget child = InkWell(

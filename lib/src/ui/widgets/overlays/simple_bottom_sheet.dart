@@ -19,6 +19,9 @@ class SimpleBottomSheet {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
     final BottomSheetThemeData bottomSheetTheme = theme.bottomSheetTheme;
+    final bool usesTokenCardSurface =
+        bottomSheetTheme.modalBackgroundColor == null &&
+        bottomSheetTheme.backgroundColor == null;
     final Color card =
         bottomSheetTheme.modalBackgroundColor ??
         bottomSheetTheme.backgroundColor ??
@@ -26,7 +29,10 @@ class SimpleBottomSheet {
     final Color border = tokens.cardBorderColor;
     final Color handleColor =
         bottomSheetTheme.dragHandleColor ?? tokens.dividerColor;
-    final Color messageColor = tokens.mutedText;
+    final Color? builtInForegroundColor = usesTokenCardSurface
+        ? tokens.onCardResolved(theme)
+        : null;
+    final Color messageColor = builtInForegroundColor ?? tokens.mutedText;
     final ShapeBorder sheetShape =
         bottomSheetTheme.shape ??
         RoundedRectangleBorder(
@@ -70,7 +76,10 @@ class SimpleBottomSheet {
                     ),
                   ),
                 if (titleText != null) ...<Widget>[
-                  SimpleText.heading(text: titleText),
+                  SimpleText.heading(
+                    text: titleText,
+                    color: builtInForegroundColor,
+                  ),
                   JGaps.h8,
                 ],
                 if (messageText != null) ...<Widget>[

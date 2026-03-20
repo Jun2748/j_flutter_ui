@@ -49,7 +49,6 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
                   const SimpleCheckbox(
                     value: true,
                     label: 'This checked option is disabled',
-                    enabled: false,
                   ),
                 ],
               ),

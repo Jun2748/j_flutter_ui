@@ -1,102 +1,149 @@
-# j_flutter_ui Architecture
+# Architecture Rules
 
-## What this repository is
-`j_flutter_ui` is a reusable Flutter UI library/design system. It is **not** an app.
+> Structural rules for `j_flutter_ui`. Apply when adding files, layers, or infrastructure.
+> For theming rules, see `THEMING_RULEBOOK.md`. For API rules, see `API_DESIGN_RULES.md`.
 
-Primary goals:
-- app-agnostic, production-grade primitives and patterns
-- predictable theming/overrides for multiple downstream apps
-- safe fallbacks (no surprising null crashes)
-- localization-safe library-owned copy
-- demo-driven documentation via `example/`
+---
 
-## Source layout
-- `lib/j_flutter_ui.dart`
-  - The **only** supported import for consumers: `package:j_flutter_ui/j_flutter_ui.dart`
-  - Everything exported here is **public API**; treat changes as semver-impacting
+## Source layout (enforced)
 
-- `lib/src/ui/resources/`
-  - design tokens and theme infrastructure
-  - tokens: `JDimens`, `JGaps`, `JInsets`, `JHeights`, `JIconSizes`, `JFontSizes`, `JLineHeights`
-  - typography: `JTextStyles`
-  - theming: `JAppTheme`, `AppThemeTokens` (`ThemeExtension`)
-  - shared styling helpers:
-    - `JInputDecorations` (shared `InputDecoration` building for inputs)
-    - `JTints` (shared tinted surface/border recipes)
+```
+lib/
+  j_flutter_ui.dart              ← ONLY supported consumer import
+  src/ui/
+    constants/                   ← country/currency codes, static constants
+    localization/                ← JSON localization + AppLocalizationBridge
+    resources/                   ← tokens, theme infrastructure, asset helpers
+    utils/                       ← small stateless reusable utilities
+    widgets/
+      primitives/                ← single-responsibility Material wrappers
+      patterns/                  ← compositions of primitives
+example/                         ← catalog app — must remain runnable
+assets/                          ← svg/png/jpg + localization JSON
+test/                            ← regression tests
+```
 
-- `lib/src/ui/widgets/`
-  - **primitives**: thin wrappers over Material semantics
-  - **patterns**: compositions of primitives (avoid re-implementing styling logic)
-  - compact icon-action affordances belong in primitives; app-specific counters, badges, and commerce flows belong in app-layer composition
-  - overlay patterns: `SimpleBottomSheet`, `SimpleFloatingBanner`
-    - `SimpleFloatingBanner` — centered floating promo/announcement surface over a dimmed backdrop. Keep it generic and composition-first; image/media and content belong in slots, while brand campaign structure stays in the app layer.
-  - navigation patterns: `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
-    - `SimpleVerticalRail` — compact left-edge icon-label rail. Supports color-change active state plus an optional selected background highlight. App-local animated overlays (dots, bars) are `Stack` composition on top, not part of the widget.
-    - `SimpleBottomNavBar` — bottom navigation wrapper with standard active-color treatment and an optional active icon background. It should respect `BottomNavigationBarThemeData` before token fallback. Keep it a semantic navigation pattern, not a custom item renderer.
-    - `SimpleTabs` — tab wrapper that should respect `TabBarThemeData` before token fallback.
-  - Material-control wrappers such as `SimpleCheckbox`, `SimpleSwitch`, `SimpleAlertDialog`, `SimpleBottomSheet`, and `SimpleLoadingView` should respect their matching component theme before token fallback.
+**Rules:**
+- Do NOT place app-specific logic in any `src/` path.
+- Do NOT import from `src/` in consumer apps. Public API is `lib/j_flutter_ui.dart` only.
+- Do NOT place pattern logic inside primitives.
+- `example/` must remain runnable at all times. A broken catalog is a blocking issue.
 
-- `lib/src/ui/localization/`
-  - library JSON localization (`assets/localization/*.json`)
-  - override bridge for host apps (`AppLocalizationBridge`)
+---
 
-- `assets/`
-  - icons/images/flags/illustrations + library localization JSON
+## Widget layer rules
 
-- `example/`
-  - catalog + QA harness (light/dark, tokens, overrides)
+### Primitives (`widgets/primitives/`)
+- Single responsibility only.
+- Thin wrapper over one Material semantic widget.
+- Do NOT compose other library primitives inside a primitive.
+- Do NOT implement app-specific logic, routing, or state.
 
-- `test/`
-  - regression tests focused on fallbacks, theming overrides, and widget rendering behavior
+### Patterns (`widgets/patterns/`)
+- Must compose primitives. Do NOT re-implement styling logic that already exists in a primitive.
+- If styling logic appears in 3+ widgets, centralize it in `resources/` as a shared helper.
+- Do NOT place app domain logic, navigation, or state management inside a pattern.
 
-## Theming architecture
-`ThemeData` is the source of truth, augmented by `ThemeExtension<AppThemeTokens>` for library-owned semantic tokens.
+---
 
-### Token resolution
-Use `AppThemeTokens.resolve(theme)` (via `theme.appThemeTokens`) to read:
-- `primary`, `secondary`
-- paired foregrounds: `onPrimary`, `onSecondary`, `onCard`, `onInput` (or the resolved helpers)
-- surfaces: `cardBackground`, `inputBackground`
-- borders/dividers: `cardBorderColor`, `inputBorderColor`, `dividerColor`
-- text: `mutedText`
+## Resource layer rules (`resources/`)
 
-Downstream apps typically override via:
-- `ThemeData.extensions: [const AppThemeTokens(...)]`
+### Tokens
+Use the correct token class for each value type:
 
-## Widget resolution rules
-All widgets should normalize values early and resolve styling predictably:
-- `explicit widget parameter`
-- Material semantic theme (`ColorScheme`, `TextTheme`, component themes) when semantically correct
-- `AppThemeTokens` (ThemeExtension)
-- final fallback constants (rare; document why)
-- For icon-first compact action primitives, `IconButtonTheme` is the primary Material component theme source before token fallback.
-- For thin wrappers over built-in Material controls, the matching component theme is part of the Material semantic layer and should participate before token fallback.
+| Value type | Token class |
+|---|---|
+| Fixed gaps (SizedBox) | `JGaps` |
+| Padding / insets | `JInsets` |
+| Dimensions / radii | `JDimens` |
+| Heights | `JHeights` |
+| Icon sizes | `JIconSizes` |
+| Font sizes | `JFontSizes` |
+| Line heights | `JLineHeights` |
+| Typography presets | `JTextStyles` |
 
-### Foreground/content colors for token-owned surfaces
-If a widget sets a background using `AppThemeTokens` (e.g. `tokens.cardBackground`, `tokens.primary`), prefer the **paired resolved foreground** from tokens:
-- `tokens.onCardResolved(theme)` for card-like surfaces (dialogs, sheets, snackbars, banners)
-- `tokens.onPrimaryResolved(theme)` for primary actions/buttons
-- This rule also applies to token-primary feedback and selection controls.
+- Do NOT use raw numbers for any of the above. Raw numbers in widget code are a bug.
+- Add a new token only if the value is reused across multiple widgets or is part of a system scale.
 
-## Form reset semantics
-- `SimpleFormBuilderState.reset()` is the builder-level blank-form reset. It clears configured field values to `null`, syncs text controllers to empty strings, and clears errors.
-- `SimpleFormController.resetToInitialValues()` restores original controller values.
-- `SimpleFormController.reset()` remains the controller-only clear path.
+### Shared styling helpers
+- `JInputDecorations` → all `InputDecoration` construction for inputs. Do NOT duplicate input decoration logic inline.
+- `JTints` → all tinted surface/border recipes for feedback components (badge/banner/snackbar/chip). Do NOT duplicate tint recipes inline.
+- Both helpers must follow the standard resolution order: Material semantics → `AppThemeTokens` → fallback constants.
+- Do NOT hardcode color constants directly inside helpers.
 
-## Search field variants
-- `SimpleSearchField` defaults to the standard input treatment.
-- `SimpleSearchFieldVariant.quiet` is the reusable pill-like search presentation for soft-background search bars.
-- Keep variant behavior semantic and reusable; do not add app/brand-specific search chrome or route-local hacks when the variant should cover the need.
+---
 
-## Shared styling helpers (avoid drift)
-If a styling recipe appears in 3+ widgets, prefer centralizing it under `resources/` and reusing it.
+## Theming infrastructure
 
-- Use `JInputDecorations` for `SimpleTextField`/`SimpleDropdown`-like `InputDecoration` building so focus/error/disabled borders remain consistent.
-- Use `JTints` for tinted surface/border recipes in feedback/display components (badge/banner/snackbar/chip).
+- `JAppTheme` provides `lightTheme` and `darkTheme` as ready-to-use `ThemeData` instances.
+- `AppThemeTokens` is a `ThemeExtension<AppThemeTokens>` for library-owned semantic tokens.
+- Access tokens only via: `Theme.of(context).appThemeTokens`
+- `AppThemeTokens.defaults(ThemeData)` provides a safe zero-config fallback for consumers who do not register a custom token set.
+- If no `AppThemeTokens` is registered, `theme.appThemeTokens` must return `AppThemeTokens.defaults(theme)` silently. Library widgets must NEVER throw due to missing token registration.
 
-## When to add a new token
-Add a shared token only if:
-- reused across multiple widgets, or
-- part of the system scale that must remain consistent
+---
 
-Otherwise keep the value local, but prefer `JDimens` over raw numbers.
+## Localization infrastructure
+
+- Library JSON lives in `assets/localization/<lang>.json`.
+- Keys are registered in `lib/src/ui/localization/l.dart` (class `L`).
+- `AppLocalizationBridge` allows host apps to override any library key at runtime.
+- `JLocalizations.fallback()` returns a plain-English instance. Widgets must NEVER throw when the delegate is absent.
+- Resolution order: caller override → `AppLocalizationBridge` → library JSON → key fallback → plain-string fallback.
+
+---
+
+## Form infrastructure
+
+Four distinct layers — do NOT merge:
+
+| Layer | Responsibility |
+|---|---|
+| `SimpleFormBuilder` | Renders form fields from configuration |
+| `SimpleFormController` | Manages field values and initial state |
+| `SimpleFormValidator` / `SimpleCrossFieldValidator` | Validation logic only |
+| utilities | Shared helpers, no rendering or state |
+
+### Reset semantics (do NOT unify)
+- `SimpleFormBuilderState.reset()` → blank-form reset: field values → `null`, text controllers → empty, errors cleared.
+- `SimpleFormController.resetToInitialValues()` → restores original controller values.
+- `SimpleFormController.reset()` → controller-only clear.
+
+---
+
+## Navigation patterns
+
+### SimpleVerticalRail
+- Compact left-edge icon-label rail.
+- Active state: color-change. Optional selected background via `selectedItemBackgroundColor`.
+- Do NOT add built-in position indicators (dot, bar). These are app-layer `Stack` composition.
+- Per-item badges: use `badgeLabel` on `SimpleVerticalRailItem`.
+
+### SimpleBottomNavBar
+- Respects `BottomNavigationBarThemeData` before token fallback.
+- Optional active icon circle: `activeIconBackgroundColor`.
+- Do NOT turn into a custom item-renderer API.
+
+### SimpleTabs
+- Respects `TabBarThemeData` before token fallback.
+
+---
+
+## Overlay patterns
+
+### SimpleBottomSheet
+- Respects `BottomSheetThemeData` before token fallback.
+
+### SimpleFloatingBanner
+- Composition-first: `media` slot for images, `child` slot for content.
+- Do NOT bake in campaign-specific layouts, prices, or brand structure.
+- Respects `DialogTheme` and `IconButtonTheme` before token fallback.
+
+---
+
+## Test requirements
+
+- Every risky theming fallback must have a regression test.
+- Every null-safety path must have a regression test.
+- Every widget with library-owned copy must have a localization override test.
+- `example/` catalog must remain runnable — treat a broken catalog as a blocking bug.

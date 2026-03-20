@@ -40,12 +40,7 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
     );
   }
 
-  factory AppThemeTokens.resolve(ThemeData theme) {
-    final AppThemeTokens? extension = theme.extension<AppThemeTokens>();
-    if (extension != null) {
-      return extension;
-    }
-
+  factory AppThemeTokens.defaults(ThemeData theme) {
     return AppThemeTokens(
       primary: theme.colorScheme.primary,
       onPrimary: theme.colorScheme.onPrimary,
@@ -71,6 +66,15 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
           theme.textTheme.labelSmall?.color ??
           theme.colorScheme.onSurfaceVariant,
     );
+  }
+
+  factory AppThemeTokens.resolve(ThemeData theme) {
+    final AppThemeTokens? extension = theme.extension<AppThemeTokens>();
+    if (extension != null) {
+      return extension;
+    }
+
+    return AppThemeTokens.defaults(theme);
   }
 
   final Color primary;
@@ -162,7 +166,8 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
       inputBorderColor:
           Color.lerp(inputBorderColor, other.inputBorderColor, t) ??
           inputBorderColor,
-      dividerColor: Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
+      dividerColor:
+          Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
       mutedText: Color.lerp(mutedText, other.mutedText, t) ?? mutedText,
     );
   }
@@ -183,5 +188,6 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
 }
 
 extension AppThemeTokensThemeDataX on ThemeData {
-  AppThemeTokens get appThemeTokens => AppThemeTokens.resolve(this);
+  AppThemeTokens get appThemeTokens =>
+      extension<AppThemeTokens>() ?? AppThemeTokens.defaults(this);
 }

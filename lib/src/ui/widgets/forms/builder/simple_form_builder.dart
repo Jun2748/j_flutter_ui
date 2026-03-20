@@ -461,8 +461,9 @@ class SimpleFormBuilderState extends State<SimpleFormBuilder>
             value: value as bool?,
             label: field.label,
             labelWidget: field.labelWidget,
-            enabled: effectiveEnabled,
-            onChanged: (bool? checked) => _updateValue(field, checked ?? false),
+            onChanged: effectiveEnabled
+                ? (bool? checked) => _updateValue(field, checked ?? false)
+                : null,
           ),
         );
         break;

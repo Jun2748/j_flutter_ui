@@ -1,57 +1,90 @@
-# API Design Rules (Widgets)
+# API Design Rules
 
-These rules exist to keep `j_flutter_ui` plug-and-play across many apps.
+> These rules govern every widget and exported symbol in `j_flutter_ui`.
+> Apply these rules when adding, modifying, or reviewing any public API.
 
-## Public API hygiene
-- Anything exported by `lib/j_flutter_ui.dart` is public API.
-- Prefer additive changes over breaking changes.
-- Avoid renames/moves unless part of a deliberate migration with notes.
+---
 
-## Naming (avoid Flutter SDK collisions)
-- Do **not** export symbols whose names collide with common Flutter SDK/Material types.
-  - Example: Material already exports `SimpleDialog`, so `j_flutter_ui` must not export a type with that name.
-- Prefer names that reflect the underlying Material primitive:
-  - Example: a wrapper around `AlertDialog` should be named like `SimpleAlertDialog` (not `SimpleDialog`).
+## Public API boundary
 
-## Export policy (library boundary)
-- Consumers should import **only** `package:j_flutter_ui/j_flutter_ui.dart`.
-- Treat all exports from `lib/j_flutter_ui.dart` as **stable, semver-governed API**.
-- When adding new APIs:
-  - Prefer exporting a small number of high-signal primitives/patterns.
-  - Do not export internal helpers just because they exist under `src/`.
-- When refactoring internals:
-  - Do not rename/move/remove exported symbols without a **migration plan**.
-  - Prefer deprecate → migrate → remove, with notes in `MIGRATION_NOTES.md` (create only when needed).
-- Avoid “public-by-accident” APIs:
-  - if a file/class is intended to be internal, keep it unexported (or explicitly document why it’s exported).
+- Everything exported from `lib/j_flutter_ui.dart` is public API governed by semver.
+- Consumers import ONLY `package:j_flutter_ui/j_flutter_ui.dart`. No `src/` imports are permitted.
+- Do NOT export internal helpers unless there is an explicit documented reason.
+- Treat all "public-by-accident" exports as bugs to fix via planned migration, not immediate removal.
+
+### Semver policy
+
+| Change type | Version bump |
+|---|---|
+| New export (additive) | Minor |
+| New named parameter with default value | Minor |
+| Rename / move / remove export | Major — requires `MIGRATION_NOTES.md` entry |
+| Remove or rename `AppThemeTokens` token | Major — requires `MIGRATION_NOTES.md` entry |
+| Deprecate before remove | Required intermediate step |
+
+Migration sequence for breaking changes: **deprecate → migrate → remove**, with notes in `MIGRATION_NOTES.md`.
+
+---
+
+## Naming rules
+
+- Do NOT export symbols whose names collide with Flutter SDK or Material types.
+  - WRONG: exporting a type named `SimpleDialog` (Material already exports this).
+  - CORRECT: `SimpleAlertDialog` (maps to `AlertDialog`).
+- Prefer names that reflect the underlying Material primitive being wrapped.
+
+---
 
 ## Constructor design
-- Prefer **named constructors** for clearly distinct variants (e.g. `primary/secondary/outline/text`) over boolean flags.
-- Avoid “boolean soup”. If you see 3+ booleans controlling visual variants, it’s a smell.
-- Prefer nullable callbacks to represent “enabled/disabled” (`onPressed == null`).
-- Avoid requiring styling parameters; provide sensible defaults from theme/tokens.
-- For reusable presentation shifts that are genuinely semantic and common (for example a standard vs quiet search treatment), a small enum variant API is preferred over ad-hoc route theme overrides.
 
-## Styling parameters (keep override paths predictable)
-When you expose styling knobs:
-- expose the *semantic* knob (e.g., `backgroundColor`) not 10 micro-parameters
-- ensure the widget still reads the host theme/tokens when the knob is null
-- do not create a second, parallel theming system via custom classes
-- for text inputs, prefer `prefixIcon` / `suffixIcon` for icons, flags, or interactive controls; reserve `prefix` / `suffix` for inline affix content
+- Use **named constructors** for clearly distinct visual variants (e.g. `SimpleButton.primary`, `SimpleButton.outline`, `SimpleButton.text`).
+- Do NOT use boolean flags to control visual variants. Three or more booleans controlling appearance is a hard stop — redesign as named constructors or an enum.
+- Use `onPressed == null` to represent disabled state. Do NOT add a separate `enabled` boolean.
+- Do NOT require styling parameters. All styling must have sensible defaults from theme/tokens.
+- For genuinely semantic and common presentation variants (e.g. standard vs quiet search), use a small enum. Do NOT use ad-hoc route-scoped theme overrides.
 
-## Text parameters
-- Prefer accepting `Widget` slots for complex content (`title`, `subtitle`, `leading`, `trailing`) in pattern widgets.
-- For primitives that accept strings:
-  - allow `null` and treat it as empty
-  - never hide truncation defaults: specify `maxLines`/`overflow` where needed
+---
+
+## Styling parameters
+
+- Expose the **semantic knob** (e.g. `backgroundColor`), not a set of micro-parameters.
+- When a styling knob is `null`, the widget MUST fall back to theme/tokens correctly.
+- Do NOT create a second parallel theming system via custom style classes.
+- For text inputs: use `prefixIcon` / `suffixIcon` for icons, flags, or interactive affordances. Reserve `prefix` / `suffix` for simple inline affix content only.
+
+---
+
+## Text / content parameters
+
+- For pattern widgets with complex content slots, prefer `Widget` parameters (`title`, `subtitle`, `leading`, `trailing`).
+- For primitive widgets that accept strings:
+  - Allow `null` and treat it as empty.
+  - Never suppress truncation: set `maxLines` and `overflow` wherever truncation is possible.
+
+---
 
 ## Behavioral parameters
-- For async actions, make loading state explicit (`loading`) and ensure interaction is disabled consistently.
-- Avoid implicit side-effects (don’t auto-navigate, don’t read global singletons).
-- If multiple reset paths exist, keep their semantics explicit and intentionally different (for example blank-form reset vs restore-initial-values).
+
+- Async actions must expose an explicit `loading` parameter. Disable interaction consistently when `loading == true`.
+- Do NOT introduce implicit side-effects (no auto-navigation, no reading global singletons).
+- Multiple reset paths must have explicitly different semantics. Do NOT unify them silently. See form reset rules in `AGENTS.md`.
+
+---
 
 ## Extensibility
-- Prefer composition slots (`header`, `footer`, `content`) over subclassing.
-- Do not couple widgets to app routing, app state management, or app domain models.
-- Keep compact icon-action primitives domain-agnostic: the library may provide the press target, but counts, price logic, inventory rules, and add/remove flows stay in app-layer composition.
-- For overlays and promo-style surfaces, prefer a small presentation helper plus a composition-first widget (`media`, `child`, etc.) instead of fixed campaign layouts or business-specific popup classes.
+
+- Prefer composition slots (`header`, `footer`, `content`, `media`, `child`) over subclassing.
+- Do NOT couple widgets to app routing, app state management, or app domain models.
+- Keep compact icon-action primitives domain-agnostic. The library provides the press target. Counts, price logic, inventory rules, and commerce flows belong in app-layer composition.
+- For overlay and promo surfaces: use a composition-first widget (`media`, `child`). Do NOT bake in campaign-specific layouts, prices, or brand structure.
+
+---
+
+## Rejected patterns
+
+- Boolean soup constructors (3+ booleans controlling visual variants)
+- Styling via custom parallel theme classes
+- Widgets that auto-navigate or read global app state
+- Hard-coded business/product copy inside reusable widgets
+- Named symbol collisions with Flutter SDK / Material exports
+- Breaking changes without `MIGRATION_NOTES.md` entry

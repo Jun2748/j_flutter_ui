@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../resources/dimens.dart';
+import '../patterns/simple_menu_tile.dart';
+import '../primitives/simple_card.dart';
 import '../typography/simple_text.dart';
-import 'simple_card.dart';
-import 'simple_menu_tile.dart';
 
 class SimpleMenuSection extends StatelessWidget {
   const SimpleMenuSection({
@@ -78,8 +78,9 @@ class SimpleMenuSection extends StatelessWidget {
       MapEntry<int, SimpleMenuTile> entry,
     ) {
       return entry.value.copyWith(
-        showTopDivider: false,
-        showBottomDivider: entry.key != lastIndex,
+        dividers: entry.key != lastIndex
+            ? SimpleMenuTileDividers.bottom
+            : SimpleMenuTileDividers.none,
       );
     }).toList();
 

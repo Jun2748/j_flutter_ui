@@ -12,7 +12,6 @@ class SimpleCheckbox extends StatelessWidget {
     this.label,
     this.labelWidget,
     this.textStyle,
-    this.enabled = true,
   });
 
   final bool? value;
@@ -20,7 +19,6 @@ class SimpleCheckbox extends StatelessWidget {
   final String? label;
   final Widget? labelWidget;
   final TextStyle? textStyle;
-  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class SimpleCheckbox extends StatelessWidget {
     final AppThemeTokens tokens = theme.appThemeTokens;
     final CheckboxThemeData checkboxTheme = theme.checkboxTheme;
     final bool resolvedValue = value ?? false;
-    final bool interactive = enabled && onChanged != null;
+    final bool interactive = onChanged != null;
 
     final Widget checkbox = Checkbox(
       value: resolvedValue,
@@ -61,7 +59,7 @@ class SimpleCheckbox extends StatelessWidget {
                 style: baseTextStyle
                     .merge(textStyle)
                     .copyWith(
-                      color: enabled
+                      color: interactive
                           ? textStyle?.color ??
                                 baseTextStyle.color ??
                                 theme.colorScheme.onSurface

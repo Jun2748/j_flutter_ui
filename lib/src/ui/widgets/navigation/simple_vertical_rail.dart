@@ -30,7 +30,7 @@ class SimpleVerticalRail extends StatelessWidget {
     required this.items,
     required this.selectedIndex,
     required this.onSelected,
-    this.itemHeight = 76.0,
+    this.itemHeight = JHeights.menuTile,
     this.iconSize,
     this.labelStyle,
     this.backgroundColor,
@@ -45,7 +45,7 @@ class SimpleVerticalRail extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelected;
 
-  /// Height of each item. Defaults to 76dp.
+  /// Height of each item. Defaults to [JHeights.menuTile].
   final double itemHeight;
 
   /// Icon size. Defaults to [JIconSizes.lg].

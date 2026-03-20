@@ -164,7 +164,6 @@ class SimpleBadge extends StatelessWidget {
     final JStatusColors statusColors =
         theme.extension<JStatusColors>() ??
         JStatusColors.fallback(brightness: theme.brightness);
-    final Color textPrimary = theme.colorScheme.onSurface;
     final Color cardBackground = tokens.cardBackground;
     final Color cardBorderColor = tokens.cardBorderColor;
 
@@ -172,7 +171,7 @@ class SimpleBadge extends StatelessWidget {
       case _SimpleBadgeVariant.neutral:
         return _SimpleBadgeColors(
           background: cardBackground,
-          foreground: textPrimary,
+          foreground: tokens.onCardResolved(theme),
           border: cardBorderColor,
         );
       case _SimpleBadgeVariant.primary:

@@ -181,9 +181,11 @@ void main() {
         mutedText: Color(0xFF92400E),
       );
 
+      final ThemeData theme = _withTokens(JAppTheme.lightTheme, tokens);
+
       await tester.pumpWidget(
         MaterialApp(
-          theme: _withTokens(JAppTheme.lightTheme, tokens),
+          theme: theme,
           home: Scaffold(
             body: Builder(
               builder: (BuildContext context) {
@@ -222,7 +224,7 @@ void main() {
       expect(bottomSheet.backgroundColor, const Color(0xFFFDFBF4));
       expect(shape.side.color, const Color(0xFFD97706));
       expect(handleDecoration.color, const Color(0xFFF59E0B));
-      expect(messageText.style?.color, const Color(0xFF92400E));
+      expect(messageText.style?.color, tokens.onCardResolved(theme));
     });
 
     testWidgets('bottom sheet respects BottomSheetTheme styling', (

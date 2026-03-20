@@ -58,7 +58,7 @@ class SimpleChip extends StatelessWidget {
       case _SimpleChipVariant.neutral:
         return _ChipColors(
           background: tokens.cardBackground,
-          foreground: theme.colorScheme.onSurface,
+          foreground: tokens.onCardResolved(theme),
         );
       case _SimpleChipVariant.primary:
         return _ChipColors(

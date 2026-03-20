@@ -28,8 +28,8 @@ class SimpleCard extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.onTap,
-  })  : margin = EdgeInsets.zero,
-        radius = 0;
+  }) : margin = EdgeInsets.zero,
+       radius = 0;
 
   final Widget? child;
   final EdgeInsets padding;

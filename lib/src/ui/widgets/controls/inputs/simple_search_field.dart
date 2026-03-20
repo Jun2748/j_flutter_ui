@@ -145,7 +145,6 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
     BuildContext context,
     ThemeData theme,
   ) {
-    final AppThemeTokens tokens = theme.appThemeTokens;
     final SearchBarThemeData searchBarTheme = theme.searchBarTheme;
     final Set<WidgetState> states = _searchBarStates();
     final BorderRadius quietBorderRadius = _resolvedQuietBorderRadius(
@@ -155,56 +154,26 @@ class _SimpleSearchFieldState extends State<SimpleSearchField> {
     final BorderSide enabledSide =
         searchBarTheme.side?.resolve(states) ??
         BorderSide(color: Colors.transparent, width: JDimens.dp1);
+    final InputBorder? baseBorder =
+        theme.inputDecorationTheme.border ??
+        theme.inputDecorationTheme.enabledBorder ??
+        theme.inputDecorationTheme.focusedBorder ??
+        theme.inputDecorationTheme.disabledBorder ??
+        theme.inputDecorationTheme.errorBorder ??
+        theme.inputDecorationTheme.focusedErrorBorder;
+    final OutlineInputBorder quietBorder = _quietBorder(
+      baseBorder,
+      borderRadius: quietBorderRadius,
+      side: enabledSide,
+    );
 
     return theme.inputDecorationTheme.copyWith(
-      filled: true,
-      fillColor:
-          searchBarTheme.backgroundColor?.resolve(states) ??
-          theme.inputDecorationTheme.fillColor ??
-          tokens.inputBackground,
-      border: _quietBorder(
-        theme.inputDecorationTheme.border,
-        borderRadius: quietBorderRadius,
-        side: enabledSide,
-      ),
-      enabledBorder: _quietBorder(
-        theme.inputDecorationTheme.enabledBorder ??
-            theme.inputDecorationTheme.border,
-        borderRadius: quietBorderRadius,
-        side: enabledSide,
-      ),
-      focusedBorder: _quietBorder(
-        theme.inputDecorationTheme.focusedBorder ??
-            theme.inputDecorationTheme.enabledBorder ??
-            theme.inputDecorationTheme.border,
-        borderRadius: quietBorderRadius,
-        side: BorderSide(
-          color: theme.colorScheme.primary,
-          width: JDimens.dp1_5,
-        ),
-      ),
-      disabledBorder: _quietBorder(
-        theme.inputDecorationTheme.disabledBorder ??
-            theme.inputDecorationTheme.enabledBorder ??
-            theme.inputDecorationTheme.border,
-        borderRadius: quietBorderRadius,
-        side: BorderSide(color: tokens.dividerColor, width: JDimens.dp1),
-      ),
-      errorBorder: _quietBorder(
-        theme.inputDecorationTheme.errorBorder ??
-            theme.inputDecorationTheme.enabledBorder ??
-            theme.inputDecorationTheme.border,
-        borderRadius: quietBorderRadius,
-        side: BorderSide(color: theme.colorScheme.error, width: JDimens.dp1),
-      ),
-      focusedErrorBorder: _quietBorder(
-        theme.inputDecorationTheme.focusedErrorBorder ??
-            theme.inputDecorationTheme.errorBorder ??
-            theme.inputDecorationTheme.enabledBorder ??
-            theme.inputDecorationTheme.border,
-        borderRadius: quietBorderRadius,
-        side: BorderSide(color: theme.colorScheme.error, width: JDimens.dp1_5),
-      ),
+      border: quietBorder,
+      enabledBorder: quietBorder,
+      focusedBorder: quietBorder,
+      disabledBorder: quietBorder,
+      errorBorder: quietBorder,
+      focusedErrorBorder: quietBorder,
     );
   }
 

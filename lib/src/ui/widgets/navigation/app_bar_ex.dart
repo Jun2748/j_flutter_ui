@@ -54,21 +54,28 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
         (title != null
             ? Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis)
             : null);
+    final Color? resolvedBackgroundColor =
+        backgroundColor ?? theme.appBarTheme.backgroundColor;
+    final Color fallbackForegroundColor = resolvedBackgroundColor == null
+        ? tokens.onCardResolved(theme)
+        : theme.colorScheme.onSurface;
     final Color? themeForegroundColor = theme.appBarTheme.foregroundColor;
     final TextStyle baseTitleStyle =
         theme.appBarTheme.titleTextStyle ??
         theme.textTheme.titleLarge ??
         const TextStyle();
-    final TextStyle resolvedTitleStyle =
-        baseTitleStyle.color != null || themeForegroundColor == null
+    final TextStyle resolvedTitleStyle = baseTitleStyle.color != null
         ? baseTitleStyle
-        : baseTitleStyle.copyWith(color: themeForegroundColor);
+        : baseTitleStyle.copyWith(
+            color: themeForegroundColor ?? fallbackForegroundColor,
+          );
     final IconThemeData baseIconTheme =
         theme.appBarTheme.iconTheme ?? theme.iconTheme;
-    final IconThemeData resolvedIconTheme =
-        baseIconTheme.color != null || themeForegroundColor == null
+    final IconThemeData resolvedIconTheme = baseIconTheme.color != null
         ? baseIconTheme
-        : baseIconTheme.copyWith(color: themeForegroundColor);
+        : baseIconTheme.copyWith(
+            color: themeForegroundColor ?? fallbackForegroundColor,
+          );
     final Widget toolbar = SizedBox(
       height: height,
       child: Padding(
@@ -84,10 +91,7 @@ class AppBarEx extends StatelessWidget implements PreferredSizeWidget {
     );
 
     return Material(
-      color:
-          backgroundColor ??
-          theme.appBarTheme.backgroundColor ??
-          tokens.cardBackground,
+      color: resolvedBackgroundColor ?? tokens.cardBackground,
       elevation: elevation,
       surfaceTintColor: Colors.transparent,
       shadowColor: elevation == 0 ? Colors.transparent : null,

@@ -1,134 +1,207 @@
 # j_flutter_ui — Agent & Maintainer Rules
 
-Read this file before changing code.
+> Read this file before changing any code.
+> This file contains RULES ONLY. For historical gap tracking, see `RESOLVED_GAPS.md`. For audit history, see `REPO_AUDIT_SUMMARY.md`.
 
-## Purpose
-- `j_flutter_ui` is a reusable Flutter UI library and design system.
-- It must remain **app-agnostic**, **themeable**, **localization-safe**, and **stable** for multiple downstream apps.
-- Do not “fix” library issues by changing consumer app code.
+---
 
-## Non‑negotiables
-- **Public API stability**: avoid breaking changes; avoid renames/moves of exported symbols unless explicitly planned.
-- **Focused diffs**: no drive-by refactors in the same change.
-- **No parallel theme systems**: use Flutter-native `ThemeData` + `ThemeExtension`.
-- **Null-safety discipline**: avoid `!` unless the guarantee is obvious and local.
+## Library contract (non-negotiables)
 
-## Repo map (mental model)
-- `lib/j_flutter_ui.dart`: the public entrypoint. Anything exported here is public API.
-- `lib/src/ui/resources/`: tokens (`JDimens`, `JInsets`, `JTextStyles`), `JAppTheme`, `AppThemeTokens`.
-- `lib/src/ui/widgets/`: primitives + patterns.
-- `lib/src/ui/localization/`: library JSON localization + app override bridge.
-- `example/`: demo catalog and QA surface. Keep it working.
-- `test/`: regression suite. Add tests for risky theming/null behavior.
+- `j_flutter_ui` must remain **app-agnostic**, **themeable**, **localization-safe**, and **stable** across multiple downstream apps.
+- Do NOT fix library issues by changing consumer app code.
+- Do NOT add app routing, app state management, or app domain models inside any library widget.
+- Do NOT hardcode app/business copy in reusable widgets.
+- Do NOT introduce a parallel theme system. Use Flutter-native `ThemeData` + `ThemeExtension` only.
+- Do NOT use `!` force-unwrap unless the null guarantee is obvious, local, and documented inline.
+- Do NOT make breaking changes to public API without a migration plan in `MIGRATION_NOTES.md`.
+- Do NOT refactor unrelated code in the same diff (no drive-by refactors).
 
-## Widget layering (keep it enforceable)
-- **Primitives**: single responsibility, thin wrappers around Material semantics.
-  - Examples: `SimpleText`, `SimpleButton`, `SimpleIconButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
-- **Patterns**: compose primitives; do not rebuild styling logic from scratch.
-  - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`, `SimpleFloatingBanner`.
+---
 
-## Active indicator pattern (navigation)
-`SimpleVerticalRail` defaults to color-change active state and now also supports an optional selected background via `selectedItemBackgroundColor`. Defaults are active: `colorScheme.onSurface`, inactive: `tokens.mutedText`, but you can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
+## Repo map
 
-`SimpleBottomNavBar` supports the standard active-color treatment and an optional active icon circle treatment via `activeIconBackgroundColor`. Do not expand it into a custom item-renderer API for app-specific navigation chrome.
+| Path | Purpose |
+|---|---|
+| `lib/j_flutter_ui.dart` | Public entrypoint. Everything exported here is public API. |
+| `lib/src/ui/resources/` | Tokens (`JDimens`, `JInsets`, `JTextStyles`), `JAppTheme`, `AppThemeTokens`. |
+| `lib/src/ui/widgets/` | Primitives and patterns. |
+| `lib/src/ui/localization/` | Library JSON localization + `AppLocalizationBridge`. |
+| `example/` | Demo catalog and QA surface. Must remain runnable at all times. |
+| `test/` | Regression suite. Must pass before any merge. |
 
-## Theming contract (what downstream apps rely on)
-Use Flutter-native theming only.
+---
 
-### Resolution order (default)
-Every visual value should resolve in this order:
-`explicit widget parameter -> Material semantic theme source when semantically correct -> AppThemeTokens (ThemeExtension) -> final fallback constants`
+## Widget layering
 
-Rationale: downstream apps often customize library-owned styling via `AppThemeTokens`, while standard Material surfaces/components should still respect their matching Material theme APIs (for example `AppBarTheme` for app bars).
+### Primitives
+- Single responsibility. Thin wrappers around Material semantics.
+- Do NOT compose other library primitives inside a primitive.
+- Examples: `SimpleText`, `SimpleButton`, `SimpleIconButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
 
-### Use Material semantics when
-- The value is a standard Material semantic pairing.
-- Examples: `theme.colorScheme.error`, `theme.colorScheme.onSurface`, `theme.textTheme`, `theme.appBarTheme`, `theme.iconTheme`.
-- Also prefer matching component themes when the widget is a thin wrapper over a Material control: `theme.bottomNavigationBarTheme`, `theme.tabBarTheme`, `theme.checkboxTheme`, `theme.switchTheme`, `theme.dialogTheme`, `theme.bottomSheetTheme`, `theme.progressIndicatorTheme`.
-- For compact icon-action primitives, prefer `theme.iconButtonTheme.style` before token fallback.
-- `AppBarEx` should prefer `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
-- `SimpleBottomNavBar`, `SimpleTabs`, `SimpleCheckbox`, `SimpleSwitch`, `SimpleAlertDialog`, `SimpleBottomSheet`, and `SimpleLoadingView` should all respect their matching Material component theme before token fallback.
+### Patterns
+- Compose primitives. Do NOT rebuild styling logic from scratch inside a pattern.
+- Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`, `SimpleFloatingBanner`.
 
-### Use `AppThemeTokens` when
-- The library owns the semantic styling (surfaces, borders, muted text, input fills).
-- Avoid duplicating all of `ColorScheme`/`TextTheme` into tokens.
+---
 
-### Foreground/content colors for token-owned surfaces
-If a widget uses a token-owned background (e.g. `tokens.cardBackground`, `tokens.primary`), prefer a paired token foreground:
-- `tokens.onCardResolved(theme)` for card-like surfaces
-- `tokens.onPrimaryResolved(theme)` for primary action surfaces
-Rationale: downstream apps often override token backgrounds; relying on Material `onSurface`/`onPrimary` can break contrast.
+## Pre-edit checklist (run before every change)
 
-### Allowed constants
-- `Colors.transparent` and similar “harmless constants” are fine.
-- Other hardcoded colors should be a last-resort fallback only.
+1. Is the symbol you are touching exported from `lib/j_flutter_ui.dart`? If yes → treat as public API, breaking changes require migration plan.
+2. Does an existing primitive or pattern already cover the need? If yes → compose it, do not add a new widget.
+3. Are all visual values resolved in the correct order? (See theming rules below.)
+4. For thin Material wrappers → does the matching component theme still participate before token fallback?
+5. Does behavior change? If yes → add or update tests, especially for fallbacks and null cases.
 
-### Theme safety rules
-- Do not assume `ThemeData` subfields are non-null.
-- Prefer “resolve once at the top of `build`” to keep widget code readable.
+---
+
+## Theming rules
+
+### Resolution order (STRICT — apply in this exact sequence)
+```
+explicit widget parameter
+  → Material component theme (when semantically correct)
+  → AppThemeTokens (ThemeExtension)
+  → final fallback constants (last resort only)
+```
+
+### When to use Material semantics
+Use Material semantics when the value is a standard Material semantic pairing:
+- `theme.colorScheme.error`, `theme.colorScheme.onSurface`, `theme.textTheme`, `theme.appBarTheme`, `theme.iconTheme`
+- Matching component themes for thin wrappers:
+
+| Widget | Prefer before token fallback |
+|---|---|
+| `AppBarEx` | `theme.appBarTheme.backgroundColor` / `foregroundColor` |
+| `SimpleBottomNavBar` | `theme.bottomNavigationBarTheme` |
+| `SimpleTabs` | `theme.tabBarTheme` |
+| `SimpleCheckbox` | `theme.checkboxTheme` |
+| `SimpleSwitch` | `theme.switchTheme` |
+| `SimpleAlertDialog` | `theme.dialogTheme` |
+| `SimpleBottomSheet` | `theme.bottomSheetTheme` |
+| `SimpleLoadingView` | `theme.progressIndicatorTheme` |
+| compact icon-action primitives | `theme.iconButtonTheme.style` |
+
+### When to use AppThemeTokens
+Use `AppThemeTokens` when the library owns the semantic styling:
+- `cardBackground`, `cardBorderColor`
+- `inputBackground`, `inputBorderColor`
+- `dividerColor`, `mutedText`
+- `primary`, `secondary`
+
+Read tokens only via the canonical accessor:
+```dart
+final AppThemeTokens tokens = Theme.of(context).appThemeTokens;
+```
+
+Do NOT access `AppThemeTokens` via any other path.
+
+### Foreground/content color rule (token-owned surfaces)
+If a widget sets a background via `AppThemeTokens`, use the paired resolved foreground — do NOT assume Material `on*` colors remain correct after token overrides:
+- `tokens.onCardResolved(theme)` → for card / sheet / dialog / snackbar surfaces
+- `tokens.onPrimaryResolved(theme)` → for primary action surfaces
+- `tokens.onSecondaryResolved(theme)` → for secondary semantic surfaces
+
+### Allowed fallback constants
+- `Colors.transparent` and structurally harmless constants are allowed.
+- All other hardcoded colors are last-resort fallback only. Document why inline.
+
+### Theme safety
+- Do NOT assume `ThemeData` subfields are non-null.
+- Resolve all visual values once at the top of `build`. Do NOT scatter resolution across the widget tree.
+
+---
 
 ## Spacing & sizing rules
-- Use **`JGaps`** for fixed gaps.
-- Use **`JInsets`** for padding.
-- Use **`JDimens` / `JHeights` / `JIconSizes` / `JFontSizes` / `JLineHeights`** for shared scales.
-- Avoid magic numbers for shared spacing/radius/heights/border widths/icon sizes/font sizes.
-- Only add new shared tokens if reused or system-scale relevant.
 
-## Text & localization rules
-- `SimpleText` is the default.
-- `AppText` is for library-owned text that needs localization, HTML, semantics label, or auto-fit.
-- Use raw `Text` only when required by Flutter/third-party APIs or when you must inherit Material component text styling.
-- If truncation is possible, set `maxLines` and `overflow` explicitly.
-- **Do not hardcode app/business copy** in reusable widgets.
+| Need | Use |
+|---|---|
+| Fixed gaps | `JGaps` |
+| Padding / insets | `JInsets` |
+| Dimensions / radii | `JDimens` |
+| Heights | `JHeights` |
+| Icon sizes | `JIconSizes` |
+| Font sizes | `JFontSizes` |
+| Line heights | `JLineHeights` |
 
-### Localization resolution order
-Library-owned copy must resolve:
-`app override (AppLocalizationBridge) -> library JSON localization -> key fallback -> safe plain-string fallback`
+- Do NOT use magic numbers for spacing, radius, heights, border widths, icon sizes, or font sizes.
+- Add a new shared token only if the value is reused across multiple widgets or is part of a system scale.
 
-Never concatenate translated fragments into a sentence.
-- When a `BuildContext` is available, pass it into localization-backed validation/message helpers so the app override bridge participates.
+---
 
-## Forms (core infrastructure)
-- Keep separation between builder/controller/validation/utilities.
+## Text rules
+
+- Use `SimpleText` by default.
+- Use `AppText` for library-owned text that needs localization, HTML rendering, semantics label, or auto-fit.
+- Use raw `Text` only when required by Flutter/third-party APIs or when Material component text styling must be inherited.
+- If truncation is possible, always set `maxLines` and `overflow` explicitly.
+
+---
+
+## Localization rules
+
+### Resolution order (STRICT — apply in this exact sequence)
+```
+caller override (explicit widget parameter)
+  → AppLocalizationBridge (host app runtime override)
+  → library JSON localization (assets/localization/<lang>.json)
+  → key fallback (returns the key string — diagnostic only)
+  → safe plain-string fallback (short English string — prevents runtime errors)
+```
+
+- Do NOT concatenate translated fragments to form a sentence. Use a single key with placeholders.
+- When a `BuildContext` is available, pass it into localization-backed helpers so `AppLocalizationBridge` participates.
+
+---
+
+## Navigation widget rules
+
+### SimpleVerticalRail
+- Active state: color-change by default. Optional selected background via `selectedItemBackgroundColor`.
+- Override active/inactive colors via `selectedItemColor` / `unselectedItemColor`.
+- Do NOT add built-in position indicators (dot, bar, line). App-specific indicators must be `Stack` overlays on top.
+- Per-item badges use `badgeLabel` on `SimpleVerticalRailItem`. Do NOT compute badge offsets at the app layer.
+
+### SimpleBottomNavBar
+- Supports active icon circle treatment via `activeIconBackgroundColor`.
+- Do NOT expand into a custom item-renderer API for app-specific navigation chrome.
+
+---
+
+## Form rules
+
+- Keep strict separation: builder / controller / validation / utilities are distinct layers.
 - Preserve app-level override capability for backend errors.
-- Avoid making the form layer “too smart” (no hidden flows).
-- `SimpleFormBuilderState.reset()` is the blank-form reset: it clears configured field values to `null` and clears errors.
-- `SimpleFormController.resetToInitialValues()` remains the restore-initial-values path.
+- Do NOT add hidden flows or implicit navigation inside the form layer.
+- `SimpleFormBuilderState.reset()` → blank-form reset: clears field values to `null`, clears errors.
+- `SimpleFormController.resetToInitialValues()` → restores original controller values.
+- `SimpleFormController.reset()` → controller-only clear path.
+- These three reset paths have intentionally different semantics. Do NOT unify them.
 
-## Reusable gaps now covered
-- `SimpleVerticalRail` includes `selectedItemBackgroundColor` for reusable selected-state background highlights without app-layer overlays.
-- `SimpleVerticalRail` items support `badgeLabel` for per-item status/count/tag badges rendered as icon-corner overlays. App-layer manual offset math is no longer required. Note: this is distinct from position indicators (dots, bars) which remain app-layer `Stack` composition.
-- `SimpleBottomNavBar` includes `activeIconBackgroundColor` for reusable active icon circle treatments without custom item rendering.
-- `SimpleSearchField` includes a first-class `quiet` variant for soft-background / pill-like search bars. Keep it semantic and app-agnostic; do not turn it into a branded search template.
-- `SimpleBadge.filled` provides a solid-fill badge for strong emphasis (discount tags, count indicators). Takes a `color` parameter with luminance-computed foreground fallback. Complements the existing tinted variants (primary, error, etc.).
-- `SimpleFloatingBanner` is the reusable centered promo/announcement overlay primitive. Keep it composition-first (`media`, `child`) and avoid baking in campaign-specific text, badges, prices, or brand layouts.
+---
 
-## Review workflow (what to do before you edit)
-- Identify whether you’re touching **public API** (exported via `j_flutter_ui.dart`).
-- Check for existing primitives/patterns before adding new ones.
-- Ensure theming and tokens are resolved predictably.
-- For thin wrappers over Material components, verify the matching component theme still participates before token fallback.
-- Add/adjust tests when behavior changes (especially fallbacks and null cases).
+## Shared styling helpers
 
-## Labels for partial migrations (use consistently in PRs)
+- Use `JInputDecorations` for all `InputDecoration` building in inputs (keeps focus/error/disabled borders consistent).
+- Use `JTints` for all tinted surface/border recipes in feedback components (badge/banner/snackbar/chip).
+- Helpers must follow the same resolution order as widgets: Material semantics → `AppThemeTokens` → fallback constants.
+- Do NOT hardcode `JColors` or any color constant directly inside `JInputDecorations`, `JTints`, or any shared helper.
+
+---
+
+## Public API rules
+
+- Consumers import only `package:j_flutter_ui/j_flutter_ui.dart`. No `src/` imports.
+- Every export from `lib/j_flutter_ui.dart` is semver-governed public API.
+- Adding a new export → non-breaking (minor bump).
+- Renaming, moving, or removing an export → breaking change (major bump), requires `MIGRATION_NOTES.md` entry.
+- Do NOT export internal helpers unless there is an explicit documented reason.
+- Do NOT name exported symbols to collide with Flutter SDK / Material types (e.g. do NOT export a type named `SimpleDialog`).
+
+---
+
+## PR labels (use consistently)
+
 - `fully migrated`
 - `partially migrated`
 - `acceptable fallback`
 - `intentional Material semantic usage`
-
-## Resolved gaps (validated)
-
-Previously confirmed validation gaps are now implemented in the library:
-
-- `SimpleGrid` now provides a fixed n-column layout helper for catalog/product grids.
-- `SimpleVerticalRail` supports `selectedItemColor` / `unselectedItemColor` so active-color customization no longer needs theme workarounds.
-- `SimpleVerticalRail` supports `selectedItemBackgroundColor` so reusable selected-state highlights no longer need app-layer overlays.
-- `SimpleVerticalRail` supports `badgeLabel` on `SimpleVerticalRailItem` so per-item badges no longer need app-layer offset computation.
-- `SimpleBadge.filled` provides a solid-fill variant (color + foreground) for discount tags, counts, and strong-emphasis labels.
-- `SimpleBottomNavBar` supports `activeIconBackgroundColor` so reusable active icon circle treatments no longer need custom wrappers.
-- `SimpleCard.flush` provides an edge-to-edge / full-bleed variant (no external margin, no corner radius) for hero banners.
-- `SimpleSearchField` provides a `quiet` pill-like variant so common search bars do not need route-scoped input theme overrides.
-- `SimpleFloatingBanner` provides a reusable centered promo/announcement overlay with dimmed backdrop, optional close affordance, and custom content/media composition.
-- `SimpleChipBar` provides a reusable horizontal single-select chip bar for filters, categories, and segmented-style choices without app-layer scrolling or chip-theme glue code.
-
-If a new downstream gap is reintroduced, add it back here as a fresh “Known gaps” entry.

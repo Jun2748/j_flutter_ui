@@ -136,7 +136,7 @@ void main() {
                 const SimpleMenuTile(
                   title: 'Profile',
                   subtitle: 'Manage your account',
-                  showBottomDivider: true,
+                  dividers: SimpleMenuTileDividers.bottom,
                 ),
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
+import '../../localization/app_localizations.dart';
 import '../../localization/intl.dart';
 import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
@@ -121,8 +122,30 @@ class AppText extends StatelessWidget {
   }
 
   String _resolveText(BuildContext context) {
-    if (localeKey != null && localeKey!.trim().isNotEmpty) {
-      return Intl.text(localeKey!, context: context, args: args);
+    final String? resolvedLocaleKey = localeKey?.trim();
+
+    if (resolvedLocaleKey != null && resolvedLocaleKey.isNotEmpty) {
+      final String localized = Intl.text(
+        resolvedLocaleKey,
+        context: context,
+        args: args,
+      );
+      if (localized.isNotEmpty && localized != resolvedLocaleKey) {
+        return localized;
+      }
+
+      final String? fallbackLocalized = AppLocalizations.fallback(
+        locale: Localizations.maybeLocaleOf(context),
+      ).maybeTr(resolvedLocaleKey, args: args);
+      if (fallbackLocalized != null && fallbackLocalized.isNotEmpty) {
+        return fallbackLocalized;
+      }
+
+      if (text != null && text!.isNotEmpty) {
+        return text!;
+      }
+
+      return '';
     }
 
     return text ?? '';

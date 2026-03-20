@@ -38,15 +38,11 @@ class SimpleChipBar<T> extends StatelessWidget {
 
     final ThemeData theme = Theme.of(context);
     final ChipThemeData chipTheme = ChipTheme.of(context);
-    final AppThemeTokens? tokenOverrides = theme.extension<AppThemeTokens>();
-    final AppThemeTokens fallbackTokens = AppThemeTokens.fallback(
-      brightness: theme.brightness,
-    );
+    final AppThemeTokens tokens = theme.appThemeTokens;
     final _SimpleChipBarColors colors = _resolveColors(
       theme: theme,
       chipTheme: chipTheme,
-      tokenOverrides: tokenOverrides,
-      fallbackTokens: fallbackTokens,
+      tokens: tokens,
     );
 
     return SingleChildScrollView(
@@ -61,9 +57,7 @@ class SimpleChipBar<T> extends StatelessWidget {
               item: items[index],
               chipTheme: chipTheme,
               colors: colors,
-              borderColor:
-                  tokenOverrides?.cardBorderColor ??
-                  fallbackTokens.cardBorderColor,
+              borderColor: tokens.cardBorderColor,
             ),
           ],
         ],
@@ -134,31 +128,24 @@ class SimpleChipBar<T> extends StatelessWidget {
   _SimpleChipBarColors _resolveColors({
     required ThemeData theme,
     required ChipThemeData chipTheme,
-    required AppThemeTokens? tokenOverrides,
-    required AppThemeTokens fallbackTokens,
+    required AppThemeTokens tokens,
   }) {
     final Color resolvedSelectedBackground =
         selectedColor ??
         chipTheme.secondarySelectedColor ??
         chipTheme.selectedColor ??
-        tokenOverrides?.primary ??
-        fallbackTokens.primary;
+        tokens.primary;
     final Color resolvedUnselectedBackground =
-        unselectedColor ??
-        chipTheme.backgroundColor ??
-        tokenOverrides?.cardBackground ??
-        fallbackTokens.cardBackground;
+        unselectedColor ?? chipTheme.backgroundColor ?? tokens.cardBackground;
     final Color resolvedSelectedLabel =
         selectedLabelColor ??
         chipTheme.secondaryLabelStyle?.color ??
-        tokenOverrides?.onPrimaryResolved(theme) ??
-        fallbackTokens.onPrimaryResolved(theme);
+        tokens.onPrimaryResolved(theme);
     final Color resolvedUnselectedLabel =
         unselectedLabelColor ??
         chipTheme.labelStyle?.color ??
         theme.textTheme.labelLarge?.color ??
-        tokenOverrides?.onCardResolved(theme) ??
-        fallbackTokens.onCardResolved(theme);
+        tokens.onCardResolved(theme);
 
     return _SimpleChipBarColors(
       selectedBackground: resolvedSelectedBackground,

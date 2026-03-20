@@ -6,6 +6,10 @@ import '../feedback/simple_badge.dart';
 import '../display/simple_divider.dart';
 import '../typography/simple_text.dart';
 
+enum SimpleMenuTileDisclosure { none, chevron }
+
+enum SimpleMenuTileDividers { none, top, bottom, both }
+
 class SimpleMenuTile extends StatelessWidget {
   const SimpleMenuTile({
     super.key,
@@ -17,9 +21,8 @@ class SimpleMenuTile extends StatelessWidget {
     this.badgeLabel,
     this.trailingText,
     this.trailingLabel,
-    this.showChevron = true,
-    this.showTopDivider = false,
-    this.showBottomDivider = true,
+    this.disclosure = SimpleMenuTileDisclosure.chevron,
+    this.dividers = SimpleMenuTileDividers.bottom,
     this.enabled = true,
     this.padding,
     this.minHeight = JHeights.menuTile,
@@ -32,8 +35,7 @@ class SimpleMenuTile extends StatelessWidget {
     String? subtitle,
     Widget? leading,
     Widget? trailing,
-    bool showTopDivider = false,
-    bool showBottomDivider = true,
+    SimpleMenuTileDividers dividers = SimpleMenuTileDividers.bottom,
     bool enabled = true,
     EdgeInsets? padding,
     double minHeight = JHeights.menuTile,
@@ -44,9 +46,8 @@ class SimpleMenuTile extends StatelessWidget {
          subtitle: subtitle,
          leading: leading,
          trailing: trailing,
-         showChevron: true,
-         showTopDivider: showTopDivider,
-         showBottomDivider: showBottomDivider,
+         disclosure: SimpleMenuTileDisclosure.chevron,
+         dividers: dividers,
          enabled: enabled,
          padding: padding,
          minHeight: minHeight,
@@ -60,9 +61,8 @@ class SimpleMenuTile extends StatelessWidget {
     String? subtitle,
     Widget? leading,
     Widget? trailing,
-    bool showChevron = true,
-    bool showTopDivider = false,
-    bool showBottomDivider = true,
+    SimpleMenuTileDisclosure disclosure = SimpleMenuTileDisclosure.chevron,
+    SimpleMenuTileDividers dividers = SimpleMenuTileDividers.bottom,
     bool enabled = true,
     EdgeInsets? padding,
     double minHeight = JHeights.menuTile,
@@ -74,9 +74,8 @@ class SimpleMenuTile extends StatelessWidget {
          leading: leading,
          trailing: trailing,
          badgeLabel: badgeLabel,
-         showChevron: showChevron,
-         showTopDivider: showTopDivider,
-         showBottomDivider: showBottomDivider,
+         disclosure: disclosure,
+         dividers: dividers,
          enabled: enabled,
          padding: padding,
          minHeight: minHeight,
@@ -90,9 +89,8 @@ class SimpleMenuTile extends StatelessWidget {
     String? subtitle,
     Widget? leading,
     Widget? trailing,
-    bool showChevron = true,
-    bool showTopDivider = false,
-    bool showBottomDivider = true,
+    SimpleMenuTileDisclosure disclosure = SimpleMenuTileDisclosure.chevron,
+    SimpleMenuTileDividers dividers = SimpleMenuTileDividers.bottom,
     bool enabled = true,
     EdgeInsets? padding,
     double minHeight = JHeights.menuTile,
@@ -104,9 +102,8 @@ class SimpleMenuTile extends StatelessWidget {
          leading: leading,
          trailing: trailing,
          trailingText: trailingText,
-         showChevron: showChevron,
-         showTopDivider: showTopDivider,
-         showBottomDivider: showBottomDivider,
+         disclosure: disclosure,
+         dividers: dividers,
          enabled: enabled,
          padding: padding,
          minHeight: minHeight,
@@ -121,9 +118,8 @@ class SimpleMenuTile extends StatelessWidget {
   final String? badgeLabel;
   final String? trailingText;
   final String? trailingLabel;
-  final bool showChevron;
-  final bool showTopDivider;
-  final bool showBottomDivider;
+  final SimpleMenuTileDisclosure disclosure;
+  final SimpleMenuTileDividers dividers;
   final bool enabled;
   final EdgeInsets? padding;
   final double minHeight;
@@ -139,9 +135,8 @@ class SimpleMenuTile extends StatelessWidget {
     String? badgeLabel,
     String? trailingText,
     String? trailingLabel,
-    bool? showChevron,
-    bool? showTopDivider,
-    bool? showBottomDivider,
+    SimpleMenuTileDisclosure? disclosure,
+    SimpleMenuTileDividers? dividers,
     bool? enabled,
     EdgeInsets? padding,
     double? minHeight,
@@ -157,9 +152,8 @@ class SimpleMenuTile extends StatelessWidget {
       badgeLabel: badgeLabel ?? this.badgeLabel,
       trailingText: trailingText ?? this.trailingText,
       trailingLabel: trailingLabel ?? this.trailingLabel,
-      showChevron: showChevron ?? this.showChevron,
-      showTopDivider: showTopDivider ?? this.showTopDivider,
-      showBottomDivider: showBottomDivider ?? this.showBottomDivider,
+      disclosure: disclosure ?? this.disclosure,
+      dividers: dividers ?? this.dividers,
       enabled: enabled ?? this.enabled,
       padding: padding ?? this.padding,
       minHeight: minHeight ?? this.minHeight,
@@ -175,6 +169,12 @@ class SimpleMenuTile extends StatelessWidget {
     final AppThemeTokens tokens = theme.appThemeTokens;
     final Color dividerColor = tokens.dividerColor;
     final Color mutedTextColor = tokens.mutedText;
+    final bool showsTopDivider =
+        dividers == SimpleMenuTileDividers.top ||
+        dividers == SimpleMenuTileDividers.both;
+    final bool showsBottomDivider =
+        dividers == SimpleMenuTileDividers.bottom ||
+        dividers == SimpleMenuTileDividers.both;
 
     final Widget tile = Material(
       color: Colors.transparent,
@@ -213,13 +213,13 @@ class SimpleMenuTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        if (showTopDivider)
+        if (showsTopDivider)
           _MenuTileDivider(
             horizontalInset: resolvedPadding.horizontal / 2,
             color: dividerColor,
           ),
         tile,
-        if (showBottomDivider)
+        if (showsBottomDivider)
           _MenuTileDivider(
             horizontalInset: resolvedPadding.horizontal / 2,
             color: dividerColor,
@@ -237,7 +237,9 @@ class SimpleMenuTile extends StatelessWidget {
   }
 
   bool get _hasTrailingContent =>
-      trailing != null || _hasTrailingText || showChevron;
+      trailing != null ||
+      _hasTrailingText ||
+      disclosure == SimpleMenuTileDisclosure.chevron;
 
   Widget _buildContent(BuildContext context, Color mutedTextColor) {
     return Column(
@@ -302,7 +304,7 @@ class SimpleMenuTile extends StatelessWidget {
         children.add(JGaps.w8);
       }
       children.add(trailing!);
-    } else if (showChevron) {
+    } else if (disclosure == SimpleMenuTileDisclosure.chevron) {
       if (children.isNotEmpty) {
         children.add(JGaps.w8);
       }
