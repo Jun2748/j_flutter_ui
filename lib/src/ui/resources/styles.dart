@@ -60,4 +60,25 @@ abstract final class JTextStyles {
     height: JLineHeights.lh24 / JFontSizes.fs16,
     letterSpacing: 0.1,
   );
+
+  /// Prominent price display — hero prices on product/order cards.
+  /// Tabular figures keep digit widths uniform so prices align vertically.
+  static const TextStyle priceLarge = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: JFontSizes.fs20,
+    fontWeight: FontWeight.w700,
+    height: JLineHeights.lh28 / JFontSizes.fs20,
+    letterSpacing: -0.2,
+    fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+  );
+
+  /// Inline price display — list items, summaries, cart rows.
+  /// Tabular figures keep digit widths uniform so prices align vertically.
+  static const TextStyle price = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: JFontSizes.fs16,
+    fontWeight: FontWeight.w600,
+    height: JLineHeights.lh24 / JFontSizes.fs16,
+    fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+  );
 }

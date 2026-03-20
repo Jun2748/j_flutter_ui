@@ -144,6 +144,42 @@ abstract final class JInsets {
   static const EdgeInsets screen = EdgeInsets.all(JDimens.dp16);
   static const EdgeInsets screenPadding = screen;
   static const EdgeInsets card = EdgeInsets.all(JDimens.dp16);
+
+  /// RTL-safe leading-edge-only padding. Use for the first item in a
+  /// horizontal scroll list or any start-anchored layout.
+  static const EdgeInsetsDirectional onlyStart8 = EdgeInsetsDirectional.only(
+    start: JDimens.dp8,
+  );
+  static const EdgeInsetsDirectional onlyStart12 = EdgeInsetsDirectional.only(
+    start: JDimens.dp12,
+  );
+  static const EdgeInsetsDirectional onlyStart16 = EdgeInsetsDirectional.only(
+    start: JDimens.dp16,
+  );
+  static const EdgeInsetsDirectional onlyStart20 = EdgeInsetsDirectional.only(
+    start: JDimens.dp20,
+  );
+  static const EdgeInsetsDirectional onlyStart24 = EdgeInsetsDirectional.only(
+    start: JDimens.dp24,
+  );
+
+  /// RTL-safe trailing-edge-only padding. Use for the last item in a
+  /// horizontal scroll list or any end-anchored layout.
+  static const EdgeInsetsDirectional onlyEnd8 = EdgeInsetsDirectional.only(
+    end: JDimens.dp8,
+  );
+  static const EdgeInsetsDirectional onlyEnd12 = EdgeInsetsDirectional.only(
+    end: JDimens.dp12,
+  );
+  static const EdgeInsetsDirectional onlyEnd16 = EdgeInsetsDirectional.only(
+    end: JDimens.dp16,
+  );
+  static const EdgeInsetsDirectional onlyEnd20 = EdgeInsetsDirectional.only(
+    end: JDimens.dp20,
+  );
+  static const EdgeInsetsDirectional onlyEnd24 = EdgeInsetsDirectional.only(
+    end: JDimens.dp24,
+  );
 }
 
 abstract final class JHeights {

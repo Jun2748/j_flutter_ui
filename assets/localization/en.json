@@ -58,6 +58,8 @@
   "demo.text.primaryLabel": "Primary emphasis",
   "demo.text.successLabel": "Success status",
   "demo.text.errorLabel": "Error status",
+  "demo.text.priceTitle": "Price / monetary",
+  "demo.text.priceAlignmentCaption": "Tabular figures keep decimal points aligned across rows:",
   "demo.button.title": "Buttons",
   "demo.button.registryDescription": "Primary, secondary, outline, text, and loading buttons.",
   "demo.button.variantsTitle": "Variants",

@@ -78,6 +78,9 @@ class L {
   static const String demoTextPrimaryLabel = 'demo.text.primaryLabel';
   static const String demoTextSuccessLabel = 'demo.text.successLabel';
   static const String demoTextErrorLabel = 'demo.text.errorLabel';
+  static const String demoTextPriceTitle = 'demo.text.priceTitle';
+  static const String demoTextPriceAlignmentCaption =
+      'demo.text.priceAlignmentCaption';
 
   static const String demoButtonTitle = 'demo.button.title';
   static const String demoButtonRegistryDescription =

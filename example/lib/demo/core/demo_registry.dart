@@ -194,7 +194,8 @@ class DemoRegistry {
     DemoItem(
       title: const GapDemo().title,
       category: DemoCategory.layout,
-      description: 'Spacing helpers using the shared JGaps tokens.',
+      description:
+          'Spacing helpers (JGaps) and RTL-safe directional padding (JInsets.onlyStart / onlyEnd).',
       builder: (_) => const GapDemo(),
     ),
     DemoItem(
