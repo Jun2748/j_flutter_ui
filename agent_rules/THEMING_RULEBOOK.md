@@ -21,8 +21,18 @@
   `theme.appBarTheme`
   `theme.iconTheme`
   `theme.iconButtonTheme.style`
+- Matching component themes such as:
+  `theme.bottomNavigationBarTheme`
+  `theme.tabBarTheme`
+  `theme.checkboxTheme`
+  `theme.switchTheme`
+  `theme.dialogTheme`
+  `theme.bottomSheetTheme`
+  `theme.progressIndicatorTheme`
 - `AppBarEx` defaults should read `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
 - Compact icon-action primitives should read `theme.iconButtonTheme.style` before token fallback.
+- Navigation wrappers should prefer `BottomNavigationBarThemeData` / `TabBarThemeData` before token fallback.
+- Thin wrappers over Material controls should not hard-override `CheckboxThemeData`, `SwitchThemeData`, `DialogThemeData`, `BottomSheetThemeData`, or `ProgressIndicatorThemeData` unless an explicit widget parameter is set.
 
 ## Use AppThemeTokens When
 - The library owns the semantic styling.

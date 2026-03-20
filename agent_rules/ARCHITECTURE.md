@@ -32,7 +32,9 @@ Primary goals:
     - `SimpleFloatingBanner` — centered floating promo/announcement surface over a dimmed backdrop. Keep it generic and composition-first; image/media and content belong in slots, while brand campaign structure stays in the app layer.
   - navigation patterns: `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
     - `SimpleVerticalRail` — compact left-edge icon-label rail. Supports color-change active state plus an optional selected background highlight. App-local animated overlays (dots, bars) are `Stack` composition on top, not part of the widget.
-    - `SimpleBottomNavBar` — bottom navigation wrapper with standard active-color treatment and an optional active icon background. Keep it a semantic navigation pattern, not a custom item renderer.
+    - `SimpleBottomNavBar` — bottom navigation wrapper with standard active-color treatment and an optional active icon background. It should respect `BottomNavigationBarThemeData` before token fallback. Keep it a semantic navigation pattern, not a custom item renderer.
+    - `SimpleTabs` — tab wrapper that should respect `TabBarThemeData` before token fallback.
+  - Material-control wrappers such as `SimpleCheckbox`, `SimpleSwitch`, `SimpleAlertDialog`, `SimpleBottomSheet`, and `SimpleLoadingView` should respect their matching component theme before token fallback.
 
 - `lib/src/ui/localization/`
   - library JSON localization (`assets/localization/*.json`)
@@ -68,6 +70,7 @@ All widgets should normalize values early and resolve styling predictably:
 - `AppThemeTokens` (ThemeExtension)
 - final fallback constants (rare; document why)
 - For icon-first compact action primitives, `IconButtonTheme` is the primary Material component theme source before token fallback.
+- For thin wrappers over built-in Material controls, the matching component theme is part of the Material semantic layer and should participate before token fallback.
 
 ### Foreground/content colors for token-owned surfaces
 If a widget sets a background using `AppThemeTokens` (e.g. `tokens.cardBackground`, `tokens.primary`), prefer the **paired resolved foreground** from tokens:

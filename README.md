@@ -272,6 +272,31 @@ SimpleBottomNavBar(
 
 Use `activeIconBackgroundColor` when you need the common “icon in circle” active treatment without replacing the library item rendering.
 
+Default styling resolves in this order:
+- explicit widget parameter
+- `BottomNavigationBarThemeData`
+- `AppThemeTokens`
+- final safe fallback constants
+
+`SimpleTabs` follows the same pattern for `TabBarThemeData` before token fallback.
+
+---
+
+## Material Theme Overrides
+
+For thin wrappers around standard Material controls, the library now prefers the matching Material component theme before falling back to `AppThemeTokens`.
+
+Current examples:
+- `SimpleBottomNavBar` -> `BottomNavigationBarThemeData`
+- `SimpleTabs` -> `TabBarThemeData`
+- `SimpleCheckbox` -> `CheckboxThemeData`
+- `SimpleSwitch` -> `SwitchThemeData`
+- `SimpleAlertDialog` -> `DialogThemeData`
+- `SimpleBottomSheet` -> `BottomSheetThemeData`
+- `SimpleLoadingView` -> `ProgressIndicatorThemeData`
+
+This keeps library widgets aligned with host-app component theming while preserving token fallbacks for library-owned semantics.
+
 ---
 
 ## Forms (overview)
@@ -396,5 +421,5 @@ test/                      # regression tests (fallbacks, theming, rendering)
 
 - **Keep it app-agnostic**: no app routing/state/business models inside the library.
 - **Prefer composition**: patterns should reuse primitives; avoid duplicating styling logic.
-- **Theming contract**: resolve styles as widget parameter → `AppThemeTokens` → Material semantics → fallback constants.
+- **Theming contract**: resolve styles as widget parameter → Material semantics/component theme when appropriate → `AppThemeTokens` → fallback constants.
 - **Localization-safe**: no hardcoded business copy; use keys and overrides; don't concatenate translated fragments.

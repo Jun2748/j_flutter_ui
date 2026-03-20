@@ -44,8 +44,10 @@ Rationale: downstream apps often customize library-owned styling via `AppThemeTo
 ### Use Material semantics when
 - The value is a standard Material semantic pairing.
 - Examples: `theme.colorScheme.error`, `theme.colorScheme.onSurface`, `theme.textTheme`, `theme.appBarTheme`, `theme.iconTheme`.
+- Also prefer matching component themes when the widget is a thin wrapper over a Material control: `theme.bottomNavigationBarTheme`, `theme.tabBarTheme`, `theme.checkboxTheme`, `theme.switchTheme`, `theme.dialogTheme`, `theme.bottomSheetTheme`, `theme.progressIndicatorTheme`.
 - For compact icon-action primitives, prefer `theme.iconButtonTheme.style` before token fallback.
 - `AppBarEx` should prefer `theme.appBarTheme.backgroundColor` / `foregroundColor` before token fallback.
+- `SimpleBottomNavBar`, `SimpleTabs`, `SimpleCheckbox`, `SimpleSwitch`, `SimpleAlertDialog`, `SimpleBottomSheet`, and `SimpleLoadingView` should all respect their matching Material component theme before token fallback.
 
 ### Use `AppThemeTokens` when
 - The library owns the semantic styling (surfaces, borders, muted text, input fills).
@@ -103,6 +105,7 @@ Never concatenate translated fragments into a sentence.
 - Identify whether you’re touching **public API** (exported via `j_flutter_ui.dart`).
 - Check for existing primitives/patterns before adding new ones.
 - Ensure theming and tokens are resolved predictably.
+- For thin wrappers over Material components, verify the matching component theme still participates before token fallback.
 - Add/adjust tests when behavior changes (especially fallbacks and null cases).
 
 ## Labels for partial migrations (use consistently in PRs)
