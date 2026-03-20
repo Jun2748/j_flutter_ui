@@ -224,6 +224,75 @@ void main() {
       expect(handleDecoration.color, const Color(0xFFF59E0B));
       expect(messageText.style?.color, const Color(0xFF92400E));
     });
+
+    testWidgets('bottom sheet respects BottomSheetTheme styling', (
+      WidgetTester tester,
+    ) async {
+      const AppThemeTokens tokens = AppThemeTokens(
+        primary: Color(0xFF0F766E),
+        secondary: Color(0xFF7C3AED),
+        cardBackground: Color(0xFFFDFBF4),
+        cardBorderColor: Color(0xFFD97706),
+        inputBackground: Color(0xFFECFEFF),
+        inputBorderColor: Color(0xFF0891B2),
+        dividerColor: Color(0xFFF59E0B),
+        mutedText: Color(0xFF92400E),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: _withTokens(
+            JAppTheme.lightTheme.copyWith(
+              bottomSheetTheme: BottomSheetThemeData(
+                modalBackgroundColor: const Color(0xFF111827),
+                dragHandleColor: const Color(0xFF22C55E),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(JDimens.dp28),
+                  side: const BorderSide(color: Color(0xFF38BDF8), width: 2),
+                ),
+              ),
+            ),
+            tokens,
+          ),
+          home: Scaffold(
+            body: Builder(
+              builder: (BuildContext context) {
+                return TextButton(
+                  onPressed: () {
+                    SimpleBottomSheet.show<void>(
+                      context,
+                      title: 'Sheet title',
+                      child: const Text('Provided content'),
+                    );
+                  },
+                  child: const Text('Open'),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      final BottomSheet bottomSheet = tester.widget<BottomSheet>(
+        find.byType(BottomSheet),
+      );
+      final RoundedRectangleBorder shape =
+          bottomSheet.shape! as RoundedRectangleBorder;
+      final Container handle = tester.widget<Container>(
+        find.byKey(const ValueKey<String>('simple_bottom_sheet_handle')),
+      );
+      final BoxDecoration handleDecoration =
+          handle.decoration! as BoxDecoration;
+
+      expect(bottomSheet.backgroundColor, const Color(0xFF111827));
+      expect(shape.side.color, const Color(0xFF38BDF8));
+      expect(shape.side.width, 2);
+      expect(shape.borderRadius, BorderRadius.circular(JDimens.dp28));
+      expect(handleDecoration.color, const Color(0xFF22C55E));
+    });
   });
 }
 

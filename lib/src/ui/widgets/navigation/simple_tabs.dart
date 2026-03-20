@@ -23,9 +23,11 @@ class SimpleTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
-    final Color primary = tokens.primary;
-    final Color textSecondary = tokens.mutedText;
-    final Color divider = tokens.dividerColor;
+    final TabBarThemeData tabBarTheme = theme.tabBarTheme;
+    final Color primary = tabBarTheme.labelColor ?? tokens.primary;
+    final Color textSecondary =
+        tabBarTheme.unselectedLabelColor ?? tokens.mutedText;
+    final Color divider = tabBarTheme.dividerColor ?? tokens.dividerColor;
 
     return DefaultTabController(
       length: tabs.length,
@@ -40,9 +42,9 @@ class SimpleTabs extends StatelessWidget {
               isScrollable: isScrollable,
               labelColor: primary,
               unselectedLabelColor: textSecondary,
-              indicatorColor: primary,
+              indicatorColor: tabBarTheme.indicatorColor ?? primary,
               dividerColor: divider,
-              labelPadding: JInsets.horizontal12,
+              labelPadding: tabBarTheme.labelPadding ?? JInsets.horizontal12,
             ),
             JGaps.h16,
             Expanded(child: TabBarView(children: children)),

@@ -15,6 +15,8 @@ class SimpleLoadingView extends StatelessWidget {
     final bool hasMessage = message != null && message!.trim().isNotEmpty;
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
+    final ProgressIndicatorThemeData progressTheme =
+        theme.progressIndicatorTheme;
 
     return Center(
       child: Padding(
@@ -27,7 +29,7 @@ class SimpleLoadingView extends StatelessWidget {
               height: JDimens.dp32,
               child: CircularProgressIndicator(
                 strokeWidth: JDimens.dp2,
-                color: tokens.primary,
+                color: progressTheme.color ?? tokens.primary,
               ),
             ),
             if (hasMessage) ...<Widget>[

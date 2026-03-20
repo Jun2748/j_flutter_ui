@@ -18,10 +18,23 @@ class SimpleBottomSheet {
   }) {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
-    final Color card = tokens.cardBackground;
+    final BottomSheetThemeData bottomSheetTheme = theme.bottomSheetTheme;
+    final Color card =
+        bottomSheetTheme.modalBackgroundColor ??
+        bottomSheetTheme.backgroundColor ??
+        tokens.cardBackground;
     final Color border = tokens.cardBorderColor;
-    final Color handleColor = tokens.dividerColor;
+    final Color handleColor =
+        bottomSheetTheme.dragHandleColor ?? tokens.dividerColor;
     final Color messageColor = tokens.mutedText;
+    final ShapeBorder sheetShape =
+        bottomSheetTheme.shape ??
+        RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(JDimens.dp24),
+          ),
+          side: BorderSide(color: border),
+        );
     final String? titleText = title != null && title.trim().isNotEmpty
         ? title
         : null;
@@ -33,12 +46,7 @@ class SimpleBottomSheet {
       context: context,
       isScrollControlled: isScrollControlled,
       backgroundColor: card,
-      shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(JDimens.dp24),
-        ),
-        side: BorderSide(color: border),
-      ),
+      shape: sheetShape,
       builder: (BuildContext bottomSheetContext) {
         return SafeArea(
           top: false,

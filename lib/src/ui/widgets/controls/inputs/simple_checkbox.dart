@@ -26,23 +26,28 @@ class SimpleCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
+    final CheckboxThemeData checkboxTheme = theme.checkboxTheme;
     final bool resolvedValue = value ?? false;
     final bool interactive = enabled && onChanged != null;
 
     final Widget checkbox = Checkbox(
       value: resolvedValue,
       onChanged: interactive ? onChanged : null,
-      fillColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return theme.disabledColor.withAlpha(140);
-        }
-        if (states.contains(WidgetState.selected)) {
-          return tokens.primary;
-        }
-        return Colors.transparent;
-      }),
-      checkColor: tokens.onPrimaryResolved(theme),
-      side: BorderSide(color: tokens.inputBorderColor),
+      fillColor:
+          checkboxTheme.fillColor ??
+          WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return theme.disabledColor.withAlpha(140);
+            }
+            if (states.contains(WidgetState.selected)) {
+              return tokens.primary;
+            }
+            return Colors.transparent;
+          }),
+      checkColor:
+          checkboxTheme.checkColor?.resolve(<WidgetState>{}) ??
+          tokens.onPrimaryResolved(theme),
+      side: checkboxTheme.side ?? BorderSide(color: tokens.inputBorderColor),
     );
 
     final bool hasTextLabel = label != null && label!.trim().isNotEmpty;

@@ -49,15 +49,31 @@ class SimpleBottomNavBar extends StatelessWidget {
 
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
+    final BottomNavigationBarThemeData bottomNavTheme =
+        theme.bottomNavigationBarTheme;
     final int safeIndex = currentIndex == null
         ? 0
         : currentIndex!.clamp(0, resolvedItems.length - 1);
-    final Color card = backgroundColor ?? tokens.cardBackground;
+    final Color card =
+        backgroundColor ??
+        bottomNavTheme.backgroundColor ??
+        tokens.cardBackground;
     final Color border = borderColor ?? tokens.cardBorderColor;
-    final Color primary = tokens.primary;
-    final Color textSecondary = tokens.mutedText;
+    final Color primary = bottomNavTheme.selectedItemColor ?? tokens.primary;
+    final Color textSecondary =
+        bottomNavTheme.unselectedItemColor ?? tokens.mutedText;
     final TextStyle labelStyle =
         theme.textTheme.labelSmall ?? JTextStyles.label;
+    final TextStyle selectedLabelStyle =
+        bottomNavTheme.selectedLabelStyle ??
+        labelStyle.copyWith(color: primary, fontWeight: FontWeight.w600);
+    final TextStyle unselectedLabelStyle =
+        bottomNavTheme.unselectedLabelStyle ??
+        labelStyle.copyWith(color: textSecondary);
+    final double iconSize =
+        bottomNavTheme.selectedIconTheme?.size ??
+        bottomNavTheme.unselectedIconTheme?.size ??
+        JIconSizes.md;
 
     if (resolvedItems.length < 2) {
       final SimpleBottomNavItem item = resolvedItems.first;
@@ -92,19 +108,16 @@ class SimpleBottomNavBar extends StatelessWidget {
         child: BottomNavigationBar(
           currentIndex: safeIndex,
           onTap: onTap,
-          type: BottomNavigationBarType.fixed,
+          type: bottomNavTheme.type ?? BottomNavigationBarType.fixed,
           backgroundColor: card,
-          elevation: 0,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
+          elevation: bottomNavTheme.elevation ?? 0,
+          showSelectedLabels: bottomNavTheme.showSelectedLabels ?? true,
+          showUnselectedLabels: bottomNavTheme.showUnselectedLabels ?? true,
           selectedItemColor: primary,
           unselectedItemColor: textSecondary,
-          selectedLabelStyle: labelStyle.copyWith(
-            color: primary,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: labelStyle.copyWith(color: textSecondary),
-          iconSize: JIconSizes.md,
+          selectedLabelStyle: selectedLabelStyle,
+          unselectedLabelStyle: unselectedLabelStyle,
+          iconSize: iconSize,
           items: resolvedItems
               .map(
                 (SimpleBottomNavItem item) => BottomNavigationBarItem(

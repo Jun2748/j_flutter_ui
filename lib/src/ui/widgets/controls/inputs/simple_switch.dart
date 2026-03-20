@@ -24,6 +24,7 @@ class SimpleSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
+    final SwitchThemeData switchTheme = theme.switchTheme;
     final bool resolvedValue = value ?? false;
     final bool interactive = onChanged != null;
     final Color primary = tokens.primary;
@@ -35,36 +36,42 @@ class SimpleSwitch extends StatelessWidget {
     final Widget switchWidget = Switch(
       value: resolvedValue,
       onChanged: onChanged,
-      thumbColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return disabled;
-        }
-        if (states.contains(WidgetState.selected)) {
-          return tokens.onPrimaryResolved(theme);
-        }
-        return thumbOff;
-      }),
-      trackColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-        if (states.contains(WidgetState.disabled)) {
-          return trackOff.withAlpha(160);
-        }
-        if (states.contains(WidgetState.selected)) {
-          return primary.withAlpha(180);
-        }
-        return trackOff;
-      }),
-      trackOutlineColor: WidgetStateProperty.resolveWith((
-        Set<WidgetState> states,
-      ) {
-        if (states.contains(WidgetState.disabled)) {
-          return disabled.withAlpha(120);
-        }
-        if (states.contains(WidgetState.selected)) {
-          return primary;
-        }
-        return border;
-      }),
-      trackOutlineWidth: const WidgetStatePropertyAll<double>(JDimens.dp1),
+      thumbColor:
+          switchTheme.thumbColor ??
+          WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return disabled;
+            }
+            if (states.contains(WidgetState.selected)) {
+              return tokens.onPrimaryResolved(theme);
+            }
+            return thumbOff;
+          }),
+      trackColor:
+          switchTheme.trackColor ??
+          WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return trackOff.withAlpha(160);
+            }
+            if (states.contains(WidgetState.selected)) {
+              return primary.withAlpha(180);
+            }
+            return trackOff;
+          }),
+      trackOutlineColor:
+          switchTheme.trackOutlineColor ??
+          WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return disabled.withAlpha(120);
+            }
+            if (states.contains(WidgetState.selected)) {
+              return primary;
+            }
+            return border;
+          }),
+      trackOutlineWidth:
+          switchTheme.trackOutlineWidth ??
+          const WidgetStatePropertyAll<double>(JDimens.dp1),
     );
 
     if (labelWidget == null &&

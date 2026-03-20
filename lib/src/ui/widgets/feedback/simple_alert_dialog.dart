@@ -62,6 +62,7 @@ class SimpleAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final AppThemeTokens tokens = theme.appThemeTokens;
+    final DialogThemeData dialogTheme = theme.dialogTheme;
     final Color textPrimary = tokens.onCardResolved(theme);
     final Color textSecondary = tokens.mutedText;
     final bool hasTitle = title != null && title!.trim().isNotEmpty;
@@ -69,12 +70,14 @@ class SimpleAlertDialog extends StatelessWidget {
     final String resolvedConfirmText = _resolveConfirmText(context);
 
     return AlertDialog(
-      backgroundColor: tokens.cardBackground,
-      surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(JDimens.dp16),
-        side: BorderSide(color: tokens.cardBorderColor),
-      ),
+      backgroundColor: dialogTheme.backgroundColor ?? tokens.cardBackground,
+      surfaceTintColor: dialogTheme.surfaceTintColor ?? Colors.transparent,
+      shape:
+          dialogTheme.shape ??
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(JDimens.dp16),
+            side: BorderSide(color: tokens.cardBorderColor),
+          ),
       titlePadding: const EdgeInsets.fromLTRB(
         JDimens.dp24,
         JDimens.dp24,
@@ -143,4 +146,3 @@ class SimpleAlertDialog extends StatelessWidget {
     return 'Okay';
   }
 }
-
