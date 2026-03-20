@@ -25,7 +25,7 @@ Read this file before changing code.
 - **Primitives**: single responsibility, thin wrappers around Material semantics.
   - Examples: `SimpleText`, `SimpleButton`, `SimpleIconButton`, `SimpleCard`, `SimpleTextField`, `SimpleListItem`.
 - **Patterns**: compose primitives; do not rebuild styling logic from scratch.
-  - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`.
+  - Examples: `SimpleMenuTile`, `SimpleMenuSection`, `SimpleMenuPage`, `SimpleBottomNavBar`, `SimpleFormBuilder`, `SimpleVerticalRail`, `SimpleFloatingBanner`.
 
 ## Active indicator pattern (navigation)
 `SimpleVerticalRail` provides color-change only. Defaults are active: `colorScheme.onSurface`, inactive: `tokens.mutedText`, but you can override the active/inactive colors via `selectedItemColor` / `unselectedItemColor`. It intentionally has no built-in position indicator (dot, bar, etc.). App-specific indicators must be implemented as `Stack` overlays on top of the widget. Do not add indicator logic into the library widget itself.
@@ -91,6 +91,10 @@ Never concatenate translated fragments into a sentence.
 - `SimpleFormBuilderState.reset()` is the blank-form reset: it clears configured field values to `null` and clears errors.
 - `SimpleFormController.resetToInitialValues()` remains the restore-initial-values path.
 
+## Reusable gaps now covered
+- `SimpleSearchField` includes a first-class `quiet` variant for soft-background / pill-like search bars. Keep it semantic and app-agnostic; do not turn it into a branded search template.
+- `SimpleFloatingBanner` is the reusable centered promo/announcement overlay primitive. Keep it composition-first (`media`, `child`) and avoid baking in campaign-specific text, badges, prices, or brand layouts.
+
 ## Review workflow (what to do before you edit)
 - Identify whether you’re touching **public API** (exported via `j_flutter_ui.dart`).
 - Check for existing primitives/patterns before adding new ones.
@@ -110,5 +114,7 @@ Previously confirmed validation gaps are now implemented in the library:
 - `SimpleGrid` now provides a fixed n-column layout helper for catalog/product grids.
 - `SimpleVerticalRail` supports `selectedItemColor` / `unselectedItemColor` so active-color customization no longer needs theme workarounds.
 - `SimpleCard.flush` provides an edge-to-edge / full-bleed variant (no external margin, no corner radius) for hero banners.
+- `SimpleSearchField` provides a `quiet` pill-like variant so common search bars do not need route-scoped input theme overrides.
+- `SimpleFloatingBanner` provides a reusable centered promo/announcement overlay with dimmed backdrop, optional close affordance, and custom content/media composition.
 
 If a new downstream gap is reintroduced, add it back here as a fresh “Known gaps” entry.

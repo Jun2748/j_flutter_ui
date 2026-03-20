@@ -30,6 +30,7 @@ These rules exist to keep `j_flutter_ui` plug-and-play across many apps.
 - Avoid “boolean soup”. If you see 3+ booleans controlling visual variants, it’s a smell.
 - Prefer nullable callbacks to represent “enabled/disabled” (`onPressed == null`).
 - Avoid requiring styling parameters; provide sensible defaults from theme/tokens.
+- For reusable presentation shifts that are genuinely semantic and common (for example a standard vs quiet search treatment), a small enum variant API is preferred over ad-hoc route theme overrides.
 
 ## Styling parameters (keep override paths predictable)
 When you expose styling knobs:
@@ -53,3 +54,4 @@ When you expose styling knobs:
 - Prefer composition slots (`header`, `footer`, `content`) over subclassing.
 - Do not couple widgets to app routing, app state management, or app domain models.
 - Keep compact icon-action primitives domain-agnostic: the library may provide the press target, but counts, price logic, inventory rules, and add/remove flows stay in app-layer composition.
+- For overlays and promo-style surfaces, prefer a small presentation helper plus a composition-first widget (`media`, `child`, etc.) instead of fixed campaign layouts or business-specific popup classes.

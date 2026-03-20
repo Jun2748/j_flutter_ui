@@ -27,6 +27,7 @@ import '../widgets/forms/switch_demo.dart';
 import '../widgets/forms/text_field_demo.dart';
 import '../widgets/forms/validation_demo.dart';
 import '../widgets/layout/gap_demo.dart';
+import '../widgets/layout/grid_demo.dart';
 import '../widgets/layout/scaffold_demo.dart';
 import '../widgets/layout/section_demo.dart';
 import '../widgets/navigation/app_bar_demo.dart';
@@ -34,6 +35,7 @@ import '../widgets/navigation/bottom_nav_bar_demo.dart';
 import '../widgets/navigation/tabs_demo.dart';
 import '../widgets/navigation/vertical_rail_demo.dart';
 import '../widgets/overlays/bottom_sheet_demo.dart';
+import '../widgets/overlays/floating_banner_demo.dart';
 import '../widgets/screens/account_menu_demo.dart';
 import '../widgets/states/empty_state_demo.dart';
 import '../widgets/states/error_view_demo.dart';
@@ -200,6 +202,13 @@ class DemoRegistry {
       builder: (_) => const GapDemo(),
     ),
     DemoItem(
+      title: const GridDemo().title,
+      category: DemoCategory.layout,
+      description:
+          'Fixed-column grid layout with equal-width cells and aligned partial last rows.',
+      builder: (_) => const GridDemo(),
+    ),
+    DemoItem(
       title: const SectionDemo().title,
       category: DemoCategory.layout,
       description: 'Titled sections wrapping related content.',
@@ -262,6 +271,13 @@ class DemoRegistry {
       category: DemoCategory.overlays,
       description: 'Reusable modal bottom sheets with title and content.',
       builder: (_) => const BottomSheetDemo(),
+    ),
+    DemoItem(
+      title: const FloatingBannerDemo().title,
+      category: DemoCategory.overlays,
+      description:
+          'Centered floating promo-style overlay with optional media and dismiss controls.',
+      builder: (_) => const FloatingBannerDemo(),
     ),
     DemoItem(
       title: const FormCompositionDemo().title,

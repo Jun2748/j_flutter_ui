@@ -28,6 +28,8 @@ Primary goals:
   - **primitives**: thin wrappers over Material semantics
   - **patterns**: compositions of primitives (avoid re-implementing styling logic)
   - compact icon-action affordances belong in primitives; app-specific counters, badges, and commerce flows belong in app-layer composition
+  - overlay patterns: `SimpleBottomSheet`, `SimpleFloatingBanner`
+    - `SimpleFloatingBanner` — centered floating promo/announcement surface over a dimmed backdrop. Keep it generic and composition-first; image/media and content belong in slots, while brand campaign structure stays in the app layer.
   - navigation patterns: `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
     - `SimpleVerticalRail` — compact left-edge icon-label rail. Provides color-change active state only. App-local animated overlays (dots, bars) are `Stack` composition on top, not part of the widget.
 
@@ -76,6 +78,11 @@ If a widget sets a background using `AppThemeTokens` (e.g. `tokens.cardBackgroun
 - `SimpleFormBuilderState.reset()` is the builder-level blank-form reset. It clears configured field values to `null`, syncs text controllers to empty strings, and clears errors.
 - `SimpleFormController.resetToInitialValues()` restores original controller values.
 - `SimpleFormController.reset()` remains the controller-only clear path.
+
+## Search field variants
+- `SimpleSearchField` defaults to the standard input treatment.
+- `SimpleSearchFieldVariant.quiet` is the reusable pill-like search presentation for soft-background search bars.
+- Keep variant behavior semantic and reusable; do not add app/brand-specific search chrome or route-local hacks when the variant should cover the need.
 
 ## Shared styling helpers (avoid drift)
 If a styling recipe appears in 3+ widgets, prefer centralizing it under `resources/` and reusing it.

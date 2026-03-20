@@ -28,7 +28,7 @@ Consumers should import only `package:j_flutter_ui/j_flutter_ui.dart`. The publi
 - **Forms**: `SimpleForm`, `SimpleFormBuilder`, `SimpleFormController`, validation helpers
 - **Layout**: `AppScaffold`, `VStack`, `HStack`, `Section`, `SimpleGrid`
 - **Navigation**: `AppBarEx`, `SimpleBottomNavBar`, `SimpleTabs`, `SimpleVerticalRail`
-- **Overlays**: `SimpleBottomSheet`
+- **Overlays**: `SimpleBottomSheet`, `SimpleFloatingBanner`
 - **States**: `SimpleLoadingView`, `SimpleEmptyState`, `SimpleErrorView`
 - **Typography**: `SimpleText`, `AppText`
 - **Flags & helpers**: `SimpleFlag`, `FlagUtils`, `CountryCodes`, `CurrencyCodes`
@@ -251,6 +251,67 @@ If you're building non-trivial forms, prefer the controller-driven form system:
 - `SimpleFormBuilder`
 - `SimpleFormController`
 - `SimpleFormValidator` and `SimpleCrossFieldValidator`
+
+---
+
+## Search Field
+
+`SimpleSearchField` keeps the standard search-input behavior by default and also provides a first-class quiet pill variant for soft-background search bars.
+
+```dart
+SimpleSearchField(
+  variant: SimpleSearchFieldVariant.quiet,
+  hintText: 'Search menu items',
+  onChanged: (value) => setState(() => _query = value),
+)
+```
+
+Quiet variant styling resolves in this order:
+- explicit `fillColor` / `borderColor`
+- Material search semantics via `ThemeData.searchBarTheme`
+- `AppThemeTokens`
+- final safe fallback constants
+
+Use it for common app-agnostic search bars without route-scoped input theme overrides.
+
+---
+
+## Floating Banner Overlay
+
+`SimpleFloatingBanner` is a reusable centered overlay surface for promos, announcements, onboarding callouts, or image-led notices. It supports a dimmed backdrop, optional close button, safe-area-aware centering, and composition via `media` and `child`.
+
+```dart
+showSimpleFloatingBanner<void>(
+  context,
+  media: Image.asset('assets/promo.png', fit: BoxFit.cover),
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: const <Widget>[
+      SimpleText.heading(text: 'Seasonal update'),
+      JGaps.h8,
+      SimpleText.body(
+        text: 'Use this surface for generic promotional or announcement content.',
+        maxLines: 4,
+      ),
+    ],
+  ),
+);
+```
+
+The overlay is intentionally generic:
+- use `media` for image-heavy banners
+- use `child` for custom composed content
+- use `showCloseButton` and `barrierDismissible` to control dismissal
+- use `maxWidth`, `widthFactor`, `padding`, and `borderRadius` for layout tuning
+
+Default styling resolves in this order:
+- explicit widget parameter
+- Material dialog semantics (`DialogTheme`, `IconButtonTheme`, `ColorScheme` where appropriate)
+- `AppThemeTokens`
+- final safe fallback constants
+
+This is a reusable overlay primitive, not a campaign-specific popup template.
 
 ---
 
