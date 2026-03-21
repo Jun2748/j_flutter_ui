@@ -19,6 +19,8 @@ The following gaps were identified during downstream validation in `playground_f
 | Per-item badges required app-layer offset computation | `SimpleVerticalRailItem` now supports `badgeLabel` |
 | Strong-emphasis badge variant was missing | `SimpleBadge.filled` added (solid color + luminance-computed foreground) |
 | Active icon circle treatment required custom wrappers | `SimpleBottomNavBar` now supports `activeIconBackgroundColor` |
+| `SimpleBottomNavItem` had no per-item badge support | `SimpleBottomNavItem.badgeLabel` added — rendered via `SimpleBadge.filled` overlay on the icon corner |
+| No compact button variant for tight spaces | `SimpleButton.small` / `SimpleButton.smallOutline` / `SimpleButton.smallText` added (32dp height, `JTextStyles.label`) |
 | Edge-to-edge / full-bleed card variant was missing | `SimpleCard.flush` added (no external margin, no corner radius) |
 | Common search bars required route-scoped input theme overrides | `SimpleSearchField` now supports `quiet` pill-like variant |
 | Promo/announcement overlays had no reusable primitive | `SimpleFloatingBanner` added (dimmed backdrop, optional close, `media` + `child` slots) |

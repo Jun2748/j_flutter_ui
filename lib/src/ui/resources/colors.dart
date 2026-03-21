@@ -16,6 +16,7 @@ abstract final class PaletteConst {
   static const String warning = 'warning';
   static const String error = 'error';
   static const String info = 'info';
+  static const String cardBorderColor = 'cardBorderColor';
 }
 
 @immutable
@@ -91,6 +92,7 @@ abstract final class JColors {
   static const Color warningBase = Color(0xFFF59E0B);
   static const Color errorBase = Color(0xFFDC2626);
   static const Color infoBase = Color(0xFF0EA5E9);
+  static const Color cardBorderColor = Color(0xFFEEF1FA);
 
   // Semantic aliases
   static const Color primary = primaryBase;
@@ -113,6 +115,7 @@ abstract final class JColors {
     PaletteConst.warning: warningBase,
     PaletteConst.error: errorBase,
     PaletteConst.info: infoBase,
+    PaletteConst.cardBorderColor: cardBorderColor,
   };
 
   static const Map<String, Color> darkPalette = <String, Color>{
@@ -129,6 +132,7 @@ abstract final class JColors {
     PaletteConst.warning: Color(0xFFFBBF24),
     PaletteConst.error: Color(0xFFF87171),
     PaletteConst.info: Color(0xFF38BDF8),
+    PaletteConst.cardBorderColor: Color(0xFF334155),
   };
 
   static bool isDarkTheme(BuildContext context) {

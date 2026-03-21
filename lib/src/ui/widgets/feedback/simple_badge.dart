@@ -15,6 +15,8 @@ class SimpleBadge extends StatelessWidget {
     required _SimpleBadgeVariant variant,
     this.icon,
     this.padding,
+    this.labelWeight,
+    this.labelStyle,
     Color? filledColor,
     Color? filledForeground,
   }) : _variant = variant,
@@ -26,12 +28,16 @@ class SimpleBadge extends StatelessWidget {
     required String label,
     IconData? icon,
     EdgeInsets? padding,
+    FontWeight? labelWeight,
+    TextStyle? labelStyle,
   }) : this._(
          key: key,
          label: label,
          variant: _SimpleBadgeVariant.neutral,
          icon: icon,
          padding: padding,
+         labelWeight: labelWeight,
+         labelStyle: labelStyle,
        );
 
   const SimpleBadge.primary({
@@ -39,12 +45,16 @@ class SimpleBadge extends StatelessWidget {
     required String label,
     IconData? icon,
     EdgeInsets? padding,
+    FontWeight? labelWeight,
+    TextStyle? labelStyle,
   }) : this._(
          key: key,
          label: label,
          variant: _SimpleBadgeVariant.primary,
          icon: icon,
          padding: padding,
+         labelWeight: labelWeight,
+         labelStyle: labelStyle,
        );
 
   const SimpleBadge.success({
@@ -52,12 +62,16 @@ class SimpleBadge extends StatelessWidget {
     required String label,
     IconData? icon,
     EdgeInsets? padding,
+    FontWeight? labelWeight,
+    TextStyle? labelStyle,
   }) : this._(
          key: key,
          label: label,
          variant: _SimpleBadgeVariant.success,
          icon: icon,
          padding: padding,
+         labelWeight: labelWeight,
+         labelStyle: labelStyle,
        );
 
   const SimpleBadge.warning({
@@ -65,12 +79,16 @@ class SimpleBadge extends StatelessWidget {
     required String label,
     IconData? icon,
     EdgeInsets? padding,
+    FontWeight? labelWeight,
+    TextStyle? labelStyle,
   }) : this._(
          key: key,
          label: label,
          variant: _SimpleBadgeVariant.warning,
          icon: icon,
          padding: padding,
+         labelWeight: labelWeight,
+         labelStyle: labelStyle,
        );
 
   const SimpleBadge.error({
@@ -78,12 +96,16 @@ class SimpleBadge extends StatelessWidget {
     required String label,
     IconData? icon,
     EdgeInsets? padding,
+    FontWeight? labelWeight,
+    TextStyle? labelStyle,
   }) : this._(
          key: key,
          label: label,
          variant: _SimpleBadgeVariant.error,
          icon: icon,
          padding: padding,
+         labelWeight: labelWeight,
+         labelStyle: labelStyle,
        );
 
   /// Solid-fill badge for strong emphasis: discount tags, count indicators, and
@@ -96,6 +118,10 @@ class SimpleBadge extends StatelessWidget {
   /// [foregroundColor] defaults to a luminance-computed white or black so
   /// contrast is maintained automatically when [color] is theme-derived.
   /// Pass an explicit value to override (e.g. [ColorScheme.onError]).
+  ///
+  /// [labelWeight] overrides the default [FontWeight.w600] label weight.
+  /// [labelStyle] is merged into the label [TextStyle] before color and weight
+  /// are applied — use it for compact layouts (e.g. `TextStyle(height: 1.0)`).
   const SimpleBadge.filled({
     Key? key,
     required String label,
@@ -103,6 +129,8 @@ class SimpleBadge extends StatelessWidget {
     Color? foregroundColor,
     IconData? icon,
     EdgeInsets? padding,
+    FontWeight? labelWeight,
+    TextStyle? labelStyle,
   }) : this._(
          key: key,
          label: label,
@@ -111,11 +139,21 @@ class SimpleBadge extends StatelessWidget {
          filledForeground: foregroundColor,
          icon: icon,
          padding: padding,
+         labelWeight: labelWeight,
+         labelStyle: labelStyle,
        );
 
   final String label;
   final IconData? icon;
   final EdgeInsets? padding;
+
+  /// Optional [FontWeight] for the badge label. Defaults to [FontWeight.w600].
+  final FontWeight? labelWeight;
+
+  /// Optional [TextStyle] merged into the label before color and weight are
+  /// applied. Use for compact icon-corner badges: `TextStyle(height: 1.0)`.
+  final TextStyle? labelStyle;
+
   final _SimpleBadgeVariant _variant;
 
   // Only used by the filled variant.
@@ -150,8 +188,9 @@ class SimpleBadge extends StatelessWidget {
             SimpleText.label(
               text: label,
               color: colors.foreground,
-              weight: FontWeight.w600,
+              weight: labelWeight ?? FontWeight.w600,
               maxLines: 1,
+              style: labelStyle,
             ),
           ],
         ),

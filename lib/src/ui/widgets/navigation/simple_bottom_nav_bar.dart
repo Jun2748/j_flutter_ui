@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
+import '../feedback/simple_badge.dart';
 import '../layout/h_stack.dart';
 import '../typography/simple_text.dart';
 
@@ -11,11 +12,16 @@ class SimpleBottomNavItem {
     required this.icon,
     required this.label,
     this.activeIcon,
+    this.badgeLabel,
   });
 
   final IconData? icon;
   final String? label;
   final IconData? activeIcon;
+
+  /// Optional short text rendered as a badge overlaid on the item's icon
+  /// (top-end corner). Suitable for counts ("3") or short status markers.
+  final String? badgeLabel;
 }
 
 class SimpleBottomNavBar extends StatelessWidget {
@@ -88,7 +94,8 @@ class SimpleBottomNavBar extends StatelessWidget {
                 gap: JDimens.dp8,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  _buildActiveNavIcon(item) ?? _buildInactiveNavIcon(item),
+                  _buildActiveNavIcon(context, item) ??
+                      _buildInactiveNavIcon(context, item),
                   SimpleText.label(text: item.label ?? ''),
                 ],
               ),
@@ -121,8 +128,8 @@ class SimpleBottomNavBar extends StatelessWidget {
           items: resolvedItems
               .map(
                 (SimpleBottomNavItem item) => BottomNavigationBarItem(
-                  icon: _buildInactiveNavIcon(item),
-                  activeIcon: _buildActiveNavIcon(item),
+                  icon: _buildInactiveNavIcon(context, item),
+                  activeIcon: _buildActiveNavIcon(context, item),
                   label: item.label ?? '',
                 ),
               )
@@ -132,11 +139,15 @@ class SimpleBottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildInactiveNavIcon(SimpleBottomNavItem item) {
-    return Icon(item.icon ?? Icons.circle_outlined);
+  Widget _buildInactiveNavIcon(BuildContext context, SimpleBottomNavItem item) {
+    return _wrapIconWithBadge(
+      context,
+      item,
+      Icon(item.icon ?? Icons.circle_outlined),
+    );
   }
 
-  Widget? _buildActiveNavIcon(SimpleBottomNavItem item) {
+  Widget? _buildActiveNavIcon(BuildContext context, SimpleBottomNavItem item) {
     if (activeIconBackgroundColor == null && item.activeIcon == null) {
       return null;
     }
@@ -146,15 +157,55 @@ class SimpleBottomNavBar extends StatelessWidget {
     );
 
     if (activeIconBackgroundColor == null) {
+      return _wrapIconWithBadge(context, item, icon);
+    }
+
+    return _wrapIconWithBadge(
+      context,
+      item,
+      DecoratedBox(
+        decoration: BoxDecoration(
+          color: activeIconBackgroundColor,
+          shape: BoxShape.circle,
+        ),
+        child: Padding(padding: JInsets.all8, child: icon),
+      ),
+    );
+  }
+
+  Widget _wrapIconWithBadge(
+    BuildContext context,
+    SimpleBottomNavItem item,
+    Widget icon,
+  ) {
+    final String? badgeLabel = item.badgeLabel;
+    if (badgeLabel == null) {
       return icon;
     }
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: activeIconBackgroundColor,
-        shape: BoxShape.circle,
-      ),
-      child: Padding(padding: JInsets.all8, child: icon),
+    final ThemeData theme = Theme.of(context);
+    final AppThemeTokens tokens = theme.appThemeTokens;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: <Widget>[
+        icon,
+        PositionedDirectional(
+          top: -JDimens.dp4,
+          end: -JDimens.dp8,
+          child: SimpleBadge.filled(
+            label: badgeLabel,
+            color: tokens.primary,
+            foregroundColor: tokens.onPrimaryResolved(theme),
+            padding: const EdgeInsets.symmetric(
+              horizontal: JDimens.dp4,
+              vertical: JDimens.dp2,
+            ),
+            labelWeight: FontWeight.w700,
+            labelStyle: const TextStyle(height: 1.0),
+          ),
+        ),
+      ],
     );
   }
 }

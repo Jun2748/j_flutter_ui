@@ -245,7 +245,8 @@ class DemoRegistry {
     DemoItem(
       title: const BottomNavBarDemo().title,
       category: DemoCategory.navigation,
-      description: 'Working bottom navigation with local selection state.',
+      description:
+          'Working bottom navigation with local selection state and item badges.',
       builder: (_) => const BottomNavBarDemo(),
     ),
     DemoItem(

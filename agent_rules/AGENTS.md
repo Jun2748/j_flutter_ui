@@ -163,7 +163,27 @@ caller override (explicit widget parameter)
 
 ### SimpleBottomNavBar
 - Supports active icon circle treatment via `activeIconBackgroundColor`.
+- Per-item badges use `badgeLabel` on `SimpleBottomNavItem`. Do NOT compute badge overlays at the app layer.
 - Do NOT expand into a custom item-renderer API for app-specific navigation chrome.
+
+---
+
+## Button widget rules
+
+### SimpleButton variants
+
+| Constructor | Height | Text style | Use for |
+|---|---|---|---|
+| `SimpleButton.primary` | 48dp (`JHeights.button`) | `JTextStyles.button` | Standard CTA |
+| `SimpleButton.secondary` | 48dp | `JTextStyles.button` | Secondary CTA |
+| `SimpleButton.outline` | 48dp | `JTextStyles.button` | Tertiary / outlined CTA |
+| `SimpleButton.text` | 48dp | `JTextStyles.button` | Inline text action |
+| `SimpleButton.small` | 32dp | `JTextStyles.label` | Compact primary CTA (e.g. promo banners, inline cards) |
+| `SimpleButton.smallOutline` | 32dp | `JTextStyles.label` | Compact outlined CTA |
+| `SimpleButton.smallText` | 32dp | `JTextStyles.label` | Compact text action |
+
+- Do NOT use boolean flags or manual `padding` hacks to approximate the small height. Use the dedicated small constructors.
+- Do NOT use `SimpleButton.small` as a replacement for `SimpleIconButton` in toolbar contexts.
 
 ---
 
@@ -185,6 +205,15 @@ caller override (explicit widget parameter)
 - Use `JTints` for all tinted surface/border recipes in feedback components (badge/banner/snackbar/chip).
 - Helpers must follow the same resolution order as widgets: Material semantics → `AppThemeTokens` → fallback constants.
 - Do NOT hardcode `JColors` or any color constant directly inside `JInputDecorations`, `JTints`, or any shared helper.
+
+### SimpleBadge icon-corner usage
+
+For icon-corner count/status badges (e.g. nav item overlays), use `SimpleBadge.filled` with:
+- `color: tokens.primary` and `foregroundColor: tokens.onPrimaryResolved(theme)` for primary-colored indicators.
+- `padding: EdgeInsets.symmetric(horizontal: JDimens.dp4, vertical: JDimens.dp2)` for compact size.
+- `labelWeight: FontWeight.w700` and `labelStyle: TextStyle(height: 1.0)` for tight pill rendering.
+
+Do NOT create private badge widgets (e.g. `_NavItemBadge`) that duplicate this logic. Use `SimpleBadge.filled` directly.
 
 ---
 

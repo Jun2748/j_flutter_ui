@@ -65,6 +65,63 @@ void main() {
       expect(_activeIconBackgroundFinder(), findsOneWidget);
       expect(find.byIcon(Icons.person), findsOneWidget);
     });
+
+    testWidgets('renders a badge when badgeLabel is non-null', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: JAppTheme.lightTheme,
+          home: Scaffold(
+            bottomNavigationBar: SimpleBottomNavBar(
+              currentIndex: 0,
+              onTap: (_) {},
+              items: const <SimpleBottomNavItem>[
+                SimpleBottomNavItem(
+                  icon: Icons.home_outlined,
+                  label: 'Home',
+                  badgeLabel: '3',
+                ),
+                SimpleBottomNavItem(
+                  icon: Icons.person_outline,
+                  label: 'Profile',
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SimpleBadge), findsOneWidget);
+      expect(find.text('3'), findsOneWidget);
+      expect(_badgeAnchorFinder(), findsOneWidget);
+    });
+
+    testWidgets('renders no badge when badgeLabel is null', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: JAppTheme.lightTheme,
+          home: Scaffold(
+            bottomNavigationBar: SimpleBottomNavBar(
+              currentIndex: 0,
+              onTap: (_) {},
+              items: const <SimpleBottomNavItem>[
+                SimpleBottomNavItem(icon: Icons.home_outlined, label: 'Home'),
+                SimpleBottomNavItem(
+                  icon: Icons.person_outline,
+                  label: 'Profile',
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SimpleBadge), findsNothing);
+      expect(find.text('3'), findsNothing);
+    });
   });
 }
 
@@ -76,5 +133,11 @@ Finder _activeIconBackgroundFinder() {
 
     final BoxDecoration decoration = widget.decoration as BoxDecoration;
     return decoration.shape == BoxShape.circle;
+  });
+}
+
+Finder _badgeAnchorFinder() {
+  return find.byWidgetPredicate((Widget widget) {
+    return widget is Stack && widget.clipBehavior == Clip.none;
   });
 }

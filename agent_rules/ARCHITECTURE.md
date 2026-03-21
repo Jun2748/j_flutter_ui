@@ -141,6 +141,14 @@ Four distinct layers — do NOT merge:
 
 ---
 
+## Exported symbols with no rulebook entry (LOW severity — audit 2026-03)
+
+The following symbols are exported from `lib/j_flutter_ui.dart` but have no dedicated rulebook entry. They are not gaps — they are stable and tested — but future maintainers should document rules if non-obvious behaviour is added:
+
+`SimpleDropdown`, `SimpleRadio`, `SimpleSegmentedControl`, `SimpleChip`, `SimpleDivider`, `SimpleBanner`, `SimpleSnackbar`, `SimpleFlag`, `SimpleMenuPage`, `AppScaffold`, `HStack`, `VStack`, `Section`, `SimpleEmptyState`, `SimpleErrorView`, `FlagUtils`, `TextScaleUtils`
+
+---
+
 ## Test requirements
 
 - Every risky theming fallback must have a regression test.

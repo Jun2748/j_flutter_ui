@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
+import '../feedback/simple_badge.dart';
 import '../typography/simple_text.dart';
 
 class SimpleVerticalRailItem {
@@ -126,7 +127,17 @@ class SimpleVerticalRail extends StatelessWidget {
                 PositionedDirectional(
                   top: -JDimens.dp4,
                   end: -JDimens.dp8,
-                  child: _RailItemBadge(label: item.badgeLabel!),
+                  child: SimpleBadge.filled(
+                    label: item.badgeLabel!,
+                    color: tokens.primary,
+                    foregroundColor: tokens.onPrimaryResolved(theme),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: JDimens.dp4,
+                      vertical: JDimens.dp2,
+                    ),
+                    labelWeight: FontWeight.w700,
+                    labelStyle: const TextStyle(height: 1.0),
+                  ),
                 ),
               ],
             );
@@ -180,42 +191,3 @@ class SimpleVerticalRail extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Private: compact icon-corner badge for rail items.
-//
-// Theming: background = tokens.primary; foreground = tokens.onPrimaryResolved
-// so that downstream apps which override the primary token get consistent
-// badge contrast automatically.
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _RailItemBadge extends StatelessWidget {
-  const _RailItemBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final AppThemeTokens tokens = theme.appThemeTokens;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: tokens.primary,
-        borderRadius: BorderRadius.circular(JDimens.dp24),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: JDimens.dp4,
-          vertical: JDimens.dp2,
-        ),
-        child: SimpleText.label(
-          text: label,
-          color: tokens.onPrimaryResolved(theme),
-          weight: FontWeight.w700,
-          maxLines: 1,
-          style: const TextStyle(height: 1.0),
-        ),
-      ),
-    );
-  }
-}

@@ -23,7 +23,7 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
       appBar: AppBarEx(title: widget.title),
       bottomNavigationBar: SimpleBottomNavBar(
         currentIndex: _currentIndex,
-        activeIconBackgroundColor: theme.colorScheme.primaryContainer,
+        activeIconBackgroundColor: theme.appThemeTokens.cardBorderColor,
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
@@ -39,11 +39,13 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
             icon: Icons.explore_outlined,
             activeIcon: Icons.explore,
             label: 'Explore',
+            badgeLabel: 'NEW',
           ),
           SimpleBottomNavItem(
             icon: Icons.person_outline,
             activeIcon: Icons.person,
             label: 'Profile',
+            badgeLabel: '3',
           ),
         ],
       ),
@@ -60,7 +62,7 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
                 JGaps.h12,
                 const SimpleText.body(
                   text:
-                      'Tap the items to verify the active icon background treatment and state updates.',
+                      'Tap the items to verify the active icon background treatment, badge overlays, and state updates.',
                   align: TextAlign.center,
                 ),
               ],
