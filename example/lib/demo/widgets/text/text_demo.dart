@@ -79,9 +79,7 @@ class TextDemo extends StatelessWidget {
                   color: onSurface,
                 ),
                 const SimpleDivider(),
-                SimpleText.caption(
-                  text: tr(L.demoTextPriceAlignmentCaption),
-                ),
+                SimpleText.caption(text: tr(L.demoTextPriceAlignmentCaption)),
                 JGaps.h4,
                 ..._menuPrices.map(
                   (_PriceLine line) => _PriceRow(
@@ -89,6 +87,30 @@ class TextDemo extends StatelessWidget {
                     price: line.price,
                     color: onSurface,
                   ),
+                ),
+              ],
+            ),
+          ),
+          JGaps.h24,
+          Section(
+            title: 'SimpleText semantic variants',
+            child: VStack(
+              gap: JDimens.dp16,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const SimpleText.sectionLabel(text: 'FEATURED OFFER'),
+                Row(
+                  children: <Widget>[
+                    const Expanded(
+                      child: SimpleText.body(text: 'Seasonal blend'),
+                    ),
+                    SimpleText.priceLarge(text: 'RM 18.90', color: onSurface),
+                  ],
+                ),
+                const SimpleText.counter(text: '12'),
+                const SimpleText.body(
+                  text: 'Custom size override',
+                  fontSize: JFontSizes.fs18,
                 ),
               ],
             ),
@@ -118,9 +140,7 @@ class _StyleRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
       children: <Widget>[
-        Expanded(
-          child: SimpleText.caption(text: label),
-        ),
+        Expanded(child: SimpleText.caption(text: label)),
         Text(price, style: style.copyWith(color: color)),
       ],
     );
@@ -142,9 +162,7 @@ class _PriceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(
-          child: SimpleText.body(text: name),
-        ),
+        Expanded(child: SimpleText.body(text: name)),
         Text(price, style: JTextStyles.price.copyWith(color: color)),
       ],
     );
