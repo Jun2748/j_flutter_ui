@@ -2,9 +2,13 @@
 
 Canonical agent rulebooks are now in `agent_rules/`.
 
-- Read `agent_rules/AGENTS.md` before changing code.
-- Read `agent_rules/THEMING_RULEBOOK.md` for theming rules.
-- Read `agent_rules/ARCHITECTURE.md` for repo architecture.
-- Read `agent_rules/API_DESIGN_RULES.md` and `agent_rules/LOCALIZATION_RULES.md` for API/i18n expectations.
-- Read `agent_rules/REPO_AUDIT_SUMMARY.md`.
-- Read `agent_rules/RESOLVED_GAPS.md`.
+Read these files before changing any code:
+- `agent_rules/AGENTS.md` — master rules, non-negotiables, pre-edit checklist
+- `agent_rules/THEMING_RULEBOOK.md` — style resolution order, theming contracts
+- `agent_rules/ARCHITECTURE.md` — source layout, structural rules
+- `agent_rules/API_DESIGN_RULES.md` — public API, semver, constructor rules
+- `agent_rules/LOCALIZATION_RULES.md` — localization resolution, key rules
+
+Do NOT act on these files — historical record only:
+- `agent_rules/REPO_AUDIT_SUMMARY.md`
+- `agent_rules/RESOLVED_GAPS.md`

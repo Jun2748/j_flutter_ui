@@ -20,9 +20,11 @@ abstract final class JDimens {
   static const double dp48 = 48;
   static const double dp52 = 52;
   static const double dp56 = 56;
+  static const double dp60 = 60;
   static const double dp64 = 64;
   static const double dp72 = 72;
   static const double dp120 = 120;
+  static const double dp140 = 140;
 }
 
 abstract final class JGaps {
