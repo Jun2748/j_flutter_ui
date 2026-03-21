@@ -37,7 +37,9 @@ import '../widgets/navigation/tabs_demo.dart';
 import '../widgets/navigation/vertical_rail_demo.dart';
 import '../widgets/overlays/bottom_sheet_demo.dart';
 import '../widgets/overlays/floating_banner_demo.dart';
+import '../widgets/overlays/progress_overlay_demo.dart';
 import '../widgets/screens/account_menu_demo.dart';
+import '../widgets/screens/bottom_action_bar_demo.dart';
 import '../widgets/states/empty_state_demo.dart';
 import '../widgets/states/error_view_demo.dart';
 import '../widgets/states/loading_view_demo.dart';
@@ -203,6 +205,13 @@ class DemoRegistry {
       builder: (_) => const AccountMenuDemo(),
     ),
     DemoItem(
+      title: const BottomActionBarDemo().title,
+      category: DemoCategory.screens,
+      description:
+          'Sticky bottom action bar with label, price, and primary CTA. Standard layout for detail and checkout screens.',
+      builder: (_) => const BottomActionBarDemo(),
+    ),
+    DemoItem(
       title: const GapDemo().title,
       category: DemoCategory.layout,
       description:
@@ -287,6 +296,13 @@ class DemoRegistry {
       description:
           'Centered floating promo-style overlay with optional media and dismiss controls.',
       builder: (_) => const FloatingBannerDemo(),
+    ),
+    DemoItem(
+      title: const ProgressOverlayDemo().title,
+      category: DemoCategory.overlays,
+      description:
+          'Full-screen dimmed loading overlay with a host-provided indicator slot.',
+      builder: (_) => const ProgressOverlayDemo(),
     ),
     DemoItem(
       title: const FormCompositionDemo().title,

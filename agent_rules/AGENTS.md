@@ -168,6 +168,38 @@ caller override (explicit widget parameter)
 
 ---
 
+## Overlay patterns
+
+### SimpleProgressOverlay
+- Generic full-screen dimmed overlay. Barrier + card + indicator slot + optional message.
+- Host app controls visibility via conditional `Stack` rendering. Do NOT build show/hide logic into the widget.
+- `indicator` slot accepts any widget. `CircularProgressIndicator` is the default; custom animation widgets are appropriate for branded apps.
+- Card background is transparent by default. The indicator floats over the dimmed barrier with no card chrome.
+- Pass explicit `cardColor` to enable a card surface (for example `cardColor: Colors.white` for a visible card with rounded corners).
+- Border radius is only applied when `cardColor` is explicitly provided.
+- `AbsorbPointer` is built in. Do NOT wrap it again at the app layer.
+- Usage pattern:
+```dart
+if (isLoading)
+  SimpleProgressOverlay(
+    indicator: MyCustomAnimation(),
+    message: 'Loading...',
+  )
+```
+
+## Action bar patterns
+
+### SimpleBottomActionBar
+- Sticky bottom bar for detail and checkout screens.
+- Layout: label + price on left, primary CTA button on right.
+- Use in `Scaffold.bottomNavigationBar`.
+- Safe area is built in. Do NOT wrap in `SafeArea` at the app layer.
+- `onAction: null` disables the button. Use this during loading to prevent double-tap.
+- `loading` wires through to the CTA button loading state.
+- Do NOT rebuild this pattern inline in app screens. Use the library widget.
+
+---
+
 ## Button widget rules
 
 ### SimpleButton variants

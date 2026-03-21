@@ -7,6 +7,7 @@ abstract final class JDimens {
   static const double dp1 = 1;
   static const double dp1_5 = 1.5;
   static const double dp2 = 2;
+  static const double dp3 = 3;
   static const double dp4 = 4;
   static const double dp8 = 8;
   static const double dp12 = 12;
@@ -25,6 +26,7 @@ abstract final class JDimens {
   static const double dp72 = 72;
   static const double dp120 = 120;
   static const double dp140 = 140;
+  static const double dp160 = 160;
 }
 
 abstract final class JGaps {
@@ -88,6 +90,7 @@ abstract final class JInsets {
   static const EdgeInsets all16 = EdgeInsets.all(JDimens.dp16);
   static const EdgeInsets all20 = EdgeInsets.all(JDimens.dp20);
   static const EdgeInsets all24 = EdgeInsets.all(JDimens.dp24);
+  static const EdgeInsets all32 = EdgeInsets.all(JDimens.dp32);
 
   static const EdgeInsets horizontal4 = EdgeInsets.symmetric(
     horizontal: JDimens.dp4,

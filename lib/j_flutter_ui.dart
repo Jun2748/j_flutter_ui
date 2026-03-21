@@ -50,6 +50,8 @@ export 'src/ui/widgets/navigation/simple_tabs.dart';
 export 'src/ui/widgets/navigation/simple_vertical_rail.dart';
 export 'src/ui/widgets/overlays/simple_bottom_sheet.dart';
 export 'src/ui/widgets/overlays/simple_floating_banner.dart';
+export 'src/ui/widgets/overlays/simple_progress_overlay.dart';
+export 'src/ui/widgets/patterns/simple_bottom_action_bar.dart';
 export 'src/ui/widgets/patterns/simple_menu_tile.dart';
 export 'src/ui/widgets/primitives/simple_card.dart';
 export 'src/ui/widgets/states/simple_empty_state.dart';

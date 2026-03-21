@@ -20,6 +20,9 @@ The following gaps were identified during downstream validation in `playground_f
 | Strong-emphasis badge variant was missing | `SimpleBadge.filled` added (solid color + luminance-computed foreground) |
 | Active icon circle treatment required custom wrappers | `SimpleBottomNavBar` now supports `activeIconBackgroundColor` |
 | `SimpleBottomNavItem` had no per-item badge support | `SimpleBottomNavItem.badgeLabel` added — rendered via `SimpleBadge.filled` overlay on the icon corner |
+| No sticky bottom action bar primitive for detail/checkout screens | `SimpleBottomActionBar` added — price label left, CTA button right, safe-area aware, composition-first |
+| `SimpleBottomNavItem` had no per-item badge support | `SimpleBottomNavItem.badgeLabel` added — same pattern as `SimpleVerticalRailItem.badgeLabel` |
+| No generic full-screen loading overlay primitive | `SimpleProgressOverlay` added — dimmed barrier + transparent background by default + indicator slot + message. Pass `cardColor` explicitly to enable card chrome. App provides branded animation via `indicator` child. |
 | No compact button variant for tight spaces | `SimpleButton.small` / `SimpleButton.smallOutline` / `SimpleButton.smallText` added (32dp height, `JTextStyles.label`) |
 | Edge-to-edge / full-bleed card variant was missing | `SimpleCard.flush` added (no external margin, no corner radius) |
 | Common search bars required route-scoped input theme overrides | `SimpleSearchField` now supports `quiet` pill-like variant |

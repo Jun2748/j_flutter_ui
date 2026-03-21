@@ -211,3 +211,4 @@ final loc = JLocalizations.of(context) ?? JLocalizations.fallback();
 - Small local layout values when no shared token exists
 - `AppThemeTokens.defaults(theme)` as the unregistered-consumer fallback
 - `JLocalizations.fallback()` as the unregistered-delegate fallback
+- `SimpleProgressOverlay` transparent card default is intentional, not a missing token fallback
