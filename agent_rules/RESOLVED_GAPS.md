@@ -28,6 +28,13 @@ The following gaps were identified during downstream validation in `playground_f
 | Common search bars required route-scoped input theme overrides | `SimpleSearchField` now supports `quiet` pill-like variant |
 | Promo/announcement overlays had no reusable primitive | `SimpleFloatingBanner` added (dimmed backdrop, optional close, `media` + `child` slots) |
 | Horizontal single-select chip bar required app-layer glue | `SimpleChipBar` added |
+| Missing fine-grained dimension scale values | `JDimens` expanded — added `dp6`, `dp10`, `dp18`, `dp36`, `dp44`, `dp80`, `dp96`, `dp100`, `dp180`, `dp200`, `dp240`, `dp260` |
+| Missing small and large gap sizes | `JGaps` expanded — added `h2`, `h6`, `h40`, `h48`, `w2`, `w6`, `w40`, `w48` |
+| Missing caption and subheading font sizes | `JFontSizes` expanded — added `fs10`, `fs18`, `fs28` |
+| Missing tiny and hero icon sizes | `JIconSizes` expanded — added `xxs` (8dp), `xxl` (40dp) |
+| Missing inset combinations and directional padding | `JInsets` expanded — added `horizontal32`, `vertical32`, `horizontal8Vertical4`, `horizontal16Vertical8`, `horizontal24Vertical16`, `onlyTop8/16/24`, `onlyBottom8/16/24` |
+| Missing component height tokens for production UI | `JHeights` expanded — added `bottomNav`, `bottomBar`, `tabBar`, `chip`, `badge`, `buttonSmall`, `productCard`, `promoBanner`, `railItem`, `searchBar` |
+| Missing compact line height tokens | `JLineHeights` expanded — added `lh14`, `lh18` |
 
 ---
 

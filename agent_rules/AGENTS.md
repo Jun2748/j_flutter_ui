@@ -118,12 +118,13 @@ If a widget sets a background via `AppThemeTokens`, use the paired resolved fore
 | Fixed gaps | `JGaps` |
 | Padding / insets | `JInsets` |
 | Dimensions / radii | `JDimens` |
-| Heights | `JHeights` |
+| Heights | `JHeights` — includes component heights: `appBar`, `button`, `input`, `listItem`, `menuTile`, `cardMin`, `bottomNav`, `bottomBar`, `tabBar`, `chip`, `badge`, `buttonSmall`, `productCard`, `promoBanner`, `railItem`, `searchBar` |
 | Icon sizes | `JIconSizes` |
 | Font sizes | `JFontSizes` |
 | Line heights | `JLineHeights` |
 
 - Do NOT use magic numbers for spacing, radius, heights, border widths, icon sizes, or font sizes.
+- Before using a raw number for any height, check `JHeights` first — most common component heights are already defined.
 - Add a new shared token only if the value is reused across multiple widgets or is part of a system scale.
 
 ---

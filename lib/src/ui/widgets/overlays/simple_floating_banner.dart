@@ -194,8 +194,9 @@ class SimpleFloatingBanner extends StatelessWidget {
 
   Color _fallbackBarrierColor(ThemeData theme) {
     final Color scrim = theme.colorScheme.scrim;
-    if (scrim.alpha != 0) {
-      return scrim.withAlpha(math.max(scrim.alpha, 166));
+    final int scrimAlpha = (scrim.a * 255.0).round().clamp(0, 255);
+    if (scrimAlpha != 0) {
+      return scrim.withAlpha(math.max(scrimAlpha, 166));
     }
     return Colors.black54;
   }
@@ -246,6 +247,9 @@ class _BannerSurface extends StatelessWidget {
     final BorderSide closeBorder =
         iconButtonStyle?.side?.resolve(states) ??
         BorderSide(color: tokens.cardBorderColor.withAlpha(204));
+    final Widget? paddedChild = child == null
+        ? null
+        : Padding(padding: padding, child: child!);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -262,10 +266,7 @@ class _BannerSurface extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              if (media != null) media!,
-              if (child != null) Padding(padding: padding, child: child!),
-            ],
+            children: <Widget>[?media, ?paddedChild],
           ),
         ),
         if (showCloseButton)

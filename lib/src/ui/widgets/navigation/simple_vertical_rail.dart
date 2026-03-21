@@ -4,7 +4,6 @@ import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
 import '../../resources/styles.dart';
 import '../feedback/simple_badge.dart';
-import '../typography/simple_text.dart';
 
 class SimpleVerticalRailItem {
   const SimpleVerticalRailItem({
@@ -190,4 +189,3 @@ class SimpleVerticalRail extends StatelessWidget {
     );
   }
 }
-
