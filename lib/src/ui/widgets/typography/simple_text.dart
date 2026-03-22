@@ -143,7 +143,7 @@ class SimpleText extends StatelessWidget {
     this.align,
     this.fontSize,
   }) : style = JTextStyles.priceLarge,
-       weight = FontWeight.w700,
+       weight = FontWeight.w800,
        _variant = _SimpleTextVariant.body;
 
   const SimpleText.sectionLabel({
@@ -153,7 +153,7 @@ class SimpleText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.fontSize,
-  }) : style = JTextStyles.label,
+  }) : style = JTextStyles.sectionLabel,
        weight = FontWeight.w700,
        align = null,
        _variant = _SimpleTextVariant.label;
@@ -164,7 +164,7 @@ class SimpleText extends StatelessWidget {
     this.color,
     this.maxLines,
     this.fontSize,
-  }) : style = JTextStyles.heading1,
+  }) : style = JTextStyles.counter,
        weight = FontWeight.w700,
        align = TextAlign.center,
        overflow = TextOverflow.clip,

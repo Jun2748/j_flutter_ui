@@ -135,6 +135,8 @@ If a widget sets a background via `AppThemeTokens`, use the paired resolved fore
 - Use `AppText` for library-owned text that needs localization, HTML rendering, semantics label, or auto-fit.
 - Use raw `Text` only when required by Flutter/third-party APIs or when Material component text styling must be inherited.
 - If truncation is possible, always set `maxLines` and `overflow` explicitly.
+- Use `SimpleText.sectionLabel` for uppercase grouped-content headers in ordering flows. It carries dedicated tracking and line height; do NOT substitute `SimpleText.label` for this role.
+- Use `SimpleText.counter` for quantity values only. It is compact and uses tabular figures to keep digit widths stable during stepper changes.
 
 ---
 

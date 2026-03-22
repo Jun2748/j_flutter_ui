@@ -115,6 +115,44 @@ class TextDemo extends StatelessWidget {
               ],
             ),
           ),
+          JGaps.h24,
+          Section(
+            title: 'F&B ordering flow typography',
+            child: VStack(
+              gap: JDimens.dp16,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                _VariantPreviewRow(
+                  label: 'Section label',
+                  child: const SimpleText.sectionLabel(text: 'CUSTOMIZE'),
+                ),
+                _VariantPreviewRow(
+                  label: 'Heading',
+                  child: SimpleText.heading(
+                    text: 'Brown Sugar Boba Milk',
+                    color: onSurface,
+                  ),
+                ),
+                _VariantPreviewRow(
+                  label: 'Hero price',
+                  child: SimpleText.priceLarge(
+                    text: 'RM 18.90',
+                    color: onSurface,
+                  ),
+                ),
+                _VariantPreviewRow(
+                  label: 'Counter',
+                  child: const SizedBox(
+                    width: JDimens.dp40,
+                    child: SimpleText.counter(text: '12'),
+                  ),
+                ),
+                const SimpleCard(
+                  child: _OrderingFlowPreview(),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -164,6 +202,69 @@ class _PriceRow extends StatelessWidget {
       children: <Widget>[
         Expanded(child: SimpleText.body(text: name)),
         Text(price, style: JTextStyles.price.copyWith(color: color)),
+      ],
+    );
+  }
+}
+
+class _VariantPreviewRow extends StatelessWidget {
+  const _VariantPreviewRow({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(child: SimpleText.caption(text: label)),
+        JGaps.w16,
+        Flexible(child: Align(alignment: Alignment.centerRight, child: child)),
+      ],
+    );
+  }
+}
+
+class _OrderingFlowPreview extends StatelessWidget {
+  const _OrderingFlowPreview();
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
+    return VStack(
+      gap: JDimens.dp12,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SimpleText.sectionLabel(text: 'TOP PICK'),
+        SimpleText.heading(
+          text: 'Iced Sea Salt Latte',
+          color: theme.colorScheme.onSurface,
+        ),
+        const SimpleText.body(
+          text:
+              'Smooth milk tea with a lightly salted cream cap for a layered sip.',
+          maxLines: 3,
+        ),
+        Row(
+          children: <Widget>[
+            SimpleText.priceLarge(text: 'RM 18.90', color: theme.colorScheme.onSurface),
+            JGaps.w8,
+            const SimpleText.caption(text: 'Hero price'),
+          ],
+        ),
+        const SimpleDivider(),
+        Row(
+          children: <Widget>[
+            const Expanded(child: SimpleText.label(text: 'Qty in stepper')),
+            const SizedBox(
+              width: JDimens.dp40,
+              child: SimpleText.counter(text: '12'),
+            ),
+          ],
+        ),
+        const SimpleText.label(text: 'Less sugar • Warm • Pearl topping'),
       ],
     );
   }

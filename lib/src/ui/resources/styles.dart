@@ -25,10 +25,10 @@ abstract final class JTextStyles {
 
   static const TextStyle heading1 = TextStyle(
     fontFamily: fontFamily,
-    fontSize: JFontSizes.fs24,
+    fontSize: JFontSizes.fs20,
     fontWeight: FontWeight.w700,
-    height: JLineHeights.lh32 / JFontSizes.fs24,
-    letterSpacing: -0.3,
+    height: JLineHeights.lh28 / JFontSizes.fs20,
+    letterSpacing: -0.2,
   );
 
   static const TextStyle body1 = TextStyle(
@@ -65,10 +65,29 @@ abstract final class JTextStyles {
   /// Tabular figures keep digit widths uniform so prices align vertically.
   static const TextStyle priceLarge = TextStyle(
     fontFamily: fontFamily,
-    fontSize: JFontSizes.fs20,
-    fontWeight: FontWeight.w700,
-    height: JLineHeights.lh28 / JFontSizes.fs20,
+    fontSize: JFontSizes.fs28,
+    fontWeight: FontWeight.w800,
+    height: JLineHeights.lh33_6 / JFontSizes.fs28,
     letterSpacing: -0.2,
+    fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+  );
+
+  /// Uppercase section labels for grouped content in ordering flows.
+  static const TextStyle sectionLabel = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: JFontSizes.fs12,
+    fontWeight: FontWeight.w700,
+    height: JLineHeights.lh16_8 / JFontSizes.fs12,
+    letterSpacing: JDimens.dp0_6,
+  );
+
+  /// Compact quantity display with tabular figures for stable digit widths.
+  static const TextStyle counter = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: JFontSizes.fs18,
+    fontWeight: FontWeight.w700,
+    height: JLineHeights.lh18 / JFontSizes.fs18,
+    letterSpacing: JDimens.dp0,
     fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
   );
 

@@ -6,7 +6,7 @@ import '../test_helpers.dart';
 
 void main() {
   group('SimpleText', () {
-    testWidgets('priceLarge renders with JTextStyles.priceLarge and w700', (
+    testWidgets('priceLarge renders with JTextStyles.priceLarge and w800', (
       WidgetTester tester,
     ) async {
       await pumpTestApp(tester, const SimpleText.priceLarge(text: 'RM 18.90'));
@@ -15,11 +15,13 @@ void main() {
 
       expect(text.style?.fontSize, JTextStyles.priceLarge.fontSize);
       expect(text.style?.height, JTextStyles.priceLarge.height);
-      expect(text.style?.fontWeight, FontWeight.w700);
+      expect(text.style?.fontWeight, FontWeight.w800);
       expect(text.style?.fontFeatures, JTextStyles.priceLarge.fontFeatures);
     });
 
-    testWidgets('sectionLabel renders with JTextStyles.label and w700', (
+    testWidgets(
+      'sectionLabel renders with JTextStyles.sectionLabel and w700',
+      (
       WidgetTester tester,
     ) async {
       await pumpTestApp(
@@ -29,13 +31,16 @@ void main() {
 
       final Text text = tester.widget<Text>(find.text('FEATURED OFFER'));
 
-      expect(text.style?.fontSize, JTextStyles.label.fontSize);
-      expect(text.style?.height, JTextStyles.label.height);
-      expect(text.style?.letterSpacing, JTextStyles.label.letterSpacing);
+      expect(text.style?.fontSize, JTextStyles.sectionLabel.fontSize);
+      expect(text.style?.height, JTextStyles.sectionLabel.height);
+      expect(
+        text.style?.letterSpacing,
+        JTextStyles.sectionLabel.letterSpacing,
+      );
       expect(text.style?.fontWeight, FontWeight.w700);
     });
 
-    testWidgets('counter renders centered with heading style and w700', (
+    testWidgets('counter renders centered with counter style and w700', (
       WidgetTester tester,
     ) async {
       await pumpTestApp(tester, const SimpleText.counter(text: '12'));
@@ -44,9 +49,10 @@ void main() {
 
       expect(text.textAlign, TextAlign.center);
       expect(text.overflow, TextOverflow.clip);
-      expect(text.style?.fontSize, JTextStyles.heading1.fontSize);
-      expect(text.style?.height, JTextStyles.heading1.height);
+      expect(text.style?.fontSize, JTextStyles.counter.fontSize);
+      expect(text.style?.height, JTextStyles.counter.height);
       expect(text.style?.fontWeight, FontWeight.w700);
+      expect(text.style?.fontFeatures, JTextStyles.counter.fontFeatures);
     });
 
     testWidgets('fontSize overrides style fontSize when provided', (

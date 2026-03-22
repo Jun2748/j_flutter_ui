@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../../resources/app_theme_tokens.dart';
 import '../../resources/dimens.dart';
@@ -77,8 +78,8 @@ class SimpleBottomActionBar extends StatelessWidget {
             children: _hasLeftContent
                 ? <Widget>[
                     _buildLeftSide(tokens),
-                    JGaps.w32,
-                    Expanded(child: _buildButton()),
+                    Expanded(child: SizedBox()),
+                    _buildButton(),
                   ]
                 : <Widget>[Expanded(child: _buildButton())],
           ),
@@ -109,10 +110,14 @@ class SimpleBottomActionBar extends StatelessWidget {
   }
 
   Widget _buildButton() {
-    return SimpleButton.primary(
-      label: actionLabel,
-      onPressed: onAction,
-      loading: loading,
+    return SizedBox(
+      width: JDimens.dp140,
+      height: JDimens.dp50,
+      child: SimpleButton.primary(
+        label: actionLabel,
+        onPressed: onAction,
+        loading: loading,
+      ),
     );
   }
 }

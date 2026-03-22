@@ -4,6 +4,7 @@ abstract final class JDimens {
   const JDimens._();
 
   static const double dp0 = 0;
+  static const double dp0_6 = 0.6;
   static const double dp1 = 1;
   static const double dp1_5 = 1.5;
   static const double dp2 = 2;
@@ -15,15 +16,18 @@ abstract final class JDimens {
   static const double dp12 = 12;
   static const double dp14 = 14;
   static const double dp16 = 16;
+  static const double dp16_8 = 16.8;
   static const double dp18 = 18;
   static const double dp20 = 20;
   static const double dp24 = 24;
   static const double dp28 = 28;
   static const double dp32 = 32;
+  static const double dp33_6 = 33.6;
   static const double dp36 = 36;
   static const double dp40 = 40;
   static const double dp44 = 44;
   static const double dp48 = 48;
+  static const double dp50 = 50;
   static const double dp52 = 52;
   static const double dp56 = 56;
   static const double dp60 = 60;
@@ -88,11 +92,13 @@ abstract final class JLineHeights {
 
   static const double lh14 = JDimens.dp14;
   static const double lh16 = JDimens.dp16;
+  static const double lh16_8 = JDimens.dp16_8;
   static const double lh18 = JDimens.dp18;
   static const double lh20 = JDimens.dp20;
   static const double lh24 = JDimens.dp24;
   static const double lh28 = JDimens.dp28;
   static const double lh32 = JDimens.dp32;
+  static const double lh33_6 = JDimens.dp33_6;
   static const double lh40 = JDimens.dp40;
 }
 
