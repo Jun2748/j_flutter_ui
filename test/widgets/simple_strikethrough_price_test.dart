@@ -26,6 +26,28 @@ Widget _buildSubject({
   );
 }
 
+Widget _buildStackedSubject({
+  String originalPrice = 'RM 18.90',
+  String currentPrice = 'RM 14.90',
+  Color? originalPriceColor,
+  Color? currentPriceColor,
+  FontWeight? currentPriceWeight,
+  TextStyle? style,
+  double? gap,
+}) {
+  return buildTestApp(
+    SimpleStrikethroughPrice.stacked(
+      originalPrice: originalPrice,
+      currentPrice: currentPrice,
+      originalPriceColor: originalPriceColor,
+      currentPriceColor: currentPriceColor,
+      currentPriceWeight: currentPriceWeight,
+      style: style,
+      gap: gap,
+    ),
+  );
+}
+
 void main() {
   group('SimpleStrikethroughPrice', () {
     testWidgets('renders both prices', (WidgetTester tester) async {
@@ -136,7 +158,7 @@ void main() {
       expect(currentWidget.weight, FontWeight.w400);
     });
 
-    testWidgets('uses baseline cross-axis alignment', (
+    testWidgets('uses Row with baseline cross-axis alignment', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(_buildSubject());
@@ -164,6 +186,93 @@ void main() {
       );
 
       expect(boxes.any((SizedBox b) => b.width == JDimens.dp16), isTrue);
+    });
+  });
+
+  group('SimpleStrikethroughPrice.stacked', () {
+    testWidgets('renders both prices', (WidgetTester tester) async {
+      await tester.pumpWidget(_buildStackedSubject());
+
+      expect(find.text('RM 18.90'), findsOneWidget);
+      expect(find.text('RM 14.90'), findsOneWidget);
+    });
+
+    testWidgets('uses Column with start alignment', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(_buildStackedSubject());
+
+      final Column column = tester.widget<Column>(find.byType(Column));
+      expect(column.crossAxisAlignment, CrossAxisAlignment.start);
+      expect(column.mainAxisSize, MainAxisSize.min);
+    });
+
+    testWidgets('original price has lineThrough decoration', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(_buildStackedSubject());
+
+      final SimpleText originalWidget = tester.widget<SimpleText>(
+        find.ancestor(
+          of: find.text('RM 18.90'),
+          matching: find.byType(SimpleText),
+        ),
+      );
+
+      expect(
+        originalWidget.style?.decoration,
+        equals(TextDecoration.lineThrough),
+      );
+    });
+
+    testWidgets('custom gap is applied as SizedBox height', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(_buildStackedSubject(gap: JDimens.dp12));
+
+      final Iterable<SizedBox> boxes = tester.widgetList<SizedBox>(
+        find.byType(SizedBox),
+      );
+
+      expect(boxes.any((SizedBox b) => b.height == JDimens.dp12), isTrue);
+    });
+
+    testWidgets('no crash with all optional params null', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(_buildStackedSubject());
+
+      expect(find.byType(SimpleStrikethroughPrice), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('custom colors are applied in stacked layout', (
+      WidgetTester tester,
+    ) async {
+      const Color customOriginal = Colors.grey;
+      const Color customCurrent = Colors.red;
+      await tester.pumpWidget(
+        _buildStackedSubject(
+          originalPriceColor: customOriginal,
+          currentPriceColor: customCurrent,
+        ),
+      );
+
+      final SimpleText originalWidget = tester.widget<SimpleText>(
+        find.ancestor(
+          of: find.text('RM 18.90'),
+          matching: find.byType(SimpleText),
+        ),
+      );
+      final SimpleText currentWidget = tester.widget<SimpleText>(
+        find.ancestor(
+          of: find.text('RM 14.90'),
+          matching: find.byType(SimpleText),
+        ),
+      );
+
+      expect(originalWidget.color, customOriginal);
+      expect(currentWidget.color, customCurrent);
     });
   });
 }

@@ -213,10 +213,13 @@ if (isLoading)
 - Do NOT use for two-column equal-width grids. This widget is label-left / value-right only.
 
 ### SimpleStrikethroughPrice
-- Pattern layer. Composes two `SimpleText.body` with `Flexible` in a `Row`.
+- Pattern layer. Composes two `SimpleText.body` with token-driven color defaults.
 - Defaults: original price → `tokens.mutedText` + `TextDecoration.lineThrough`, current price → `tokens.primary` + `FontWeight.w700`.
-- Uses `mainAxisSize: MainAxisSize.max` + `Flexible` on both children. Do NOT revert to `MainAxisSize.min` — it overflows in tight grid cells.
+- Default constructor → `Row` with `Flexible` children + baseline alignment. Uses `mainAxisSize: MainAxisSize.max`. Do NOT revert to `MainAxisSize.min` — it overflows in tight grid cells.
+- `.stacked()` constructor → `Column` with `CrossAxisAlignment.start` + `mainAxisSize: MainAxisSize.min`. Use for tight vertical product cards where horizontal space is limited.
+- Gap defaults: `JDimens.dp8` for horizontal, `JDimens.dp2` for stacked.
 - Pass `style` to override base text style for both prices (e.g. larger size). Strikethrough decoration is merged on top.
+- Do NOT use `Column` with `CrossAxisAlignment.baseline` — baseline is a `Row`-only alignment.
 - Do NOT use for non-price copy. It is a pricing component, not a generic strikethrough widget.
 
 ### SimpleVoucherCard

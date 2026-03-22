@@ -15,7 +15,7 @@ class StrikethroughPriceDemo extends StatelessWidget {
       body: ListView(
         padding: JInsets.screenPadding,
         children: <Widget>[
-          SimpleText.sectionLabel(text: 'DEFAULT'),
+          SimpleText.sectionLabel(text: 'DEFAULT (HORIZONTAL)'),
           JGaps.h8,
           SimpleCard(
             child: const SimpleStrikethroughPrice(
@@ -36,7 +36,7 @@ class StrikethroughPriceDemo extends StatelessWidget {
             ),
           ),
           JGaps.h16,
-          SimpleText.sectionLabel(text: 'IN A PRODUCT CARD'),
+          SimpleText.sectionLabel(text: 'IN A HORIZONTAL PRODUCT CARD'),
           JGaps.h8,
           SimpleCard(
             child: Row(
@@ -69,6 +69,85 @@ class StrikethroughPriceDemo extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          JGaps.h16,
+          SimpleText.sectionLabel(text: 'STACKED (VERTICAL PRODUCT CARD)'),
+          JGaps.h8,
+          SimpleGrid(
+            columnCount: 2,
+            columnGap: JDimens.dp12,
+            rowGap: JDimens.dp12,
+            children: <Widget>[
+              SimpleCard(
+                margin: EdgeInsets.zero,
+                padding: JInsets.all12,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: JDimens.dp100,
+                      decoration: BoxDecoration(
+                        color: tokens.cardBorderColor,
+                        borderRadius: BorderRadius.circular(JDimens.dp8),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.local_cafe,
+                          size: JIconSizes.xl,
+                          color: tokens.primary,
+                        ),
+                      ),
+                    ),
+                    JGaps.h8,
+                    const SimpleText.body(
+                      text: 'Iced Latte',
+                      weight: FontWeight.w700,
+                      maxLines: 1,
+                    ),
+                    JGaps.h4,
+                    const SimpleStrikethroughPrice.stacked(
+                      originalPrice: 'RM 15.90',
+                      currentPrice: 'RM 12.90',
+                    ),
+                  ],
+                ),
+              ),
+              SimpleCard(
+                margin: EdgeInsets.zero,
+                padding: JInsets.all12,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: JDimens.dp100,
+                      decoration: BoxDecoration(
+                        color: tokens.cardBorderColor,
+                        borderRadius: BorderRadius.circular(JDimens.dp8),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.coffee,
+                          size: JIconSizes.xl,
+                          color: tokens.primary,
+                        ),
+                      ),
+                    ),
+                    JGaps.h8,
+                    const SimpleText.body(
+                      text: 'Cold Brew',
+                      weight: FontWeight.w700,
+                      maxLines: 1,
+                    ),
+                    JGaps.h4,
+                    SimpleStrikethroughPrice.stacked(
+                      originalPrice: 'RM 17.90',
+                      currentPrice: 'RM 14.90',
+                      currentPriceColor: Colors.green.shade700,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
