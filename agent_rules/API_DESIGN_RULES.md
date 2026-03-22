@@ -24,7 +24,7 @@
 
 Migration sequence for breaking changes: **deprecate → migrate → remove**, with notes in `MIGRATION_NOTES.md`.
 
-> **Current version: 2.4.0** (read from `pubspec.yaml` — update this when bumping).
+> **Current version: 2.8.0** (read from `pubspec.yaml` — update this when bumping).
 
 ---
 

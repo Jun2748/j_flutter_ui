@@ -51,6 +51,7 @@ Use Material semantics when the value is a standard Material semantic pairing:
 | `SimpleBottomSheet` | `theme.bottomSheetTheme` |
 | `SimpleLoadingView` | `theme.progressIndicatorTheme` |
 | compact icon-action primitives | `theme.iconButtonTheme.style` |
+| `SimpleMultiSelectChipBar` | `theme.chipTheme` (padding, shape, side, label style, selected color) |
 
 Do NOT hard-override these component themes inside library widgets unless an explicit widget parameter is set.
 

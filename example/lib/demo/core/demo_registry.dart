@@ -3,7 +3,16 @@ import 'package:j_flutter_ui/j_flutter_ui.dart';
 import '../widgets/buttons/button_demo.dart';
 import '../widgets/cards/card_demo.dart';
 import '../widgets/controls/chip_bar_demo.dart';
+import '../widgets/controls/multi_select_chip_bar_demo.dart';
+import '../widgets/controls/quantity_stepper_demo.dart';
 import '../widgets/controls/segmented_control_demo.dart';
+import '../widgets/display/page_indicator_demo.dart';
+import '../widgets/display/rating_bar_demo.dart';
+import '../widgets/display/skeleton_box_demo.dart';
+import '../widgets/display/step_indicator_demo.dart';
+import '../widgets/display/strikethrough_price_demo.dart';
+import '../widgets/display/summary_row_demo.dart';
+import '../widgets/display/voucher_card_demo.dart';
 import '../widgets/foundations/theme_demo.dart';
 import '../widgets/images_display/flag_demo.dart';
 import '../widgets/images_display/image_helper_demo.dart';
@@ -137,6 +146,20 @@ class DemoRegistry {
       builder: (_) => const ChipBarDemo(),
     ),
     DemoItem(
+      title: const MultiSelectChipBarDemo().title,
+      category: DemoCategory.controls,
+      description:
+          'Multi-select chip bar with optional max-selection limit.',
+      builder: (_) => const MultiSelectChipBarDemo(),
+    ),
+    DemoItem(
+      title: const QuantityStepperDemo().title,
+      category: DemoCategory.controls,
+      description:
+          'Token-aware increment/decrement stepper for cart and order quantities.',
+      builder: (_) => const QuantityStepperDemo(),
+    ),
+    DemoItem(
       title: const SegmentedControlDemo().title,
       category: DemoCategory.controls,
       description: 'Segmented selection with equal-width and compact layouts.',
@@ -178,6 +201,48 @@ class DemoRegistry {
       category: DemoCategory.display,
       description: 'Status and category chip variants.',
       builder: (_) => const ChipDemo(),
+    ),
+    DemoItem(
+      title: const SummaryRowDemo().title,
+      category: DemoCategory.display,
+      description: 'Label-value row for order summaries and checkout totals.',
+      builder: (_) => const SummaryRowDemo(),
+    ),
+    DemoItem(
+      title: const StrikethroughPriceDemo().title,
+      category: DemoCategory.display,
+      description: 'Original + discounted price pair with lineThrough decoration.',
+      builder: (_) => const StrikethroughPriceDemo(),
+    ),
+    DemoItem(
+      title: const RatingBarDemo().title,
+      category: DemoCategory.display,
+      description: 'Star rating bar with half-star support and review count.',
+      builder: (_) => const RatingBarDemo(),
+    ),
+    DemoItem(
+      title: const StepIndicatorDemo().title,
+      category: DemoCategory.display,
+      description: 'Linear step progress for checkout flows and order tracking.',
+      builder: (_) => const StepIndicatorDemo(),
+    ),
+    DemoItem(
+      title: const SkeletonBoxDemo().title,
+      category: DemoCategory.display,
+      description: 'Animated shimmer placeholder for loading states.',
+      builder: (_) => const SkeletonBoxDemo(),
+    ),
+    DemoItem(
+      title: const PageIndicatorDemo().title,
+      category: DemoCategory.display,
+      description: 'Animated pill-dot page indicator for carousels and onboarding.',
+      builder: (_) => const PageIndicatorDemo(),
+    ),
+    DemoItem(
+      title: const VoucherCardDemo().title,
+      category: DemoCategory.display,
+      description: 'Card with animated dashed border for voucher and promo display.',
+      builder: (_) => const VoucherCardDemo(),
     ),
     DemoItem(
       title: const EmptyStateDemo().title,

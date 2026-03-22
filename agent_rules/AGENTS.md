@@ -188,6 +188,81 @@ if (isLoading)
   )
 ```
 
+## Commerce & quantity control rules
+
+### SimpleQuantityStepper
+- Pattern layer. Composes `SimpleIconButton.outline` + `SimpleText.counter` in a `Row`.
+- Pass `onChanged: null` to disable both buttons. Do NOT suppress the callback silently.
+- `minValue` defaults to `1`. Set to `0` only when item-removal on zero is handled at the **app layer**.
+- Do NOT embed cart-removal or inventory logic inside the widget. Below-min decrement behavior belongs to the caller.
+- Active/disabled colors resolve via `tokens.primary` / `tokens.mutedText`. Override with `activeColor`, `disabledColor`, `disabledBorderColor`.
+- Do NOT use as a generic number input — it carries clamped quantity semantics.
+
+### SimpleMultiSelectChipBar
+- Primitive layer. Thin `FilterChip`-in-`Wrap`. Respects `ChipThemeData` before `AppThemeTokens` fallback.
+- Mutual-exclusion logic (e.g. "None clears others") is the **caller's responsibility** inside `onChanged`. Do NOT add exclusive-selection logic inside the widget.
+- `maxSelections: null` means no limit. When the limit is reached, non-selected chips become non-interactive (`onSelected: null`).
+- `showCheckmark: false` is enforced inside the widget. Do NOT re-enable at the app layer.
+- Do NOT use for single-select scenarios — use `SimpleChipBar` instead.
+
+### SimpleSummaryRow
+- Pattern layer. Composes `SimpleText.body` in a `MainAxisAlignment.spaceBetween` `Row`.
+- Default colors: label and value both → `tokens.mutedText`.
+- For emphasis (e.g. "Total"): pass `labelWeight: FontWeight.w700`, `valueColor: tokens.primary`, `valueWeight: FontWeight.w700`.
+- The label side is `Flexible` (truncates). The value side never wraps — keep value strings short.
+- Do NOT use for two-column equal-width grids. This widget is label-left / value-right only.
+
+### SimpleStrikethroughPrice
+- Pattern layer. Composes two `SimpleText.body` with `Flexible` in a `Row`.
+- Defaults: original price → `tokens.mutedText` + `TextDecoration.lineThrough`, current price → `tokens.primary` + `FontWeight.w700`.
+- Uses `mainAxisSize: MainAxisSize.max` + `Flexible` on both children. Do NOT revert to `MainAxisSize.min` — it overflows in tight grid cells.
+- Pass `style` to override base text style for both prices (e.g. larger size). Strikethrough decoration is merged on top.
+- Do NOT use for non-price copy. It is a pricing component, not a generic strikethrough widget.
+
+### SimpleVoucherCard
+- Pattern layer. `CustomPainter` dashed border + `ClipRRect` + optional `InkWell`.
+- Background resolves: explicit param → `theme.cardTheme.color` → `tokens.cardBackground`.
+- Dashed border is drawn by `_DashedBorderPainter` via `PathMetrics`. Do NOT use `BoxDecoration.border` for dashed effects.
+- Set `onTap` to make interactive. `null` renders a static, non-tappable surface.
+- `child` slot accepts any content. Do NOT hardcode voucher layout inside the widget — it is composition-first.
+- Do NOT mix `SimpleVoucherCard` and `SimpleCard` on the same surface. Choose one.
+
+---
+
+## Progress & status display rules
+
+### SimpleStepIndicator
+- Pattern layer. Custom `Row`/`Column` layout — no thin Material wrapper.
+- Steps before `currentStep` are "completed", `currentStep` is "active", steps after are "incomplete".
+- `currentStep` is clamped to `[0, steps.length - 1]`. Safe to pass any value.
+- Connector lines are split into leading/trailing halves per cell, enabling correct color transitions.
+- `icon` on `SimpleStepItem` renders only in completed and active dots.
+- Do NOT add tap handlers to individual steps — this widget is display-only.
+- Do NOT use as a page indicator — use `SimplePageIndicator` instead.
+
+### SimpleRatingBar
+- Primitive layer. `Row` of `Icon` widgets (full / half / empty stars via `Icons.star` / `Icons.star_half` / `Icons.star_border`).
+- `rating` is clamped to `[0.0, starCount]`.
+- Star thresholds (`fraction >= 1.0` full, `fraction >= 0.5` half) are intentional and not magic numbers.
+- This is a **display-only** widget. Do NOT add interactive tap handling to it — implement a separate `SimpleRatingInput` at the app layer if needed.
+
+### SimpleSkeletonBox
+- Primitive layer. `StatefulWidget` with shimmer `AnimationController` + `AnimatedBuilder`.
+- Default: `width: double.infinity`, `height: JDimens.dp16`, `borderRadius: JDimens.dp8`.
+- `highlightColor` defaults to `baseColor` blended 50% toward `Colors.white` via `Color.lerp`.
+- Animation constants are file-private named constants (`_kShimmerDuration`, `_kShimmerSweepRange`, etc.). Do NOT use raw millisecond or float literals for animation values.
+- Do NOT use for interactive loading placeholders. It is display-only.
+
+### SimplePageIndicator
+- Primitive layer. `Row` of `AnimatedContainer` dots.
+- Active dot animates to `activeDotWidth` (pill shape). Inactive dots are circles with diameter `dotSize`.
+- `currentIndex` is clamped to `[0, count - 1]`. Safe to pass any value.
+- Animation duration is `_kDotAnimationDuration` (250 ms). Do NOT use raw ms literals.
+- Preferred placement: inside a `Stack` positioned at the bottom of a `PageView` banner.
+- Do NOT use as a stepper progress indicator — use `SimpleStepIndicator` for multi-step flows.
+
+---
+
 ## Action bar patterns
 
 ### SimpleBottomActionBar

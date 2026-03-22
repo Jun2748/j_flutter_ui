@@ -7,7 +7,23 @@
 
 ---
 
-## Validated and implemented (as of 2026-03)
+## Validated and implemented (as of 2026-03, batch 2 — F&B widget set)
+
+| Gap | Resolution |
+|---|---|
+| No reusable quantity stepper for cart / product-detail screens | `SimpleQuantityStepper` added — minus/count/plus row composing `SimpleIconButton.outline` + `SimpleText.counter`, token-driven active/disabled states |
+| No multi-select chip group; required `Wrap`+`FilterChip` inline at app layer | `SimpleMultiSelectChipBar<T>` added — generic `FilterChip`-in-`Wrap` primitive; respects `ChipThemeData`; max-selection limit built in; mutual-exclusion logic delegated to caller |
+| No label/value summary row; required repeated inline `Row` patterns in cart/checkout screens | `SimpleSummaryRow` added — `MainAxisAlignment.spaceBetween` row composing `SimpleText.body`, token-driven colors, emphasis via weight/color overrides |
+| No strikethrough pricing component; required inline `TextDecoration` at app layer | `SimpleStrikethroughPrice` added — original+current price `Row` with `Flexible` children, merged strikethrough decoration, token-driven color defaults |
+| No step-progress indicator for order-tracking and multi-step checkout flows | `SimpleStepIndicator` added — horizontal dot+connector track with completed/active/incomplete states, optional icons in dots, display-only |
+| No star rating display; product detail and listing cards had no standardised rating component | `SimpleRatingBar` added — full/half/empty star row with optional review count, `rating` clamped to `starCount`, display-only |
+| No shimmer loading skeleton; screens had no standardised loading placeholder | `SimpleSkeletonBox` added — shimmer-animated `AnimatedBuilder` rectangle, token-derived highlight color, configurable size/radius |
+| No page/carousel dot indicator; promo banners and onboarding flows had no standardised position display | `SimplePageIndicator` added — animated pill-dot `Row`, active dot stretches to pill via `AnimatedContainer`, token-driven colors |
+| No voucher/promo card with dashed border; app required inline `CustomPainter` | `SimpleVoucherCard` added — dashed-border card via `_DashedBorderPainter` + `PathMetrics`, composition-first `child` slot, optional `onTap` |
+
+---
+
+## Validated and implemented (as of 2026-03, batch 1)
 
 The following gaps were identified during downstream validation in `playground_flutter_app` and have been implemented in the library:
 
