@@ -62,8 +62,16 @@ Use the correct token class for each value type:
 | Line heights | `JLineHeights` |
 | Typography presets | `JTextStyles` |
 
-- Do NOT use raw numbers for any of the above. Raw numbers in widget code are a bug.
-- Add a new token only if the value is reused across multiple widgets or is part of a system scale.
+**Inside library widget implementations**, do NOT use raw numbers for any of the above.
+Raw undocumented numbers in library widget code are a bug.
+
+This rule applies to the `src/` layer only. At the app layer and in `example/`, token
+values are sensible defaults — explicit spec values are permitted and expected when a
+design requires them. See `AGENTS.md` — Design fidelity rules for the full policy.
+
+Add a new shared token only if the value is reused across multiple widgets or is part
+of a system scale. A value used in one place at the app layer does not qualify — use it
+directly with an inline comment instead.
 
 ### Shared styling helpers
 - `JInputDecorations` → all `InputDecoration` construction for inputs. Do NOT duplicate input decoration logic inline.
@@ -141,11 +149,19 @@ Four distinct layers — do NOT merge:
 
 ---
 
-## Exported symbols with no rulebook entry (LOW severity — audit 2026-03)
+## Exported symbols pending dedicated rulebook entries
 
-The following symbols are exported from `lib/j_flutter_ui.dart` but have no dedicated rulebook entry. They are not gaps — they are stable and tested — but future maintainers should document rules if non-obvious behaviour is added:
+The following symbols are exported from `lib/j_flutter_ui.dart` but have no dedicated
+rulebook section yet. They are stable and tested. The absence of a specific section is
+a documentation gap, not a behavioral exception — apply all general rules (theming,
+token usage, API design) to them exactly as you would to any other exported symbol.
 
-`SimpleDropdown`, `SimpleRadio`, `SimpleSegmentedControl`, `SimpleChip`, `SimpleDivider`, `SimpleBanner`, `SimpleSnackbar`, `SimpleFlag`, `SimpleMenuPage`, `AppScaffold`, `HStack`, `VStack`, `Section`, `SimpleEmptyState`, `SimpleErrorView`, `FlagUtils`, `TextScaleUtils`
+Future maintainers should add a rulebook entry if non-obvious behaviour is introduced:
+
+`SimpleDropdown`, `SimpleRadio`, `SimpleSegmentedControl`, `SimpleChip`, `SimpleDivider`,
+`SimpleBanner`, `SimpleSnackbar`, `SimpleFlag`, `SimpleMenuPage`, `AppScaffold`,
+`HStack`, `VStack`, `Section`, `SimpleEmptyState`, `SimpleErrorView`,
+`FlagUtils`, `TextScaleUtils`
 
 ---
 

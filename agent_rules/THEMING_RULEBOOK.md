@@ -17,11 +17,15 @@
 ## Style resolution order (STRICT — apply in this exact sequence)
 
 ```
-1. Explicit widget parameter
-2. Material component theme (when semantically correct)
+1. Explicit widget parameter       ← design spec values live here
+2. Material component theme        (when semantically correct)
 3. AppThemeTokens (ThemeExtension)
-4. Final fallback constants (last resort only — document why inline)
+4. Final fallback constants        (last resort only — document why inline)
 ```
+
+Step 1 is where design-specified values belong. When a design spec provides an exact
+color, size, or style that differs from a token default, pass it as an explicit widget
+parameter — do NOT skip step 1 and let the token win by default.
 
 ---
 
@@ -91,6 +95,42 @@ This rule applies to:
 - Card / sheet / dialog / snackbar / banner surfaces → `tokens.onCardResolved(theme)`
 - Primary action surfaces / buttons → `tokens.onPrimaryResolved(theme)`
 - Token-primary feedback and selection controls (badges, segmented controls, selected switches, selected checkboxes)
+
+---
+
+## Design-provided colors vs token defaults
+
+When a design spec provides a color value that differs from the current `AppThemeTokens` default:
+
+- **Light mode**: pass the color as an explicit widget parameter (step 1 in the resolution
+  order). Do NOT let the token default win when a spec value exists.
+- **Dark mode**: if the dark-mode spec color also differs from the token default, apply
+  the override at the `JAppTheme.darkTheme` registration level — not as an inline
+  `Theme.of(context).brightness` conditional inside a widget.
+- Do NOT hardcode `brightness`-conditional colors inline:
+  ```dart
+  // WRONG — hardcoded brightness conditional
+  color: theme.brightness == Brightness.dark ? Color(0xFF1A1A2E) : Color(0xFFFFFFFF),
+  ```
+  Use `ThemeData.brightness`-aware token registration at the app level instead.
+- Do NOT substitute a token color for a spec color because they look visually similar.
+  Token values may diverge from the spec color in future theme updates.
+
+---
+
+## Token scope boundary
+
+Token rules govern styling **inside library widget implementations**.
+At the app layer, tokens are reference values and sensible defaults — not constraints.
+
+| Context | Rule |
+|---|---|
+| Inside a library primitive or pattern | Use tokens. Raw values without documentation are a bug. |
+| App screen layout matching a design spec | Spec wins. Use tokens only when they match the spec exactly. |
+| App screen with no design spec provided | Use tokens as sensible starting defaults. |
+| `example/` catalog screens | Tokens preferred; spec overrides allowed when demonstrating a specific variant. |
+
+Never force app-layer layout to conform to library tokens at the cost of design accuracy.
 
 ---
 
@@ -202,6 +242,8 @@ final loc = JLocalizations.of(context) ?? JLocalizations.fallback();
 - Library widgets that throw when `AppThemeTokens` or `JLocalizations` are not registered
 - Localization delegates missing keys for any library-owned string
 - Token-owned background surfaces paired with Material `on*` foreground colors (use paired token foregrounds instead)
+- Inline `brightness`-conditional hardcoded colors — use theme registration instead
+- Substituting a token color for a design-spec color because they look similar
 
 ---
 
@@ -213,3 +255,4 @@ final loc = JLocalizations.of(context) ?? JLocalizations.fallback();
 - `AppThemeTokens.defaults(theme)` as the unregistered-consumer fallback
 - `JLocalizations.fallback()` as the unregistered-delegate fallback
 - `SimpleProgressOverlay` transparent card default is intentional, not a missing token fallback
+- Explicit spec-value overrides at the app layer when the design differs from token defaults

@@ -49,10 +49,35 @@ Migration sequence for breaking changes: **deprecate → migrate → remove**, w
 
 ## Styling parameters
 
-- Expose the **semantic knob** (e.g. `backgroundColor`), not a set of micro-parameters.
+- Expose the **semantic knob** (e.g. `backgroundColor`, `textStyle`, `padding`), not a set of micro-parameters.
 - When a styling knob is `null`, the widget MUST fall back to theme/tokens correctly.
 - Do NOT create a second parallel theming system via custom style classes.
 - For text inputs: use `prefixIcon` / `suffixIcon` for icons, flags, or interactive affordances. Reserve `prefix` / `suffix` for simple inline affix content only.
+
+### Explicit parameters are the design override path
+
+The rule *"all styling must have sensible defaults"* means library widgets must work
+correctly without any styling parameters provided. It does NOT mean callers should
+avoid passing explicit values.
+
+Callers at the app layer — screens, feature widgets, and compositions — are expected
+to pass explicit styling parameters whenever a design spec requires a value that
+differs from the token default. This is the intended and correct usage:
+
+```dart
+// Correct — spec value passed explicitly, token default is not the right fit here
+SimpleText.body(
+  text: productTitle,
+  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+)
+
+// Correct — token default is right for this context, no override needed
+SimpleText.body(text: description)
+```
+
+Defaulting to token values when a spec says otherwise is a design defect, not
+rule compliance. Pass the explicit value. See `AGENTS.md` — Design fidelity rules
+for the full policy on when spec values override tokens.
 
 ---
 
@@ -90,3 +115,4 @@ Migration sequence for breaking changes: **deprecate → migrate → remove**, w
 - Hard-coded business/product copy inside reusable widgets
 - Named symbol collisions with Flutter SDK / Material exports
 - Breaking changes without `MIGRATION_NOTES.md` entry
+- Choosing a wrong widget variant to avoid passing an explicit style parameter

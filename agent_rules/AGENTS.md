@@ -54,6 +54,79 @@
 
 ---
 
+## ⭐ Design fidelity rules (read this before writing any screen or widget)
+
+> These rules govern all work done at the **app layer** — screens, feature layouts, and
+> compositions built on top of `j_flutter_ui`. They also apply to any library widget
+> that accepts design-spec values via explicit parameters.
+
+### The fundamental priority order
+
+When implementing any screen or widget against a design source (Figma file, screenshot,
+redline spec, or written measurements), apply values in this order:
+
+```
+1. Explicit design spec value  ← ALWAYS wins when a spec is provided
+2. Matching j_flutter_ui token ← use when spec matches a token exactly
+3. Library widget default      ← use only when no spec exists
+```
+
+**Tokens are shared defaults and design contracts for the library. They are NOT
+constraints that override an explicit design specification.** If a design says 14 dp
+gap and `JGaps.h12` is the nearest token, use 14 dp — not 12 dp.
+
+### Working with design inputs (Figma, images, redlines)
+
+When a screen image, Figma file, or written spec is provided:
+
+1. **Extract exact values first** — colors, font sizes, font weights, letter spacing,
+   line height, corner radii, spacing, icon sizes. Do this before reaching for tokens.
+2. **Map to tokens where they match exactly** — if the spec says 16 dp padding and
+   `JInsets.all16` exists, use the token. Self-documenting and correct.
+3. **Use the spec value directly when tokens do not match** — pass it as an explicit
+   widget parameter. Do NOT round or substitute the nearest token.
+   Add an inline comment: `// spec: 14dp — no matching token`
+4. **Colors from the design that have no matching token** — use `Color(0xFF...)` directly.
+   Do NOT substitute `tokens.primary` or any other token color just because it looks
+   similar in the design. Color substitution changes the design.
+5. **Spacing values that fall between tokens** — use the exact dp value.
+   Do NOT round up or down to the nearest `JGaps` / `JInsets` / `JDimens` entry.
+6. **If the same non-token value appears in 3 or more places** with the same spec
+   intent → propose a new token addition. Until then, use the value directly.
+
+The goal: a developer reading the implementation can verify it against the design spec
+without needing to know the current token values.
+
+### "No magic numbers" means no arbitrary values — not "every value must be a token"
+
+The rule *"do not use magic numbers"* means: do not invent arbitrary values without
+intent or documentation.
+
+It does **NOT** mean every value must already exist as a token. When a design spec
+calls for a value not in the token scale:
+
+- Use the exact value as a widget parameter (e.g. `SizedBox(height: 14)`)
+- Add an inline comment referencing the spec: `// spec: 14dp gap, [ScreenName]`
+- If it becomes reused, propose a token. Until then, the comment is enough.
+
+Do NOT round to the nearest token to satisfy the no-magic-number rule.
+Rounding without spec permission changes the design silently.
+
+### Token scope boundary — library internals vs app layer
+
+`JHeights`, `JDimens`, `JInsets`, and `JGaps` govern sizing **inside library widget
+implementations**. At the app layer they are reference values, not constraints.
+
+| Context | Rule |
+|---|---|
+| Inside a library widget (primitives / patterns) | Use tokens. Raw values are a bug. |
+| App screen layout matching a design spec | Spec wins. Use tokens only when they match exactly. |
+| App screen with no design spec | Use tokens as sensible defaults. |
+
+Never force app-layer layout to conform to library tokens at the cost of design accuracy.
+
+---
+
 ## Theming rules
 
 ### Resolution order (STRICT — apply in this exact sequence)
@@ -101,6 +174,19 @@ If a widget sets a background via `AppThemeTokens`, use the paired resolved fore
 - `tokens.onPrimaryResolved(theme)` → for primary action surfaces
 - `tokens.onSecondaryResolved(theme)` → for secondary semantic surfaces
 
+### Design-provided colors vs token defaults
+
+When a design specifies a color that differs from the `AppThemeTokens` default:
+- **Light mode**: pass the color as an explicit widget parameter.
+- **Dark mode**: if the dark-mode spec color also differs from the token default, apply
+  the override at the `JAppTheme.darkTheme` registration level — not as an inline
+  `Theme.of(context).brightness` conditional.
+- Do NOT hardcode `brightness`-conditional colors inline (e.g.
+  `brightness == Brightness.dark ? Color(0xFF...) : Color(0xFF...)`).
+  Use `ThemeData.brightness`-aware token registration instead.
+- Do NOT substitute a token color for a spec color because they look similar.
+  They may diverge in future theme updates.
+
 ### Allowed fallback constants
 - `Colors.transparent` and structurally harmless constants are allowed.
 - All other hardcoded colors are last-resort fallback only. Document why inline.
@@ -123,8 +209,9 @@ If a widget sets a background via `AppThemeTokens`, use the paired resolved fore
 | Font sizes | `JFontSizes` |
 | Line heights | `JLineHeights` |
 
-- Do NOT use magic numbers for spacing, radius, heights, border widths, icon sizes, or font sizes.
-- Before using a raw number for any height, check `JHeights` first — most common component heights are already defined.
+- Inside library widgets: do NOT use raw numbers for spacing, radius, heights, border widths, icon sizes, or font sizes. Use the token classes above.
+- At the app layer: use tokens when they match the design spec exactly. Use spec values directly when they do not. See **Design fidelity rules** above.
+- Before using a raw number for any height inside a library widget, check `JHeights` first — most common component heights are already defined.
 - Add a new shared token only if the value is reused across multiple widgets or is part of a system scale.
 
 ---
@@ -133,10 +220,29 @@ If a widget sets a background via `AppThemeTokens`, use the paired resolved fore
 
 - Use `SimpleText` by default.
 - Use `AppText` for library-owned text that needs localization, HTML rendering, semantics label, or auto-fit.
-- Use raw `Text` only when required by Flutter/third-party APIs or when Material component text styling must be inherited.
+- Use raw `Text` only when required by Flutter/third-party APIs or when Material component text styling must be inherited through `DefaultTextStyle`.
 - If truncation is possible, always set `maxLines` and `overflow` explicitly.
 - Use `SimpleText.sectionLabel` for uppercase grouped-content headers in ordering flows. It carries dedicated tracking and line height; do NOT substitute `SimpleText.label` for this role.
 - Use `SimpleText.counter` for quantity values only. It is compact and uses tabular figures to keep digit widths stable during stepper changes.
+
+### Style override escape hatch
+
+When a screen design specifies text styles that do not match any `JTextStyles` preset,
+use `SimpleText` with an explicit `style` parameter override:
+
+```dart
+SimpleText.body(
+  text: productTitle,
+  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.5),
+)
+```
+
+This is preferred over raw `Text` because `SimpleText` retains `maxLines` / `overflow`
+safety and truncation behaviour. Fall back to raw `Text` only when the widget's parent
+controls text styling through `DefaultTextStyle` inheritance and wrapping would break it.
+
+Do NOT silently substitute a close-but-wrong `JTextStyles` preset to avoid the style
+override. A wrong font size or weight is a design defect, not a rule compliance win.
 
 ---
 
@@ -189,6 +295,8 @@ if (isLoading)
     message: 'Loading...',
   )
 ```
+
+---
 
 ## Commerce & quantity control rules
 
@@ -297,6 +405,9 @@ if (isLoading)
 
 - Do NOT use boolean flags or manual `padding` hacks to approximate the small height. Use the dedicated small constructors.
 - Do NOT use `SimpleButton.small` as a replacement for `SimpleIconButton` in toolbar contexts.
+- When a design spec requires a button height, label size, or style that differs from the
+  variants above, pass the override via explicit parameters rather than choosing the
+  wrong variant. Do NOT silently substitute the nearest variant.
 
 ---
 
@@ -309,6 +420,18 @@ if (isLoading)
 - `SimpleFormController.resetToInitialValues()` → restores original controller values.
 - `SimpleFormController.reset()` → controller-only clear path.
 - These three reset paths have intentionally different semantics. Do NOT unify them.
+
+### Form design override
+
+`SimpleFormBuilder` field spacing, label styles, and layout are token-driven defaults.
+When a screen design specifies different spacing or typography:
+
+- Pass explicit `fieldSpacing` / `sectionSpacing` parameters where available.
+- For label / helper style overrides, pass `SimpleFormFieldConfig` style parameters.
+- If a needed override parameter does not exist yet, compose raw `SimpleTextField` /
+  `FormFieldWrapper` directly rather than fighting `SimpleFormBuilder` defaults.
+- Do NOT inject a route-scoped `Theme` override just to change form field appearance.
+  Prefer explicit parameters or direct composition.
 
 ---
 
@@ -347,3 +470,4 @@ Do NOT create private badge widgets (e.g. `_NavItemBadge`) that duplicate this l
 - `partially migrated`
 - `acceptable fallback`
 - `intentional Material semantic usage`
+- `spec override` ← use when an explicit design spec value overrides a library token
