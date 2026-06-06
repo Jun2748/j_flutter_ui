@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 abstract final class JDimens {
   const JDimens._();
 
+  /// Core structural scale:
+  /// - fractional/stroke values for borders and typography tweaks
+  /// - complete 2dp steps from 0 to 64 for layout sizing
+  /// - curated larger sizes for banners, cards, and media
   static const double dp0 = 0;
   static const double dp0_6 = 0.6;
   static const double dp1 = 1;
@@ -19,18 +23,28 @@ abstract final class JDimens {
   static const double dp16_8 = 16.8;
   static const double dp18 = 18;
   static const double dp20 = 20;
+  static const double dp22 = 22;
   static const double dp24 = 24;
+  static const double dp26 = 26;
   static const double dp28 = 28;
+  static const double dp30 = 30;
   static const double dp32 = 32;
   static const double dp33_6 = 33.6;
+  static const double dp34 = 34;
   static const double dp36 = 36;
+  static const double dp38 = 38;
   static const double dp40 = 40;
+  static const double dp42 = 42;
   static const double dp44 = 44;
+  static const double dp46 = 46;
   static const double dp48 = 48;
   static const double dp50 = 50;
   static const double dp52 = 52;
+  static const double dp54 = 54;
   static const double dp56 = 56;
+  static const double dp58 = 58;
   static const double dp60 = 60;
+  static const double dp62 = 62;
   static const double dp64 = 64;
   static const double dp72 = 72;
   static const double dp80 = 80;
@@ -48,6 +62,7 @@ abstract final class JDimens {
 abstract final class JGaps {
   const JGaps._();
 
+  // Keep convenience aliases curated. Use JDimens directly for uncommon values.
   static const SizedBox h2 = SizedBox(height: JDimens.dp2);
   static const SizedBox h4 = SizedBox(height: JDimens.dp4);
   static const SizedBox h6 = SizedBox(height: JDimens.dp6);
