@@ -33,19 +33,13 @@ void main() {
       expect(find.text('Checkout'), findsOneWidget);
     });
 
-    testWidgets('renders priceText when provided', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _buildSubject(priceText: 'RM 16.90'),
-      );
+    testWidgets('renders priceText when provided', (WidgetTester tester) async {
+      await tester.pumpWidget(_buildSubject(priceText: 'RM 16.90'));
 
       expect(find.text('RM 16.90'), findsOneWidget);
     });
 
-    testWidgets('renders labelText when provided', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('renders labelText when provided', (WidgetTester tester) async {
       await tester.pumpWidget(
         _buildSubject(labelText: 'Total', priceText: 'RM 16.90'),
       );
@@ -69,9 +63,7 @@ void main() {
     testWidgets('loading state passes through to button', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(loading: true),
-      );
+      await tester.pumpWidget(_buildSubject(loading: true));
 
       final SimpleButton button = tester.widget<SimpleButton>(
         find.byType(SimpleButton),

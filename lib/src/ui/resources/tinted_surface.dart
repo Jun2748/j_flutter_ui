@@ -14,4 +14,3 @@ class JTints {
     return Color.alphaBlend(tint.withAlpha(alpha), base);
   }
 }
-

@@ -119,22 +119,14 @@ void main() {
       expect(result, equals(<String>{'B'}));
     });
 
-    testWidgets('custom selectedColor is applied', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('custom selectedColor is applied', (WidgetTester tester) async {
       const Color custom = Colors.orange;
       await tester.pumpWidget(
-        _buildSubject(
-          values: const <String>{'A'},
-          selectedColor: custom,
-        ),
+        _buildSubject(values: const <String>{'A'}, selectedColor: custom),
       );
 
       final FilterChip chip = tester.widget<FilterChip>(
-        find.ancestor(
-          of: find.text('A'),
-          matching: find.byType(FilterChip),
-        ),
+        find.ancestor(of: find.text('A'), matching: find.byType(FilterChip)),
       );
 
       expect(chip.selectedColor, custom);
@@ -144,15 +136,10 @@ void main() {
       WidgetTester tester,
     ) async {
       const Color custom = Colors.grey;
-      await tester.pumpWidget(
-        _buildSubject(unselectedColor: custom),
-      );
+      await tester.pumpWidget(_buildSubject(unselectedColor: custom));
 
       final FilterChip chip = tester.widget<FilterChip>(
-        find.ancestor(
-          of: find.text('A'),
-          matching: find.byType(FilterChip),
-        ),
+        find.ancestor(of: find.text('A'), matching: find.byType(FilterChip)),
       );
 
       expect(chip.backgroundColor, custom);

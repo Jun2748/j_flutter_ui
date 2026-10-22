@@ -25,7 +25,8 @@ void main() {
     expect(
       missing,
       isEmpty,
-      reason: 'Missing keys in assets/localization/en.json: '
+      reason:
+          'Missing keys in assets/localization/en.json: '
           '${missing.toList()..sort()}',
     );
   });
@@ -163,4 +164,3 @@ const List<String> _lKeys = <String>[
   L.demoAccountNavRewards,
   L.demoAccountNavAccount,
 ];
-

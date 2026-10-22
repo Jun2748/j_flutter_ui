@@ -19,9 +19,7 @@ void main() {
       expect(text.style?.fontFeatures, JTextStyles.priceLarge.fontFeatures);
     });
 
-    testWidgets(
-      'sectionLabel renders with JTextStyles.sectionLabel and w700',
-      (
+    testWidgets('sectionLabel renders with JTextStyles.sectionLabel and w700', (
       WidgetTester tester,
     ) async {
       await pumpTestApp(
@@ -33,10 +31,7 @@ void main() {
 
       expect(text.style?.fontSize, JTextStyles.sectionLabel.fontSize);
       expect(text.style?.height, JTextStyles.sectionLabel.height);
-      expect(
-        text.style?.letterSpacing,
-        JTextStyles.sectionLabel.letterSpacing,
-      );
+      expect(text.style?.letterSpacing, JTextStyles.sectionLabel.letterSpacing);
       expect(text.style?.fontWeight, FontWeight.w700);
     });
 

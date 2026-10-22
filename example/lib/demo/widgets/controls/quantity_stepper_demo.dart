@@ -57,9 +57,7 @@ class _QuantityStepperDemoState extends State<QuantityStepperDemo> {
           JGaps.h16,
           SimpleText.sectionLabel(text: 'READ-ONLY (no onChanged)'),
           JGaps.h8,
-          SimpleCard(
-            child: SimpleQuantityStepper(value: 2),
-          ),
+          SimpleCard(child: SimpleQuantityStepper(value: 2)),
         ],
       ),
     );

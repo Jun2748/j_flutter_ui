@@ -70,12 +70,8 @@ void main() {
       expect(valueWidget.color, custom);
     });
 
-    testWidgets('labelWeight override is applied', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _buildSubject(labelWeight: FontWeight.w700),
-      );
+    testWidgets('labelWeight override is applied', (WidgetTester tester) async {
+      await tester.pumpWidget(_buildSubject(labelWeight: FontWeight.w700));
 
       final SimpleText labelWidget = tester.widget<SimpleText>(
         find.ancestor(
@@ -87,12 +83,8 @@ void main() {
       expect(labelWidget.weight, FontWeight.w700);
     });
 
-    testWidgets('valueWeight override is applied', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _buildSubject(valueWeight: FontWeight.w700),
-      );
+    testWidgets('valueWeight override is applied', (WidgetTester tester) async {
+      await tester.pumpWidget(_buildSubject(valueWeight: FontWeight.w700));
 
       final SimpleText valueWidget = tester.widget<SimpleText>(
         find.ancestor(
@@ -109,10 +101,9 @@ void main() {
       await tester.pumpWidget(_buildSubject(padding: custom));
 
       final Padding paddingWidget = tester.widget<Padding>(
-        find.ancestor(
-          of: find.byType(Row),
-          matching: find.byType(Padding),
-        ).first,
+        find
+            .ancestor(of: find.byType(Row), matching: find.byType(Padding))
+            .first,
       );
 
       expect(paddingWidget.padding, custom);

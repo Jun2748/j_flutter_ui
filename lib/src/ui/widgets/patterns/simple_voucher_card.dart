@@ -63,9 +63,7 @@ class SimpleVoucherCard extends StatelessWidget {
     final AppThemeTokens tokens = theme.appThemeTokens;
 
     final Color resolvedBackground =
-        backgroundColor ??
-        theme.cardTheme.color ??
-        tokens.cardBackground;
+        backgroundColor ?? theme.cardTheme.color ?? tokens.cardBackground;
     final Color resolvedBorder = borderColor ?? tokens.cardBorderColor;
     final double resolvedRadius = borderRadius ?? JDimens.dp12;
     final double resolvedDashWidth = dashWidth ?? JDimens.dp8;
@@ -103,10 +101,7 @@ class SimpleVoucherCard extends StatelessWidget {
       );
     }
 
-    return Padding(
-      padding: resolvedMargin,
-      child: card,
-    );
+    return Padding(padding: resolvedMargin, child: card);
   }
 }
 

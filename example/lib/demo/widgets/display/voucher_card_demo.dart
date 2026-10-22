@@ -28,7 +28,10 @@ class VoucherCardDemo extends StatelessWidget {
                     color: tokens.primary.withAlpha(20),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.local_offer_outlined, color: tokens.primary),
+                  child: Icon(
+                    Icons.local_offer_outlined,
+                    color: tokens.primary,
+                  ),
                 ),
                 JGaps.w12,
                 Expanded(
@@ -58,9 +61,9 @@ class VoucherCardDemo extends StatelessWidget {
           SimpleVoucherCard(
             borderColor: tokens.primary,
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Voucher tapped!')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Voucher tapped!')));
             },
             child: Row(
               children: <Widget>[

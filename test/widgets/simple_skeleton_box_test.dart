@@ -31,9 +31,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('applies custom width and height', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('applies custom width and height', (WidgetTester tester) async {
       await tester.pumpWidget(
         _buildSubject(width: JDimens.dp200, height: JDimens.dp80),
       );
@@ -60,15 +58,10 @@ void main() {
       );
 
       final BoxDecoration decoration = box.decoration! as BoxDecoration;
-      expect(
-        decoration.borderRadius,
-        BorderRadius.circular(JDimens.dp16),
-      );
+      expect(decoration.borderRadius, BorderRadius.circular(JDimens.dp16));
     });
 
-    testWidgets('uses LinearGradient for shimmer', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('uses LinearGradient for shimmer', (WidgetTester tester) async {
       await tester.pumpWidget(_buildSubject());
 
       final Container box = tester.widget<Container>(
@@ -129,11 +122,11 @@ void main() {
 
       // Capture gradient begin alignment before advancing
       Container box() => tester.widget<Container>(
-            find.descendant(
-              of: find.byType(SimpleSkeletonBox),
-              matching: find.byType(Container),
-            ),
-          );
+        find.descendant(
+          of: find.byType(SimpleSkeletonBox),
+          matching: find.byType(Container),
+        ),
+      );
 
       final LinearGradient before =
           (box().decoration! as BoxDecoration).gradient! as LinearGradient;

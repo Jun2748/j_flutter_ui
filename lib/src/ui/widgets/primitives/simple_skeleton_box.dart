@@ -59,10 +59,8 @@ class _SimpleSkeletonBoxState extends State<SimpleSkeletonBox>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: _kShimmerDuration,
-    )..repeat();
+    _controller = AnimationController(vsync: this, duration: _kShimmerDuration)
+      ..repeat();
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 
@@ -91,10 +89,14 @@ class _SimpleSkeletonBoxState extends State<SimpleSkeletonBox>
       animation: _animation,
       builder: (BuildContext context, Widget? child) {
         final double pos = _animation.value;
-        final Alignment begin =
-            Alignment(_kShimmerBeginOffset + pos * _kShimmerSweepRange, 0);
-        final Alignment end =
-            Alignment(_kShimmerEndOffset + pos * _kShimmerSweepRange, 0);
+        final Alignment begin = Alignment(
+          _kShimmerBeginOffset + pos * _kShimmerSweepRange,
+          0,
+        );
+        final Alignment end = Alignment(
+          _kShimmerEndOffset + pos * _kShimmerSweepRange,
+          0,
+        );
 
         return Container(
           width: resolvedWidth,

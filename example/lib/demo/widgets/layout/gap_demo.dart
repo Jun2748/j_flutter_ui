@@ -143,8 +143,9 @@ class _InsetScrollRow extends StatelessWidget {
   }
 
   EdgeInsetsGeometry _paddingFor(int index) {
-    final bool isTarget =
-        applyToFirst ? index == 0 : index == examples.length - 1;
+    final bool isTarget = applyToFirst
+        ? index == 0
+        : index == examples.length - 1;
     return isTarget
         ? examples[index].inset
         : const EdgeInsets.only(right: JDimens.dp8);
@@ -170,10 +171,7 @@ class _Chip extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(JDimens.dp20),
       ),
-      child: Text(
-        label,
-        style: JTextStyles.label.copyWith(color: onColor),
-      ),
+      child: Text(label, style: JTextStyles.label.copyWith(color: onColor)),
     );
   }
 }

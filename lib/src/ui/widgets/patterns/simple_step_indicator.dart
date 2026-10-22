@@ -147,8 +147,9 @@ class _StepCell extends StatelessWidget {
   bool get _isActive => index == currentStep;
   bool get _isLast => index == stepCount - 1;
 
-  Color get _dotColor =>
-      _isCompleted ? completedColor : (_isActive ? activeColor : incompleteColor);
+  Color get _dotColor => _isCompleted
+      ? completedColor
+      : (_isActive ? activeColor : incompleteColor);
 
   Color get _labelColor => _isActive ? activeLabelColor : inactiveLabelColor;
 
@@ -172,8 +173,9 @@ class _StepCell extends StatelessWidget {
     final bool showTrailingLine = !_isLast;
 
     // Leading line colour: completed if this step is completed or active.
-    final Color leadingColor =
-        (_isCompleted || _isActive) ? completedColor : incompleteColor;
+    final Color leadingColor = (_isCompleted || _isActive)
+        ? completedColor
+        : incompleteColor;
     // Trailing line colour: completed only if this step is already completed.
     final Color trailingColor = _isCompleted ? completedColor : incompleteColor;
 
@@ -217,8 +219,10 @@ class _StepCell extends StatelessWidget {
   Widget _buildDot() {
     final IconData? icon = item.icon;
     final bool showIcon = icon != null && (_isCompleted || _isActive);
-    final double iconSize =
-        (dotSize * _kIconToDotRatio).clamp(JDimens.dp8, JDimens.dp20);
+    final double iconSize = (dotSize * _kIconToDotRatio).clamp(
+      JDimens.dp8,
+      JDimens.dp20,
+    );
 
     return Container(
       width: dotSize,

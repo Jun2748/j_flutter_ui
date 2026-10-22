@@ -147,9 +147,7 @@ class TextDemo extends StatelessWidget {
                     child: SimpleText.counter(text: '12'),
                   ),
                 ),
-                const SimpleCard(
-                  child: _OrderingFlowPreview(),
-                ),
+                const SimpleCard(child: _OrderingFlowPreview()),
               ],
             ),
           ),
@@ -220,7 +218,9 @@ class _VariantPreviewRow extends StatelessWidget {
       children: <Widget>[
         Expanded(child: SimpleText.caption(text: label)),
         JGaps.w16,
-        Flexible(child: Align(alignment: Alignment.centerRight, child: child)),
+        Flexible(
+          child: Align(alignment: Alignment.centerRight, child: child),
+        ),
       ],
     );
   }
@@ -249,7 +249,10 @@ class _OrderingFlowPreview extends StatelessWidget {
         ),
         Row(
           children: <Widget>[
-            SimpleText.priceLarge(text: 'RM 18.90', color: theme.colorScheme.onSurface),
+            SimpleText.priceLarge(
+              text: 'RM 18.90',
+              color: theme.colorScheme.onSurface,
+            ),
             JGaps.w8,
             const SimpleText.caption(text: 'Hero price'),
           ],

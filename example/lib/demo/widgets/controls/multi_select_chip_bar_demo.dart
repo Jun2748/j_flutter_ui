@@ -43,7 +43,9 @@ class _MultiSelectChipBarDemoState extends State<MultiSelectChipBarDemo> {
                 ),
                 JGaps.h12,
                 SimpleText.label(
-                  text: _selected.isEmpty ? 'None selected' : _selected.join(', '),
+                  text: _selected.isEmpty
+                      ? 'None selected'
+                      : _selected.join(', '),
                 ),
               ],
             ),
@@ -64,7 +66,9 @@ class _MultiSelectChipBarDemoState extends State<MultiSelectChipBarDemo> {
                 ),
                 JGaps.h12,
                 SimpleText.label(
-                  text: _limited.isEmpty ? 'None selected' : _limited.join(', '),
+                  text: _limited.isEmpty
+                      ? 'None selected'
+                      : _limited.join(', '),
                 ),
               ],
             ),

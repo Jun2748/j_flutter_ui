@@ -81,8 +81,7 @@ class SimpleQuantityStepper extends StatelessWidget {
 
     final int? max = maxValue;
     final bool canDecrease = onChanged != null && value > minValue;
-    final bool canIncrease =
-        onChanged != null && (max == null || value < max);
+    final bool canIncrease = onChanged != null && (max == null || value < max);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -90,10 +89,8 @@ class SimpleQuantityStepper extends StatelessWidget {
         SimpleIconButton.outline(
           icon: Icons.remove,
           onPressed: canDecrease ? () => onChanged!(value - 1) : null,
-          foregroundColor:
-              canDecrease ? resolvedActive : resolvedDisabled,
-          borderColor:
-              canDecrease ? resolvedActive : resolvedDisabledBorder,
+          foregroundColor: canDecrease ? resolvedActive : resolvedDisabled,
+          borderColor: canDecrease ? resolvedActive : resolvedDisabledBorder,
           size: buttonSize,
           iconSize: iconSize,
         ),
@@ -112,10 +109,8 @@ class SimpleQuantityStepper extends StatelessWidget {
         SimpleIconButton.outline(
           icon: Icons.add,
           onPressed: canIncrease ? () => onChanged!(value + 1) : null,
-          foregroundColor:
-              canIncrease ? resolvedActive : resolvedDisabled,
-          borderColor:
-              canIncrease ? resolvedActive : resolvedDisabledBorder,
+          foregroundColor: canIncrease ? resolvedActive : resolvedDisabled,
+          borderColor: canIncrease ? resolvedActive : resolvedDisabledBorder,
           size: buttonSize,
           iconSize: iconSize,
         ),

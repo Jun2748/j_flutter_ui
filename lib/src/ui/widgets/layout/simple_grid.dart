@@ -63,12 +63,7 @@ class SimpleGrid extends StatelessWidget {
         );
       }
 
-      rows.add(
-        Row(
-          crossAxisAlignment: crossAxisAlignment,
-          children: cells,
-        ),
-      );
+      rows.add(Row(crossAxisAlignment: crossAxisAlignment, children: cells));
     }
 
     return Column(

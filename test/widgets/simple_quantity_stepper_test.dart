@@ -61,10 +61,7 @@ void main() {
       int? lastValue;
       await pumpTestApp(
         tester,
-        SimpleQuantityStepper(
-          value: 3,
-          onChanged: (int v) => lastValue = v,
-        ),
+        SimpleQuantityStepper(value: 3, onChanged: (int v) => lastValue = v),
       );
 
       await tester.tap(find.byIcon(Icons.remove));
@@ -79,10 +76,7 @@ void main() {
       int? lastValue;
       await pumpTestApp(
         tester,
-        SimpleQuantityStepper(
-          value: 3,
-          onChanged: (int v) => lastValue = v,
-        ),
+        SimpleQuantityStepper(value: 3, onChanged: (int v) => lastValue = v),
       );
 
       await tester.tap(find.byIcon(Icons.add));
@@ -94,10 +88,7 @@ void main() {
     testWidgets('both buttons disabled when onChanged is null', (
       WidgetTester tester,
     ) async {
-      await pumpTestApp(
-        tester,
-        const SimpleQuantityStepper(value: 3),
-      );
+      await pumpTestApp(tester, const SimpleQuantityStepper(value: 3));
 
       final Finder minusButton = find.byIcon(Icons.remove);
       final Finder plusButton = find.byIcon(Icons.add);
@@ -106,16 +97,10 @@ void main() {
       expect(plusButton, findsOneWidget);
 
       final SimpleIconButton minusWidget = tester.widget<SimpleIconButton>(
-        find.ancestor(
-          of: minusButton,
-          matching: find.byType(SimpleIconButton),
-        ),
+        find.ancestor(of: minusButton, matching: find.byType(SimpleIconButton)),
       );
       final SimpleIconButton plusWidget = tester.widget<SimpleIconButton>(
-        find.ancestor(
-          of: plusButton,
-          matching: find.byType(SimpleIconButton),
-        ),
+        find.ancestor(of: plusButton, matching: find.byType(SimpleIconButton)),
       );
 
       expect(minusWidget.onPressed, isNull);
@@ -149,10 +134,7 @@ void main() {
     testWidgets('no crash with all optional params null', (
       WidgetTester tester,
     ) async {
-      await pumpTestApp(
-        tester,
-        const SimpleQuantityStepper(value: 1),
-      );
+      await pumpTestApp(tester, const SimpleQuantityStepper(value: 1));
 
       expect(find.byType(SimpleQuantityStepper), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -188,10 +170,7 @@ void main() {
       int? lastValue;
       await pumpTestApp(
         tester,
-        SimpleQuantityStepper(
-          value: 999,
-          onChanged: (int v) => lastValue = v,
-        ),
+        SimpleQuantityStepper(value: 999, onChanged: (int v) => lastValue = v),
       );
 
       await tester.tap(find.byIcon(Icons.add));

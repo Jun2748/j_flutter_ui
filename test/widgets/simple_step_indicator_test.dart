@@ -49,9 +49,7 @@ void main() {
     testWidgets('renders empty when steps list is empty', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(steps: const <SimpleStepItem>[]),
-      );
+      await tester.pumpWidget(_buildSubject(steps: const <SimpleStepItem>[]));
 
       expect(find.byType(SizedBox), findsOneWidget);
       expect(find.byType(Row), findsNothing);
@@ -60,9 +58,7 @@ void main() {
     testWidgets('currentStep clamps to last step when out of range', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(currentStep: 99),
-      );
+      await tester.pumpWidget(_buildSubject(currentStep: 99));
 
       expect(find.byType(SimpleStepIndicator), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -71,9 +67,7 @@ void main() {
     testWidgets('currentStep clamps to 0 when negative', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(currentStep: -1),
-      );
+      await tester.pumpWidget(_buildSubject(currentStep: -1));
 
       expect(find.byType(SimpleStepIndicator), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -118,9 +112,7 @@ void main() {
     });
 
     testWidgets('custom dotSize is applied', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        _buildSubject(dotSize: JDimens.dp20),
-      );
+      await tester.pumpWidget(_buildSubject(dotSize: JDimens.dp20));
 
       final Iterable<SizedBox> trackBoxes = tester.widgetList<SizedBox>(
         find.byType(SizedBox),
@@ -141,9 +133,7 @@ void main() {
     testWidgets('all steps completed renders without crash', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(currentStep: 2),
-      );
+      await tester.pumpWidget(_buildSubject(currentStep: 2));
 
       expect(find.byType(SimpleStepIndicator), findsOneWidget);
       expect(tester.takeException(), isNull);

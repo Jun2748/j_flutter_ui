@@ -28,11 +28,20 @@ class _SkeletonBoxDemoState extends State<SkeletonBoxDemo> {
               children: <Widget>[
                 const SimpleSkeletonBox(height: JDimens.dp120),
                 JGaps.h12,
-                const SimpleSkeletonBox(height: JDimens.dp16, width: JDimens.dp200),
+                const SimpleSkeletonBox(
+                  height: JDimens.dp16,
+                  width: JDimens.dp200,
+                ),
                 JGaps.h8,
-                const SimpleSkeletonBox(height: JDimens.dp12, width: JDimens.dp140),
+                const SimpleSkeletonBox(
+                  height: JDimens.dp12,
+                  width: JDimens.dp140,
+                ),
                 JGaps.h8,
-                const SimpleSkeletonBox(height: JDimens.dp12, width: JDimens.dp100),
+                const SimpleSkeletonBox(
+                  height: JDimens.dp12,
+                  width: JDimens.dp100,
+                ),
                 JGaps.h12,
                 Row(
                   children: const <Widget>[
@@ -46,9 +55,15 @@ class _SkeletonBoxDemoState extends State<SkeletonBoxDemo> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SimpleSkeletonBox(height: JDimens.dp12, width: JDimens.dp120),
+                          SimpleSkeletonBox(
+                            height: JDimens.dp12,
+                            width: JDimens.dp120,
+                          ),
                           JGaps.h6,
-                          SimpleSkeletonBox(height: JDimens.dp10, width: JDimens.dp80),
+                          SimpleSkeletonBox(
+                            height: JDimens.dp10,
+                            width: JDimens.dp80,
+                          ),
                         ],
                       ),
                     ),
@@ -69,9 +84,15 @@ class _SkeletonBoxDemoState extends State<SkeletonBoxDemo> {
                     children: <Widget>[
                       SimpleSkeletonBox(height: JDimens.dp64),
                       JGaps.h12,
-                      SimpleSkeletonBox(height: JDimens.dp16, width: JDimens.dp160),
+                      SimpleSkeletonBox(
+                        height: JDimens.dp16,
+                        width: JDimens.dp160,
+                      ),
                       JGaps.h8,
-                      SimpleSkeletonBox(height: JDimens.dp12, width: JDimens.dp100),
+                      SimpleSkeletonBox(
+                        height: JDimens.dp12,
+                        width: JDimens.dp100,
+                      ),
                     ],
                   )
                 else

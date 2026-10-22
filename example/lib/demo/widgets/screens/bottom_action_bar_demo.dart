@@ -63,10 +63,7 @@ class _BottomActionBarDemoState extends State<BottomActionBarDemo> {
                 'When both labelText and priceText are null the button expands to full width.',
           ),
           JGaps.h12,
-          SimpleBottomActionBar(
-            actionLabel: 'Place Order',
-            onAction: () {},
-          ),
+          SimpleBottomActionBar(actionLabel: 'Place Order', onAction: () {}),
 
           JGaps.h32,
           const SimpleText.label(text: 'Disabled (onAction: null)'),
@@ -83,7 +80,9 @@ class _BottomActionBarDemoState extends State<BottomActionBarDemo> {
           ),
 
           JGaps.h32,
-          const SimpleText.label(text: 'Tap "Add to Cart" above to test loading'),
+          const SimpleText.label(
+            text: 'Tap "Add to Cart" above to test loading',
+          ),
           JGaps.h8,
           const SimpleText.caption(
             text:
