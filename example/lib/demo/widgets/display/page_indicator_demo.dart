@@ -46,8 +46,7 @@ class _PageIndicatorDemoState extends State<PageIndicatorDemo> {
                   child: PageView.builder(
                     controller: _controller,
                     itemCount: _pages.length,
-                    onPageChanged: (int i) =>
-                        setState(() => _currentPage = i),
+                    onPageChanged: (int i) => setState(() => _currentPage = i),
                     itemBuilder: (BuildContext context, int i) {
                       return Container(
                         color: tokens.primary.withAlpha(20),

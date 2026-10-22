@@ -104,8 +104,7 @@ class SimpleMultiSelectChipBar<T> extends StatelessWidget {
   }) {
     final bool isSelected = values.contains(item);
     final int? max = maxSelections;
-    final bool atLimit =
-        !isSelected && max != null && values.length >= max;
+    final bool atLimit = !isSelected && max != null && values.length >= max;
 
     return FilterChip(
       label: Text(

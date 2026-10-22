@@ -34,10 +34,8 @@ class L {
       'form.validation.invalidPhone';
   static const String formValidationInvalidFormat =
       'form.validation.invalidFormat';
-  static const String formValidationMinLength =
-      'form.validation.minLength';
-  static const String formValidationMaxLength =
-      'form.validation.maxLength';
+  static const String formValidationMinLength = 'form.validation.minLength';
+  static const String formValidationMaxLength = 'form.validation.maxLength';
   static const String stateErrorTitle = 'state.error.title';
 
   static const String demoHtmlLocalized = 'demo.html.localized';

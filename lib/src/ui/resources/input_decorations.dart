@@ -151,13 +151,13 @@ class JInputDecorations {
     required Color color,
     double? width,
   }) {
-    final OutlineInputBorder? outlineBase =
-        base is OutlineInputBorder ? base : null;
+    final OutlineInputBorder? outlineBase = base is OutlineInputBorder
+        ? base
+        : null;
 
     return OutlineInputBorder(
       borderRadius:
-          outlineBase?.borderRadius ??
-          BorderRadius.circular(JDimens.dp12),
+          outlineBase?.borderRadius ?? BorderRadius.circular(JDimens.dp12),
       borderSide: BorderSide(
         color: color,
         width: width ?? outlineBase?.borderSide.width ?? JDimens.dp1,
@@ -165,4 +165,3 @@ class JInputDecorations {
     );
   }
 }
-

@@ -41,9 +41,7 @@ void main() {
       expect(find.byType(AnimatedContainer), findsNothing);
     });
 
-    testWidgets('renders correct number of dots', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('renders correct number of dots', (WidgetTester tester) async {
       await tester.pumpWidget(_buildSubject(count: 5));
 
       expect(find.byType(AnimatedContainer), findsNWidgets(5));
@@ -101,9 +99,7 @@ void main() {
       expect(dec.color, custom);
     });
 
-    testWidgets('inactive dots use inactiveColor', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('inactive dots use inactiveColor', (WidgetTester tester) async {
       const Color custom = Colors.grey;
       await tester.pumpWidget(
         _buildSubject(count: 3, currentIndex: 0, inactiveColor: custom),
@@ -122,20 +118,14 @@ void main() {
     testWidgets('currentIndex is clamped above count - 1', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(count: 3, currentIndex: 99),
-      );
+      await tester.pumpWidget(_buildSubject(count: 3, currentIndex: 99));
 
       expect(find.byType(SimplePageIndicator), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('currentIndex is clamped below 0', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _buildSubject(count: 3, currentIndex: -5),
-      );
+    testWidgets('currentIndex is clamped below 0', (WidgetTester tester) async {
+      await tester.pumpWidget(_buildSubject(count: 3, currentIndex: -5));
 
       expect(find.byType(SimplePageIndicator), findsOneWidget);
       expect(tester.takeException(), isNull);

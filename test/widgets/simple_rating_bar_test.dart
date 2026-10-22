@@ -30,9 +30,7 @@ Widget _buildSubject({
 
 void main() {
   group('SimpleRatingBar', () {
-    testWidgets('renders correct number of stars', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('renders correct number of stars', (WidgetTester tester) async {
       await tester.pumpWidget(_buildSubject(rating: 4.0, starCount: 5));
 
       // 4 full + 1 empty = 5 star icons total
@@ -61,9 +59,7 @@ void main() {
       expect(find.byIcon(Icons.star_border), findsOneWidget);
     });
 
-    testWidgets('5.0 rating shows all full stars', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('5.0 rating shows all full stars', (WidgetTester tester) async {
       await tester.pumpWidget(_buildSubject(rating: 5.0));
 
       expect(find.byIcon(Icons.star), findsNWidgets(5));
@@ -81,9 +77,7 @@ void main() {
       expect(find.byIcon(Icons.star_half), findsNothing);
     });
 
-    testWidgets('rating is clamped above maximum', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('rating is clamped above maximum', (WidgetTester tester) async {
       await tester.pumpWidget(_buildSubject(rating: 99.0));
 
       expect(find.byIcon(Icons.star), findsNWidgets(5));
@@ -100,9 +94,7 @@ void main() {
     testWidgets('reviewCount renders count label when provided', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _buildSubject(rating: 4.0, reviewCount: 128),
-      );
+      await tester.pumpWidget(_buildSubject(rating: 4.0, reviewCount: 128));
 
       expect(find.text('(128)'), findsOneWidget);
     });
@@ -119,9 +111,7 @@ void main() {
       WidgetTester tester,
     ) async {
       const Color custom = Colors.orange;
-      await tester.pumpWidget(
-        _buildSubject(rating: 5.0, filledColor: custom),
-      );
+      await tester.pumpWidget(_buildSubject(rating: 5.0, filledColor: custom));
 
       final Iterable<Icon> stars = tester.widgetList<Icon>(
         find.byIcon(Icons.star),
@@ -134,9 +124,7 @@ void main() {
       WidgetTester tester,
     ) async {
       const Color custom = Colors.grey;
-      await tester.pumpWidget(
-        _buildSubject(rating: 0.0, emptyColor: custom),
-      );
+      await tester.pumpWidget(_buildSubject(rating: 0.0, emptyColor: custom));
 
       final Iterable<Icon> stars = tester.widgetList<Icon>(
         find.byIcon(Icons.star_border),

@@ -8,4 +8,3 @@ void main() {
     const SimpleAlertDialog(title: 'Title', message: 'Message');
   });
 }
-

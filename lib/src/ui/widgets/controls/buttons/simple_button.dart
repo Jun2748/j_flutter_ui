@@ -22,9 +22,9 @@ class SimpleButton extends StatelessWidget {
     this.borderColor,
     TextStyle? defaultTextStyle,
     Size? defaultMinimumSize,
-  })  : _variant = variant,
-        _defaultTextStyle = defaultTextStyle,
-        _defaultMinimumSize = defaultMinimumSize;
+  }) : _variant = variant,
+       _defaultTextStyle = defaultTextStyle,
+       _defaultMinimumSize = defaultMinimumSize;
 
   const SimpleButton.primary({
     Key? key,
@@ -38,18 +38,18 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.primary,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.primary,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+       );
 
   const SimpleButton.secondary({
     Key? key,
@@ -63,18 +63,18 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.secondary,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.secondary,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+       );
 
   const SimpleButton.outline({
     Key? key,
@@ -88,18 +88,18 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.outline,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.outline,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+       );
 
   const SimpleButton.text({
     Key? key,
@@ -113,18 +113,18 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.text,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.text,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+       );
 
   const SimpleButton.small({
     Key? key,
@@ -138,20 +138,20 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.primary,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-          defaultTextStyle: JTextStyles.label,
-          defaultMinimumSize: const Size(0, JDimens.dp32),
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.primary,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+         defaultTextStyle: JTextStyles.label,
+         defaultMinimumSize: const Size(0, JDimens.dp32),
+       );
 
   const SimpleButton.smallOutline({
     Key? key,
@@ -165,20 +165,20 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.outline,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-          defaultTextStyle: JTextStyles.label,
-          defaultMinimumSize: const Size(0, JDimens.dp32),
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.outline,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+         defaultTextStyle: JTextStyles.label,
+         defaultMinimumSize: const Size(0, JDimens.dp32),
+       );
 
   const SimpleButton.smallText({
     Key? key,
@@ -192,20 +192,20 @@ class SimpleButton extends StatelessWidget {
     Color? foregroundColor,
     Color? borderColor,
   }) : this._(
-          key: key,
-          label: label,
-          onPressed: onPressed,
-          variant: _SimpleButtonVariant.text,
-          loading: loading,
-          icon: icon,
-          width: width,
-          padding: padding,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          borderColor: borderColor,
-          defaultTextStyle: JTextStyles.label,
-          defaultMinimumSize: const Size(0, JDimens.dp32),
-        );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         variant: _SimpleButtonVariant.text,
+         loading: loading,
+         icon: icon,
+         width: width,
+         padding: padding,
+         backgroundColor: backgroundColor,
+         foregroundColor: foregroundColor,
+         borderColor: borderColor,
+         defaultTextStyle: JTextStyles.label,
+         defaultMinimumSize: const Size(0, JDimens.dp32),
+       );
 
   static const Set<WidgetState> _enabledState = <WidgetState>{};
   static const Set<WidgetState> _disabledState = <WidgetState>{
@@ -381,7 +381,11 @@ class SimpleButton extends StatelessWidget {
       case _SimpleButtonVariant.secondary:
         return showDisabledState
             ? theme.disabledColor.withAlpha(16)
-            : JTints.surface(tokens.cardBackground, tokens.secondary, alpha: 18);
+            : JTints.surface(
+                tokens.cardBackground,
+                tokens.secondary,
+                alpha: 18,
+              );
       case _SimpleButtonVariant.outline:
       case _SimpleButtonVariant.text:
         return Colors.transparent;
@@ -445,7 +449,11 @@ class SimpleButton extends StatelessWidget {
         return BorderSide(
           color: showDisabledState
               ? theme.disabledColor.withAlpha(64)
-              : JTints.border(tokens.cardBackground, tokens.secondary, alpha: 56),
+              : JTints.border(
+                  tokens.cardBackground,
+                  tokens.secondary,
+                  alpha: 56,
+                ),
           width: resolvedWidth,
         );
       case _SimpleButtonVariant.outline:

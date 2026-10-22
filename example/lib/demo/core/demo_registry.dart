@@ -148,8 +148,7 @@ class DemoRegistry {
     DemoItem(
       title: const MultiSelectChipBarDemo().title,
       category: DemoCategory.controls,
-      description:
-          'Multi-select chip bar with optional max-selection limit.',
+      description: 'Multi-select chip bar with optional max-selection limit.',
       builder: (_) => const MultiSelectChipBarDemo(),
     ),
     DemoItem(
@@ -211,7 +210,8 @@ class DemoRegistry {
     DemoItem(
       title: const StrikethroughPriceDemo().title,
       category: DemoCategory.display,
-      description: 'Original + discounted price pair with lineThrough decoration.',
+      description:
+          'Original + discounted price pair with lineThrough decoration.',
       builder: (_) => const StrikethroughPriceDemo(),
     ),
     DemoItem(
@@ -223,7 +223,8 @@ class DemoRegistry {
     DemoItem(
       title: const StepIndicatorDemo().title,
       category: DemoCategory.display,
-      description: 'Linear step progress for checkout flows and order tracking.',
+      description:
+          'Linear step progress for checkout flows and order tracking.',
       builder: (_) => const StepIndicatorDemo(),
     ),
     DemoItem(
@@ -235,13 +236,15 @@ class DemoRegistry {
     DemoItem(
       title: const PageIndicatorDemo().title,
       category: DemoCategory.display,
-      description: 'Animated pill-dot page indicator for carousels and onboarding.',
+      description:
+          'Animated pill-dot page indicator for carousels and onboarding.',
       builder: (_) => const PageIndicatorDemo(),
     ),
     DemoItem(
       title: const VoucherCardDemo().title,
       category: DemoCategory.display,
-      description: 'Card with animated dashed border for voucher and promo display.',
+      description:
+          'Card with animated dashed border for voucher and promo display.',
       builder: (_) => const VoucherCardDemo(),
     ),
     DemoItem(

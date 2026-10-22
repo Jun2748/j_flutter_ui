@@ -78,9 +78,7 @@ void main() {
       WidgetTester tester,
     ) async {
       bool tapped = false;
-      await tester.pumpWidget(
-        _buildSubject(onTap: () => tapped = true),
-      );
+      await tester.pumpWidget(_buildSubject(onTap: () => tapped = true));
 
       await tester.tap(find.byType(SimpleVoucherCard));
       await tester.pump();
@@ -127,10 +125,12 @@ void main() {
       await tester.pumpWidget(_buildSubject(margin: custom));
 
       final Padding outerPadding = tester.widget<Padding>(
-        find.ancestor(
-          of: find.byType(ClipRRect),
-          matching: find.byType(Padding),
-        ).first,
+        find
+            .ancestor(
+              of: find.byType(ClipRRect),
+              matching: find.byType(Padding),
+            )
+            .first,
       );
 
       expect(outerPadding.padding, custom);
