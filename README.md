@@ -11,6 +11,9 @@ Built for Flutter teams shipping multiple apps and for clients who want to see p
 
 ## What's included
 
+The full list of exported widgets and tokens is in [WIDGETS.md](WIDGETS.md),
+generated from the package exports (`dart run tool/widget_index.dart`).
+
 **Controls**
 - `SimpleButton` — button family with primary, secondary, outline, and text variants.
 - `SimpleIconButton` — compact icon action button for toolbars, cards, and list rows.
