@@ -9,13 +9,22 @@ Each entry says what changed and what a consuming app must do.
 
 ## Unreleased
 
-No public API change; apps need no action.
+No public API change. Apps need no action except for the dependency fix below.
 
 - Stop tracking generated `.dart_tool/` files; remove unused root platform folders.
 - Apply `dart format` across the package; remove an unused import.
 - Add `WIDGETS.md`, a generated index of every exported widget and token, with a test that keeps it current.
 - Add CI (format, analyze, test) on pull requests and pushes to `main`.
 - Add this changelog.
+
+### Fixed
+
+- Apps that resolve dependencies without a lockfile no longer fail to compile.
+  `flutter_html` 3.0.0 calls a function that `html` 0.15.7 removed, and pub
+  picked 0.15.7 for any fresh resolve. The library now caps `html` below 0.15.7.
+  Apps: move to the release that carries this fix and run `flutter pub get`;
+  any `html` pin of their own can then go. An app that itself requires
+  `html` 0.15.7 or later now gets a resolve error instead of a broken build.
 
 ### Planned for 3.0.0 (breaking)
 
