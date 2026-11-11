@@ -11,6 +11,11 @@ dependencies:
     sdk: flutter
   auto_size_text: ^3.0.0
   flutter_html: ^3.0.0
+  # flutter_html 3.0.0 calls a function that html 0.15.7 removed, so any app
+  # that resolves 0.15.7 fails to compile. Capping it here reaches every
+  # consuming app. Lift the cap when flutter_html ships a fix, or when
+  # flutter_html leaves this package.
+  html: ">=0.15.5 <0.15.7"
   flutter_svg: ^2.2.0
 
 dev_dependencies:

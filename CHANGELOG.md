@@ -17,6 +17,13 @@ No public API change; apps need no action.
 - Add CI (format, analyze, test) on pull requests and pushes to `main`.
 - Add this changelog.
 
+### Fixed
+
+- Apps that resolve dependencies without a lockfile no longer fail to compile.
+  `flutter_html` 3.0.0 calls a function that `html` 0.15.7 removed, and pub
+  picked 0.15.7 for any fresh resolve. The library now caps `html` below 0.15.7.
+  Apps can drop any `html` pin of their own once they move to this release.
+
 ### Planned for 3.0.0 (breaking)
 
 - Move the example app's `demo.*` strings and `L.demo*` keys out of the library into `example/`.
